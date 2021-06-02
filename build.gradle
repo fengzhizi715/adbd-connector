@@ -1,0 +1,30 @@
+group 'cn.netdiscovery.adbd'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven { url "https://kotlin.bintray.com/kotlinx" }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+buildscript {
+    ext.kotlin_version = '1.4.32'
+
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
