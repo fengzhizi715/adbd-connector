@@ -47,13 +47,13 @@ interface AdbDevice : AttributeMap {
 
     fun executor(): EventLoop
 
-    fun open(destination: String?, initializer: AdbChannelInitializer): Future<Channel>
+    fun open(destination: String, initializer: AdbChannelInitializer): Future<Channel>
 
-    fun exec(destination: String?): Future<String?>?
+    fun exec(destination: String): Future<String>
 
-    fun shell(cmd: String?, vararg args: String?): Future<String?>?
+    fun shell(cmd: String, vararg args: String): Future<String>
 
-    fun shell(lineFramed: Boolean, handler: ChannelInboundHandler?): Future<Channel>
+    fun shell(lineFramed: Boolean, handler: ChannelInboundHandler): Future<Channel>
 
     fun shell(
         cmd: String,
@@ -90,17 +90,17 @@ interface AdbDevice : AttributeMap {
     /**
      * root                     restart adbd with root permissions
      */
-    fun root(): Future<*>?
+    fun root(): Future<*>
 
     /**
      * unroot                   restart adbd without root permissions
      */
-    fun unroot(): Future<*>?
+    fun unroot(): Future<*>
 
     /**
      * remount partitions read-write.
      */
-    fun remount(): Future<*>?
+    fun remount(): Future<*>
 
     /**
      * usb                      restart adbd listening on USB
