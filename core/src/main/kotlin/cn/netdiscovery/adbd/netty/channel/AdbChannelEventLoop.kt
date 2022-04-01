@@ -1,4 +1,4 @@
-package cn.netdiscovery.adbd.channel
+package cn.netdiscovery.adbd.netty.channel
 
 import io.netty.channel.*
 import io.netty.util.concurrent.Future
@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 /**
  *
  * @FileName:
- *          cn.netdiscovery.adbd.channel.AdbChannelEventLoop
+ *          cn.netdiscovery.adbd.netty.channel.AdbChannelEventLoop
  * @author: Tony Shen
  * @date: 2021-06-02 11:31
  * @version: V1.0 <描述当前版本功能>

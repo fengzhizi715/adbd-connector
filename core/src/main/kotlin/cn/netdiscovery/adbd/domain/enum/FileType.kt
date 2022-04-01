@@ -12,7 +12,6 @@ import cn.netdiscovery.adbd.constant.S_IFMT
  */
 enum class FileType(private val value: Int, private val code: Char) {
 
-
     SOCKET(49152, 's'), //套接字文件（socket）
 
     LINK(40960, 'l'),   //符号链接文件（symbolic link）

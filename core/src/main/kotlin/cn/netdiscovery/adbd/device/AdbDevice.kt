@@ -1,6 +1,6 @@
 package cn.netdiscovery.adbd.device
 
-import cn.netdiscovery.adbd.channel.AdbChannelInitializer
+import cn.netdiscovery.adbd.netty.channel.AdbChannelInitializer
 import cn.netdiscovery.adbd.constant.DEFAULT_MODE
 import cn.netdiscovery.adbd.domain.enum.DeviceType
 import cn.netdiscovery.adbd.domain.enum.Feature
@@ -28,8 +28,8 @@ interface AdbDevice : AttributeMap {
     /**
      * serial             print <serial-number>
      * @return
-    </serial-number> */
-    fun serial(): String?
+     */
+    fun serial(): String
 
     /**
      * type                print bootloader | device
