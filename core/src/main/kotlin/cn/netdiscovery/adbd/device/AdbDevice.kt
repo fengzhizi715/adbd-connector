@@ -1,6 +1,6 @@
 package cn.netdiscovery.adbd.device
 
-import cn.netdiscovery.adbd.netty.channel.AdbChannelInitializer
+import cn.netdiscovery.adbd.AdbChannelInitializer
 import cn.netdiscovery.adbd.constant.DEFAULT_MODE
 import cn.netdiscovery.adbd.domain.enum.DeviceType
 import cn.netdiscovery.adbd.domain.enum.Feature

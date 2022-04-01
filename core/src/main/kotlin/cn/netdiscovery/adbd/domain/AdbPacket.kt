@@ -15,13 +15,13 @@ import io.netty.util.ReferenceCounted
  */
 class AdbPacket : ReferenceCounted {
 
-    val command: Command
-    val arg0: Int
-    val arg1: Int
-    val size: Int
-    val checksum: Int
-    val magic: Int
-    val payload: ByteBuf?
+    private val command: Command
+    private val arg0: Int
+    private val arg1: Int
+    private val size: Int
+    private val checksum: Int
+    private val magic: Int
+    private val payload: ByteBuf?
 
     constructor(command: Command, arg0: Int, arg1: Int, size: Int, checksum: Int, magic: Int, payload: ByteBuf?) {
         this.command = command
@@ -73,15 +73,13 @@ class AdbPacket : ReferenceCounted {
 
     override fun release(decrement: Int): Boolean = payload?.release(decrement) ?: true
 
-    override fun toString(): String {
-        return "AdbPacket{" +
-                "command=" + command +
-                ", arg0=" + arg0 +
-                ", arg1=" + arg1 +
-                ", size=" + size +
-                ", checksum=" + checksum +
-                ", magic=" + magic +
-                ", payload=" + payload +
-                '}'
-    }
+    override fun toString(): String = "AdbPacket{" +
+            "command=" + command +
+            ", arg0=" + arg0 +
+            ", arg1=" + arg1 +
+            ", size=" + size +
+            ", checksum=" + checksum +
+            ", magic=" + magic +
+            ", payload=" + payload +
+            '}'
 }
