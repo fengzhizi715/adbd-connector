@@ -21,7 +21,7 @@ enum class Command(value: Int) {
 
     private val value: Int
     private val magic: Int
-    
+
     init {
         this.value = value
         magic = value xor -0x1
