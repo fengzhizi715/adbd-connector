@@ -47,11 +47,23 @@ interface AdbDevice : AttributeMap {
 
     fun executor(): EventLoop
 
-    fun open(destination: String, initializer: AdbChannelInitializer): Future<Channel>
+    fun open(destination: String, timeoutMs:Int, initializer: AdbChannelInitializer): Future<Channel>
 
-    fun exec(destination: String): Future<String>
+    fun open(destination: String, initializer: AdbChannelInitializer): Future<Channel> {
+        return open(destination, 30000, initializer)
+    }
 
-    fun shell(cmd: String, vararg args: String): Future<String>
+    fun exec(destination: String, timeoutMs:Int): Future<String>
+
+    fun exec(destination: String): Future<String> {
+        return exec(destination, 30000)
+    }
+
+    fun shell(cmd: String, timeoutMs:Int, vararg args: String): Future<String>
+
+    fun shell(cmd: String, vararg args: String): Future<String> {
+        return shell(cmd, 0, *args)
+    }
 
     fun shell(lineFramed: Boolean, handler: ChannelInboundHandler): Future<Channel>
 
@@ -68,8 +80,6 @@ interface AdbDevice : AttributeMap {
 
     fun pull(src: String, dest: OutputStream): Future<*>
 
-    fun push(src: InputStream, dest: String, mode: Int, mtime: Int): Future<*>
-
     @Throws(IOException::class)
     fun pull(src: String, dest: File): Future<*> {
         val os = FileOutputStream(dest)
@@ -78,6 +88,8 @@ interface AdbDevice : AttributeMap {
             os.close()
         }
     }
+
+    fun push(src: InputStream, dest: String, mode: Int, mtime: Int): Future<*>
 
     @Throws(IOException::class)
     fun push(src: File, dest: String): Future<*> {
