@@ -12,14 +12,20 @@ import cn.netdiscovery.adbd.constant.S_IFMT
  */
 enum class FileType(private val value: Int, private val code: Char) {
 
-    //套接口文件（socket）
-    SOCK(49152, 's'),  //符号链接文件（symbolic link）
-    LNK(40960, 'l'),  //普通文件（regular file）
-    REG(32768, '-'),  //块设备（block device）
-    BLK(24576, 'b'),  //目录（directory）
-    DIR(16384, 'd'),  //字符设备（character device）
-    CHR(8192, 'c'),  //管道（FIFO<pipe>）
-    FIFO(4096, 'p');
+
+    SOCKET(49152, 's'), //套接字文件（socket）
+
+    LINK(40960, 'l'),   //符号链接文件（symbolic link）
+
+    REG(32768, '-'),    //普通文件（regular file）
+
+    BLOCK(24576, 'b'),  //块设备（block device）
+
+    DIR(16384, 'd'),    //目录（directory）
+
+    CHR(8192, 'c'),     //字符设备（character device）
+
+    FIFO(4096, 'p');    //管道（FIFO<pipe>）
 
     fun value():Int = value
 

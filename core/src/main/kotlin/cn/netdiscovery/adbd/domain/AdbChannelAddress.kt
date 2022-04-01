@@ -10,7 +10,4 @@ import java.net.SocketAddress
  * @date: 2021-06-02 11:14
  * @version: V1.0 <描述当前版本功能>
  */
-data class AdbChannelAddress(
-    val destination: String,
-    val id: Int
-) : SocketAddress()
+data class AdbChannelAddress(val destination: String, val id: Int) : SocketAddress()
