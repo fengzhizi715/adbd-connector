@@ -7,6 +7,7 @@ import cn.netdiscovery.adbd.domain.enum.Feature
 import cn.netdiscovery.adbd.domain.sync.SyncDent
 import cn.netdiscovery.adbd.domain.sync.SyncStat
 import io.netty.channel.Channel
+import io.netty.channel.ChannelFuture
 import io.netty.channel.ChannelInboundHandler
 import io.netty.channel.EventLoop
 import io.netty.util.concurrent.Future
@@ -122,6 +123,22 @@ interface AdbDevice {
     fun reverseRemove(destination: String): Future<*>
 
     fun reverseRemoveAll(): Future<*>
+
+    fun forward(destination: String?, port: Int): ChannelFuture
+
+    @Throws(Exception::class)
+    fun reboot(mode: DeviceMode): Future<*>
+
+    @Throws(Exception::class)
+    fun reboot(): Future<*> {
+        return reboot(DeviceMode.SYSTEM)
+    }
+
+    fun reconnect(): Future<*>
+
+    fun addListener(listener: DeviceListener)
+
+    fun removeListener(listener: DeviceListener)
 
     fun close(): Future<*>
 }
