@@ -6,7 +6,7 @@ package cn.netdiscovery.adbd.domain.enum
  *          cn.netdiscovery.adbd.domain.enum.Command
  * @author: Tony Shen
  * @date: 2022/4/1 5:37 下午
- * @version: V1.0 <描述当前版本功能>
+ * @version: V1.0 Adb Protocol
  */
 enum class Command(value: Int) {
 

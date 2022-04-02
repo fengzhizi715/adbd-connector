@@ -12,9 +12,9 @@ import cn.netdiscovery.adbd.domain.enum.Feature
  * @version: V1.0 <描述当前版本功能>
  */
 data class ConnectResult(
-    private var type: DeviceType? = null,
-    private var model: String? = null,
-    private var product: String? = null,
-    private var device: String? = null,
-    private var features: Set<Feature>? = null
+    val type: DeviceType,
+    val model: String,
+    val product: String,
+    val device: String,
+    val features: Set<Feature>
 )
