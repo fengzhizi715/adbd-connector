@@ -9,7 +9,6 @@ import cn.netdiscovery.adbd.domain.sync.SyncStat
 import io.netty.channel.Channel
 import io.netty.channel.ChannelInboundHandler
 import io.netty.channel.EventLoop
-import io.netty.util.AttributeMap
 import io.netty.util.concurrent.Future
 import java.io.*
 
@@ -21,9 +20,7 @@ import java.io.*
  * @date: 2021-06-02 12:09
  * @version: V1.0 <描述当前版本功能>
  */
-interface AdbDevice : AttributeMap {
-
-    fun isClosed(): Boolean
+interface AdbDevice {
 
     /**
      * serial             print <serial-number>
