@@ -16,13 +16,9 @@ import java.util.concurrent.TimeUnit
  */
 class AdbChannelEventLoop(private val eventLoop: EventLoop) : AbstractEventLoop(eventLoop) {
 
-    override fun register(channel: Channel): ChannelFuture {
-        return register(channel, channel.newPromise())
-    }
+    override fun register(channel: Channel): ChannelFuture = register(channel, channel.newPromise())
 
-    override fun register(promise: ChannelPromise): ChannelFuture {
-        return register(promise.channel(), promise)
-    }
+    override fun register(promise: ChannelPromise): ChannelFuture = register(promise.channel(), promise)
 
     override fun register(channel: Channel, promise: ChannelPromise): ChannelFuture {
         channel.unsafe().register(this, promise)
@@ -33,13 +29,9 @@ class AdbChannelEventLoop(private val eventLoop: EventLoop) : AbstractEventLoop(
         //不需要实现，这个线程是沿用的
     }
 
-    override fun inEventLoop(thread: Thread): Boolean {
-        return eventLoop.inEventLoop(thread)
-    }
+    override fun inEventLoop(thread: Thread): Boolean = eventLoop.inEventLoop(thread)
 
-    override fun isShuttingDown(): Boolean {
-        return eventLoop.isShuttingDown
-    }
+    override fun isShuttingDown(): Boolean = eventLoop.isShuttingDown
 
     override fun shutdownGracefully(quietPeriod: Long, timeout: Long, unit: TimeUnit): Future<*> {
         return eventLoop.newPromise<Any>().setSuccess(null)
