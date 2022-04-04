@@ -52,8 +52,6 @@ abstract class AbstractAdbDevice(private val serial:String): DefaultAttributeMap
     @Volatile
     private lateinit var features: Set<Feature>
 
-    override fun isClosed(): Boolean = closePromise != null && (closePromise!!.isDone || closePromise!!.isCancelled)
-
     override fun serial(): String = serial
 
     override fun type(): DeviceType = type

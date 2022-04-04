@@ -15,13 +15,13 @@ import io.netty.util.ReferenceCounted
  */
 class AdbPacket : ReferenceCounted {
 
-    private val command: Command
-    private val arg0: Int
-    private val arg1: Int
-    private val size: Int
-    private val checksum: Int
-    private val magic: Int
-    private val payload: ByteBuf?
+    val command: Command
+    val arg0: Int
+    val arg1: Int
+    val size: Int
+    val checksum: Int
+    val magic: Int
+    val payload: ByteBuf?
 
     constructor(command: Command, arg0: Int, arg1: Int, size: Int, checksum: Int, magic: Int, payload: ByteBuf?) {
         this.command = command
@@ -37,9 +37,9 @@ class AdbPacket : ReferenceCounted {
         this.command = command
         this.arg0 = arg0
         this.arg1 = arg1
-        size = payload?.readableBytes() ?: 0
-        checksum = if (payload != null) checksum(payload) else 0
-        magic = command.magic()
+        this.size = payload?.readableBytes() ?: 0
+        this.checksum = if (payload != null) checksum(payload) else 0
+        this.magic = command.magic()
         this.payload = payload
     }
 
