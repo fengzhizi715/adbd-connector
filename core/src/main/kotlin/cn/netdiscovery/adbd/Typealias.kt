@@ -1,6 +1,8 @@
 package cn.netdiscovery.adbd
 
 import io.netty.channel.Channel
+import io.netty.channel.ChannelFuture
+import io.netty.channel.ChannelInitializer
 
 /**
  *
@@ -11,3 +13,5 @@ import io.netty.channel.Channel
  * @version: V1.0 <描述当前版本功能>
  */
 typealias AdbChannelInitializer = (Channel) -> Unit
+
+typealias ChannelFactory = (ChannelInitializer<Channel>) -> ChannelFuture

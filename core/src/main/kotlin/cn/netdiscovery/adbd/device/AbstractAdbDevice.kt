@@ -1,16 +1,14 @@
 package cn.netdiscovery.adbd.device
 
 import cn.netdiscovery.adbd.AdbChannelInitializer
-import cn.netdiscovery.adbd.domain.enum.DeviceType
-import cn.netdiscovery.adbd.domain.enum.Feature
-import io.netty.channel.Channel
-import io.netty.channel.ChannelFuture
-import io.netty.util.DefaultAttributeMap
-import io.netty.util.concurrent.Future
-import io.netty.util.concurrent.Promise
+import cn.netdiscovery.adbd.domain.DeviceInfo
+import cn.netdiscovery.adbd.netty.codec.AdbPacketCodec
+import io.netty.channel.*
+import java.security.interfaces.RSAPrivateCrtKey
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
-import java.util.concurrent.atomic.AtomicReferenceFieldUpdater
+import java.util.function.Consumer
 
 /**
  *
@@ -20,51 +18,76 @@ import java.util.concurrent.atomic.AtomicReferenceFieldUpdater
  * @date: 2022/4/2 2:58 下午
  * @version: V1.0 <描述当前版本功能>
  */
-abstract class AbstractAdbDevice(private val serial:String): DefaultAttributeMap(),AdbDevice {
+abstract class AbstractAdbDevice protected constructor(
+    private val serial: String,
+    private val privateKey: RSAPrivateCrtKey,
+    private val publicKey: ByteArray,
+    private val factory: cn.netdiscovery.adbd.ChannelFactory
+) : AdbDevice {
 
-    private val CONNECT_PROMISE_UPDATER = AtomicReferenceFieldUpdater.newUpdater(
-        AbstractAdbDevice::class.java,
-        Promise::class.java, "connectPromise"
-    )
-
-    private val reverseMap: Map<CharSequence, AdbChannelInitializer> = ConcurrentHashMap()
-
-    private val channelIdGen: AtomicInteger = AtomicInteger(1)
-
-    @Volatile
-    private lateinit var connectPromise: Promise<Channel>
+    private val channelIdGen: AtomicInteger
+    private val reverseMap: MutableMap<CharSequence, AdbChannelInitializer>
+    private val forwards: MutableSet<Channel>
 
     @Volatile
-    private lateinit var closePromise: Promise<*>
+    private var listeners: MutableSet<DeviceListener>
 
     @Volatile
-    private lateinit var type: DeviceType
+    private lateinit var channel: Channel
 
     @Volatile
-    private lateinit var model: String
+    private var deviceInfo: DeviceInfo? = null
 
-    @Volatile
-    private lateinit var product: String
+    init {
+        channelIdGen = AtomicInteger(1)
+        reverseMap = ConcurrentHashMap<CharSequence, AdbChannelInitializer>()
+        forwards = ConcurrentHashMap.newKeySet()
+        listeners = ConcurrentHashMap.newKeySet()
+        newConnection()[30, TimeUnit.SECONDS]
+    }
 
-    @Volatile
-    private lateinit var device: String
 
-    @Volatile
-    private lateinit var features: Set<Feature>
+    private fun newConnection(): ChannelFuture {
 
-    override fun serial(): String = serial
+        val future:ChannelFuture = factory.invoke(object : ChannelInitializer<Channel>() {
+            override fun initChannel(ch: Channel) {
+                val pipeline = ch.pipeline()
+                pipeline.addLast(object : ChannelInboundHandlerAdapter() {
+                    @Throws(Exception::class)
+                    override fun channelInactive(ctx: ChannelHandlerContext) {
 
-    override fun type(): DeviceType = type
+                        listeners.forEach(Consumer { listener: DeviceListener ->
+                            try {
+                                listener.onDisconnected(this@AbstractAdbDevice)
+                            } catch (e: Exception) {
+                            }
+                        })
+                        super.channelInactive(ctx)
+                    }
+                })
+                .addLast("codec", AdbPacketCodec())
+            }
 
-    override fun model(): String = model
+        })
+        channel = future.channel()
+        return future
+    }
 
-    override fun product(): String = product
+    protected fun factory(): cn.netdiscovery.adbd.ChannelFactory = factory
 
-    override fun device(): String = device
+    protected fun privateKey(): RSAPrivateCrtKey {
+        return privateKey
+    }
 
-    override fun features(): Set<Feature> = features
+    protected fun publicKey(): ByteArray {
+        return publicKey
+    }
 
-    protected open fun closeFuture(): Future<*> = closePromise
+    fun eventLoop(): EventLoop {
+        return channel!!.eventLoop()
+    }
 
-    protected abstract fun newChannel(initializer: AdbChannelInitializer): ChannelFuture
+    override fun serial(): String {
+        return serial
+    }
 }
