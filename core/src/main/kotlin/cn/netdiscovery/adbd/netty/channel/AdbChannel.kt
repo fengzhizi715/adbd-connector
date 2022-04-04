@@ -29,8 +29,8 @@ import java.util.concurrent.TimeUnit
  * @date: 2022/4/4 1:01 上午
  * @version: V1.0 <描述当前版本功能>
  */
-class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel(parent),
-    ChannelInboundHandler {
+class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel(parent), ChannelInboundHandler {
+
     private val eventLoop: EventLoop
     private val config: ChannelConfig
     private val metadata: ChannelMetadata
@@ -58,9 +58,9 @@ class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel
         this.localId = localId
         this.remoteId = remoteId
         this.eventLoop = AdbChannelEventLoop(parent.eventLoop())
-        metadata = ChannelMetadata(false)
-        pendingWriteEntries = LinkedList<PendingWriteEntry>()
-        config = DefaultChannelConfig(this)
+        this.metadata = ChannelMetadata(false)
+        this.pendingWriteEntries = LinkedList()
+        this.config = DefaultChannelConfig(this)
         config.allocator = parent.config().allocator
         config.connectTimeoutMillis = parent.config().connectTimeoutMillis
         config.isAutoClose = parent.config().isAutoClose
@@ -71,7 +71,7 @@ class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel
         return AdbUnsafe()
     }
 
-    override fun isCompatible(loop: EventLoop?): Boolean {
+    override fun isCompatible(loop: EventLoop): Boolean {
         return loop is AdbChannelEventLoop
     }
 
@@ -196,7 +196,7 @@ class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel
                 val localFlushedAmount = buf.readableBytes()
                 try {
                     /**
-                     * @see adbs.constant.Constants.WRITE_DATA_MAX;
+                     * @see cn.netdiscovery.adbd.constant.Constants.WRITE_DATA_MAX;
                      * 此处不能直接一次write, 超过大小的得分段write
                      */
                     while (true) {
