@@ -177,7 +177,7 @@ abstract class AbstractAdbDevice protected constructor(
 
     override fun shell(
         cmd: String,
-        vararg args: String,
+        args: Array<String>,
         lineFramed: Boolean,
         handler: ChannelInboundHandler
     ): ChannelFuture {

@@ -23,7 +23,7 @@ private fun buildCmdLine(cmd: String, vararg args: String): StringBuilder? {
     return cmdLine
 }
 
-fun buildShellCmd(cmd: String?, vararg args: String): String {
+fun buildShellCmd(cmd: String, vararg args: String): String {
     val sb = StringBuilder()
     sb.append("shell:")
     if (cmd != null) {

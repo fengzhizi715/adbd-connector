@@ -6,7 +6,6 @@ import cn.netdiscovery.adbd.domain.enum.DeviceType
 import cn.netdiscovery.adbd.domain.enum.Feature
 import cn.netdiscovery.adbd.domain.sync.SyncDent
 import cn.netdiscovery.adbd.domain.sync.SyncStat
-import io.netty.channel.Channel
 import io.netty.channel.ChannelFuture
 import io.netty.channel.ChannelInboundHandler
 import io.netty.channel.EventLoop
@@ -61,7 +60,7 @@ interface AdbDevice {
 
     fun shell(
         cmd: String,
-        vararg args: String,
+        args: Array<String>,
         lineFramed: Boolean,
         handler: ChannelInboundHandler
     ): ChannelFuture
