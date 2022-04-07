@@ -1,11 +1,16 @@
 package cn.netdiscovery.adbd.device
 
 import cn.netdiscovery.adbd.AdbChannelInitializer
+import cn.netdiscovery.adbd.domain.AdbChannelAddress
 import cn.netdiscovery.adbd.domain.DeviceInfo
 import cn.netdiscovery.adbd.domain.PendingWriteEntry
+import cn.netdiscovery.adbd.domain.enum.DeviceType
+import cn.netdiscovery.adbd.domain.enum.Feature
+import cn.netdiscovery.adbd.netty.channel.AdbChannel
 import cn.netdiscovery.adbd.netty.codec.AdbPacketCodec
 import cn.netdiscovery.adbd.netty.connection.AdbChannelProcessor
 import cn.netdiscovery.adbd.netty.handler.AdbAuthHandler
+import cn.netdiscovery.adbd.utils.getChannelName
 import io.netty.channel.*
 import io.netty.util.concurrent.Future
 import java.security.interfaces.RSAPrivateCrtKey
@@ -14,7 +19,6 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.RejectedExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
-import java.util.function.Consumer
 
 /**
  *
@@ -42,7 +46,7 @@ abstract class AbstractAdbDevice protected constructor(
     private lateinit var channel: Channel
 
     @Volatile
-    var deviceInfo: DeviceInfo? = null
+    var deviceInfo: DeviceInfo?=null
 
     init {
         newConnection()[30, TimeUnit.SECONDS]
@@ -87,11 +91,31 @@ abstract class AbstractAdbDevice protected constructor(
     }
 
     fun eventLoop(): EventLoop {
-        return channel!!.eventLoop()
+        return channel.eventLoop()
     }
 
     override fun serial(): String {
         return serial
+    }
+
+    override fun type(): DeviceType?  = deviceInfo?.type?:null
+
+    override fun model(): String? = deviceInfo?.model?:null
+
+    override fun product(): String? = deviceInfo?.product?:null
+
+    override fun device(): String? = deviceInfo?.device?:null
+
+    override fun features(): Set<Feature>? = deviceInfo?.features?:null
+
+    override fun open(destination: String, timeoutMs: Int, initializer: AdbChannelInitializer): ChannelFuture {
+        val localId = channelIdGen.getAndIncrement()
+        val channelName: String = getChannelName(localId)
+        val adbChannel = AdbChannel(channel, localId, 0)
+        adbChannel.config().connectTimeoutMillis = timeoutMs
+        initializer.invoke(adbChannel)
+        channel.pipeline().addLast(channelName, adbChannel)
+        return adbChannel.connect(AdbChannelAddress(destination, localId))
     }
 
     override fun addListener(listener: DeviceListener) {

@@ -33,21 +33,21 @@ interface AdbDevice {
      * type                print bootloader | device
      * @return
      */
-    fun type(): DeviceType
+    fun type(): DeviceType?
 
-    fun model(): String
+    fun model(): String?
 
-    fun product(): String
+    fun product(): String?
 
-    fun device(): String
+    fun device(): String?
 
-    fun features(): Set<Feature>
+    fun features(): Set<Feature>?
 
     fun executor(): EventLoop
 
-    fun open(destination: String, timeoutMs:Int, initializer: AdbChannelInitializer): Future<Channel>
+    fun open(destination: String, timeoutMs:Int, initializer: AdbChannelInitializer): ChannelFuture
 
-    fun open(destination: String, initializer: AdbChannelInitializer): Future<Channel> = open(destination, 30000, initializer)
+    fun open(destination: String, initializer: AdbChannelInitializer): ChannelFuture = open(destination, 30000, initializer)
 
     fun exec(destination: String, timeoutMs:Int): Future<String>
 
