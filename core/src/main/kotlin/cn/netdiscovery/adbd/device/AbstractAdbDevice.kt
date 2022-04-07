@@ -10,6 +10,8 @@ import cn.netdiscovery.adbd.netty.channel.AdbChannel
 import cn.netdiscovery.adbd.netty.codec.AdbPacketCodec
 import cn.netdiscovery.adbd.netty.connection.AdbChannelProcessor
 import cn.netdiscovery.adbd.netty.handler.AdbAuthHandler
+import cn.netdiscovery.adbd.netty.handler.ExecHandler
+import cn.netdiscovery.adbd.utils.buildShellCmd
 import cn.netdiscovery.adbd.utils.getChannelName
 import io.netty.channel.*
 import io.netty.handler.codec.string.StringDecoder
@@ -120,6 +122,38 @@ abstract class AbstractAdbDevice protected constructor(
         initializer.invoke(adbChannel)
         channel.pipeline().addLast(channelName, adbChannel)
         return adbChannel.connect(AdbChannelAddress(destination, localId))
+    }
+
+    override fun exec(destination: String, timeoutMs: Int): Future<String> {
+        val promise = eventLoop().newPromise<String>()
+        val future = open(destination, timeoutMs, object:AdbChannelInitializer {
+            override fun invoke(channel: Channel) {
+                channel.pipeline()
+                    .addLast(StringDecoder(StandardCharsets.UTF_8))
+                    .addLast(StringEncoder(StandardCharsets.UTF_8))
+                    .addLast(ExecHandler(promise))
+            }
+        })
+        future.addListener { f: Future<in Void?> ->
+            if (f.cause() != null) {
+                promise.tryFailure(f.cause())
+            }
+        }
+        promise.addListener { f: Future<in String>? ->
+            future.channel().close()
+        }
+        if (timeoutMs > 0) {
+            eventLoop().schedule({
+                val cause = TimeoutException("exec timeout: " + destination.trim { it <= ' ' })
+                promise.tryFailure(cause)
+            }, timeoutMs.toLong(), TimeUnit.MILLISECONDS)
+        }
+        return promise
+    }
+
+    override fun shell(cmd: String, timeoutMs: Int, vararg args: String): Future<String> {
+        val shellCmd: String = buildShellCmd(cmd, *args)
+        return exec(shellCmd, timeoutMs)
     }
 
     override fun addListener(listener: DeviceListener) {
