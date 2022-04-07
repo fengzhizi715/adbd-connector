@@ -57,14 +57,14 @@ interface AdbDevice {
 
     fun shell(cmd: String, vararg args: String): Future<String> = shell(cmd, 0, *args)
 
-    fun shell(lineFramed: Boolean, handler: ChannelInboundHandler): Future<Channel>
+    fun shell(lineFramed: Boolean, handler: ChannelInboundHandler): ChannelFuture
 
     fun shell(
         cmd: String,
         args: Array<String>,
         lineFramed: Boolean,
         handler: ChannelInboundHandler
-    ): Future<Channel>
+    ): ChannelFuture
 
     fun stat(path: String): Future<SyncStat>
 

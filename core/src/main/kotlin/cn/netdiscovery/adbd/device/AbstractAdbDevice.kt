@@ -14,6 +14,7 @@ import cn.netdiscovery.adbd.netty.handler.ExecHandler
 import cn.netdiscovery.adbd.utils.buildShellCmd
 import cn.netdiscovery.adbd.utils.getChannelName
 import io.netty.channel.*
+import io.netty.handler.codec.LineBasedFrameDecoder
 import io.netty.handler.codec.string.StringDecoder
 import io.netty.handler.codec.string.StringEncoder
 import io.netty.util.concurrent.Future
@@ -154,6 +155,21 @@ abstract class AbstractAdbDevice protected constructor(
     override fun shell(cmd: String, timeoutMs: Int, vararg args: String): Future<String> {
         val shellCmd: String = buildShellCmd(cmd, *args)
         return exec(shellCmd, timeoutMs)
+    }
+
+    override fun shell(lineFramed: Boolean, handler: ChannelInboundHandler): ChannelFuture {
+        return open("shell:\u0000", object:AdbChannelInitializer{
+            override fun invoke(channel: Channel) {
+                if (lineFramed) {
+                    channel.pipeline().addLast(LineBasedFrameDecoder(8192))
+                }
+                channel.pipeline()
+                    .addLast(StringDecoder(StandardCharsets.UTF_8))
+                    .addLast(StringEncoder(StandardCharsets.UTF_8))
+                    .addLast(handler)
+            }
+
+        })
     }
 
     override fun addListener(listener: DeviceListener) {
