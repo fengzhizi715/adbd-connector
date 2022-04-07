@@ -6,6 +6,8 @@ import cn.netdiscovery.adbd.domain.DeviceInfo
 import cn.netdiscovery.adbd.domain.PendingWriteEntry
 import cn.netdiscovery.adbd.domain.enum.DeviceType
 import cn.netdiscovery.adbd.domain.enum.Feature
+import cn.netdiscovery.adbd.domain.sync.SyncQuit
+import cn.netdiscovery.adbd.domain.sync.SyncStat
 import cn.netdiscovery.adbd.netty.channel.AdbChannel
 import cn.netdiscovery.adbd.netty.codec.AdbPacketCodec
 import cn.netdiscovery.adbd.netty.connection.AdbChannelProcessor
@@ -18,6 +20,7 @@ import io.netty.handler.codec.LineBasedFrameDecoder
 import io.netty.handler.codec.string.StringDecoder
 import io.netty.handler.codec.string.StringEncoder
 import io.netty.util.concurrent.Future
+import io.netty.util.concurrent.Promise
 import java.nio.charset.StandardCharsets
 import java.security.interfaces.RSAPrivateCrtKey
 import java.util.*
@@ -170,6 +173,42 @@ abstract class AbstractAdbDevice protected constructor(
             }
 
         })
+    }
+
+    override fun shell(
+        cmd: String,
+        vararg args: String,
+        lineFramed: Boolean,
+        handler: ChannelInboundHandler
+    ): ChannelFuture {
+        val shellCmd: String = buildShellCmd(cmd, *args)
+        return open(shellCmd, object:AdbChannelInitializer{
+            override fun invoke(channel: Channel) {
+                if (lineFramed) {
+                    channel.pipeline().addLast(LineBasedFrameDecoder(8192))
+                }
+                channel.pipeline()
+                    .addLast(StringDecoder(StandardCharsets.UTF_8))
+                    .addLast(StringEncoder(StandardCharsets.UTF_8))
+                    .addLast(handler)
+            }
+        })
+    }
+
+    private fun <T> sync(promise: Promise<T>, initializer: AdbChannelInitializer) {
+        val future = open("sync:\u0000", initializer)
+        future.addListener { f: Future<in Void> ->
+            if (f.cause() != null) {
+                promise.tryFailure(f.cause())
+            }
+        }
+        promise.addListener { f: Future<in T> ->
+            future.channel()
+                .writeAndFlush(SyncQuit())
+                .addListener { f0: Future<in Void> ->
+                    future.channel().close()
+                }
+        }
     }
 
     override fun addListener(listener: DeviceListener) {

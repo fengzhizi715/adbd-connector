@@ -61,7 +61,7 @@ interface AdbDevice {
 
     fun shell(
         cmd: String,
-        args: Array<String>,
+        vararg args: String,
         lineFramed: Boolean,
         handler: ChannelInboundHandler
     ): ChannelFuture
