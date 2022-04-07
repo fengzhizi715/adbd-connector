@@ -12,12 +12,16 @@ import cn.netdiscovery.adbd.netty.connection.AdbChannelProcessor
 import cn.netdiscovery.adbd.netty.handler.AdbAuthHandler
 import cn.netdiscovery.adbd.utils.getChannelName
 import io.netty.channel.*
+import io.netty.handler.codec.string.StringDecoder
+import io.netty.handler.codec.string.StringEncoder
 import io.netty.util.concurrent.Future
+import java.nio.charset.StandardCharsets
 import java.security.interfaces.RSAPrivateCrtKey
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.RejectedExecutionException
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
