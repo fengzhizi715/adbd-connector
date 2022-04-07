@@ -121,10 +121,7 @@ class AdbAuthHandler(private val privateKey: RSAPrivateCrtKey, private val publi
                         } else if ("features" == key) {
                             val fts: MutableSet<Feature> = HashSet<Feature>()
                             for (f in value.split(",").toTypedArray()) {
-                                val fe: Feature? = Feature.findByCode(f)
-                                if (fe == null) {
-                                    continue
-                                }
+                                val fe: Feature = Feature.findByCode(f) ?: continue
                                 fts.add(fe)
                             }
                             features = Collections.unmodifiableSet(fts)

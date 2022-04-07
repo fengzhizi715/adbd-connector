@@ -5,6 +5,7 @@ import cn.netdiscovery.adbd.domain.DeviceInfo
 import cn.netdiscovery.adbd.domain.PendingWriteEntry
 import cn.netdiscovery.adbd.netty.codec.AdbPacketCodec
 import cn.netdiscovery.adbd.netty.connection.AdbChannelProcessor
+import cn.netdiscovery.adbd.netty.handler.AdbAuthHandler
 import io.netty.channel.*
 import io.netty.util.concurrent.Future
 import java.security.interfaces.RSAPrivateCrtKey
@@ -66,6 +67,7 @@ abstract class AbstractAdbDevice protected constructor(
                     }
                 })
                 .addLast("codec", AdbPacketCodec())
+                .addLast("auth", AdbAuthHandler(privateKey, publicKey))
                 .addLast("connect", ConnectHandler(this@AbstractAdbDevice))
             }
 
