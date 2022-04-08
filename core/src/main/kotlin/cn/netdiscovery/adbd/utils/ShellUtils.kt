@@ -8,13 +8,13 @@ package cn.netdiscovery.adbd.utils
  * @date: 2022/4/7 4:39 下午
  * @version: V1.0 <描述当前版本功能>
  */
-private fun quote(s: String): String? {
+private fun quote(s: String): String {
     return if (s.matches("\\S+".toRegex())) {
         s
     } else "'" + s.replace("'", "'\\''") + "'"
 }
 
-private fun buildCmdLine(cmd: String, vararg args: String): StringBuilder? {
+private fun buildCmdLine(cmd: String, vararg args: String): StringBuilder {
     val cmdLine = StringBuilder(cmd)
     for (arg in args) {
         cmdLine.append(" ")

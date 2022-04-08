@@ -1,0 +1,12 @@
+package cn.netdiscovery.adbd.domain.sync
+
+/**
+ *
+ * @FileName:
+ *          cn.netdiscovery.adbd.domain.sync.SyncOkay
+ * @author: Tony Shen
+ * @date: 2022/4/8 4:41 下午
+ * @version: V1.0 <描述当前版本功能>
+ */
+class SyncOkay {
+}
