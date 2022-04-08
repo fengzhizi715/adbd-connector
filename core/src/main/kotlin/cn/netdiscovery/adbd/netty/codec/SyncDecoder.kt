@@ -17,10 +17,10 @@ import java.nio.charset.StandardCharsets
  * @date: 2022/4/8 4:22 下午
  * @version: V1.0 <描述当前版本功能>
  */
-class SyncDecoder : ByteToMessageDecoder() {
+open class SyncDecoder : ByteToMessageDecoder() {
 
     @Throws(Exception::class)
-    protected fun decode(sid: SyncID, ctx: ChannelHandlerContext, `in`: ByteBuf, out: List<Any>) {
+    open fun decode(sid: SyncID, ctx: ChannelHandlerContext, `in`: ByteBuf, out: MutableList<Any>) {
         ctx.fireExceptionCaught(ProtocolException("unsupported sid:$sid"))
     }
 
