@@ -10,9 +10,12 @@ import cn.netdiscovery.adbd.domain.sync.SyncQuit
 import cn.netdiscovery.adbd.domain.sync.SyncStat
 import cn.netdiscovery.adbd.netty.channel.AdbChannel
 import cn.netdiscovery.adbd.netty.codec.AdbPacketCodec
+import cn.netdiscovery.adbd.netty.codec.SyncEncoder
+import cn.netdiscovery.adbd.netty.codec.SyncStatDecoder
 import cn.netdiscovery.adbd.netty.connection.AdbChannelProcessor
 import cn.netdiscovery.adbd.netty.handler.AdbAuthHandler
 import cn.netdiscovery.adbd.netty.handler.ExecHandler
+import cn.netdiscovery.adbd.netty.handler.SyncStatHandler
 import cn.netdiscovery.adbd.utils.buildShellCmd
 import cn.netdiscovery.adbd.utils.getChannelName
 import io.netty.channel.*
@@ -209,6 +212,20 @@ abstract class AbstractAdbDevice protected constructor(
                     future.channel().close()
                 }
         }
+    }
+
+    override fun stat(path: String): Future<SyncStat> {
+        val promise = eventLoop().newPromise<SyncStat>()
+        sync(promise, object:AdbChannelInitializer{
+
+            override fun invoke(channel: Channel) {
+                channel.pipeline()
+                    .addLast(SyncStatDecoder())
+                    .addLast(SyncEncoder())
+                    .addLast(SyncStatHandler(this@AbstractAdbDevice, path, promise))
+            }
+        })
+        return promise
     }
 
     override fun addListener(listener: DeviceListener) {
