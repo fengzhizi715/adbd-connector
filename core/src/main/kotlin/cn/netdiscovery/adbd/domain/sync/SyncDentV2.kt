@@ -6,15 +6,16 @@ import java.util.*
 /**
  *
  * @FileName:
- *          cn.netdiscovery.adbd.domain.sync.SyncStatV2
+ *          cn.netdiscovery.adbd.domain.sync.SyncDentV2
  * @author: Tony Shen
- * @date: 2022/4/8 5:45 下午
+ * @date: 2022/4/11 3:14 下午
  * @version: V1.0 <描述当前版本功能>
  */
-data class SyncStatV2(
+data class SyncDentV2(
     override val mode: StatMode?,
     override val size: Long,
     override val mtime: Date?,
+    override val name: String,
     val error: Long,
     val dev: Long,
     val ino: Long,
@@ -23,4 +24,9 @@ data class SyncStatV2(
     val gid: Long,
     val atime: Date?,
     val ctime: Date?
-) : SyncStat(mode, size, mtime)
+) : SyncDent(mode, size, mtime, name) {
+
+    override fun toString(): String {
+        return name
+    }
+}

@@ -12,9 +12,9 @@ import java.util.*
  * @version: V1.0 <描述当前版本功能>
  */
 open class SyncStat (
-    val mode: StatMode?,
-    val size: Long,
-    val mtime: Date?)
+    open val mode: StatMode?,
+    open val size: Long,
+    open val mtime: Date?)
 {
     override fun toString(): String {
         val sb = StringBuilder()
