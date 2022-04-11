@@ -12,10 +12,7 @@ import cn.netdiscovery.adbd.domain.sync.SyncStat
 import cn.netdiscovery.adbd.netty.channel.AdbChannel
 import cn.netdiscovery.adbd.netty.codec.*
 import cn.netdiscovery.adbd.netty.connection.AdbChannelProcessor
-import cn.netdiscovery.adbd.netty.handler.AdbAuthHandler
-import cn.netdiscovery.adbd.netty.handler.ExecHandler
-import cn.netdiscovery.adbd.netty.handler.SyncListHandler
-import cn.netdiscovery.adbd.netty.handler.SyncStatHandler
+import cn.netdiscovery.adbd.netty.handler.*
 import cn.netdiscovery.adbd.utils.buildShellCmd
 import cn.netdiscovery.adbd.utils.getChannelName
 import io.netty.channel.*
@@ -24,6 +21,7 @@ import io.netty.handler.codec.string.StringDecoder
 import io.netty.handler.codec.string.StringEncoder
 import io.netty.util.concurrent.Future
 import io.netty.util.concurrent.Promise
+import java.io.OutputStream
 import java.nio.charset.StandardCharsets
 import java.security.interfaces.RSAPrivateCrtKey
 import java.util.*
@@ -238,7 +236,19 @@ abstract class AbstractAdbDevice protected constructor(
                     .addLast(SyncEncoder())
                     .addLast(SyncListHandler(this@AbstractAdbDevice, path, promise))
             }
+        })
+        return promise
+    }
 
+    override fun pull(src: String, dest: OutputStream): Future<Any> {
+        val promise = eventLoop().newPromise<Any>()
+        sync<Any>(promise, object: AdbChannelInitializer {
+            override fun invoke(channel: Channel) {
+                channel.pipeline()
+                    .addLast(SyncDataDecoder())
+                    .addLast(SyncEncoder())
+                    .addLast(SyncPullHandler(this@AbstractAdbDevice, src, dest, promise))
+            }
         })
         return promise
     }
