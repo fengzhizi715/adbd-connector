@@ -6,15 +6,15 @@ import cn.netdiscovery.adbd.domain.DeviceInfo
 import cn.netdiscovery.adbd.domain.PendingWriteEntry
 import cn.netdiscovery.adbd.domain.enum.DeviceType
 import cn.netdiscovery.adbd.domain.enum.Feature
+import cn.netdiscovery.adbd.domain.sync.SyncDent
 import cn.netdiscovery.adbd.domain.sync.SyncQuit
 import cn.netdiscovery.adbd.domain.sync.SyncStat
 import cn.netdiscovery.adbd.netty.channel.AdbChannel
-import cn.netdiscovery.adbd.netty.codec.AdbPacketCodec
-import cn.netdiscovery.adbd.netty.codec.SyncEncoder
-import cn.netdiscovery.adbd.netty.codec.SyncStatDecoder
+import cn.netdiscovery.adbd.netty.codec.*
 import cn.netdiscovery.adbd.netty.connection.AdbChannelProcessor
 import cn.netdiscovery.adbd.netty.handler.AdbAuthHandler
 import cn.netdiscovery.adbd.netty.handler.ExecHandler
+import cn.netdiscovery.adbd.netty.handler.SyncListHandler
 import cn.netdiscovery.adbd.netty.handler.SyncStatHandler
 import cn.netdiscovery.adbd.utils.buildShellCmd
 import cn.netdiscovery.adbd.utils.getChannelName
@@ -224,6 +224,21 @@ abstract class AbstractAdbDevice protected constructor(
                     .addLast(SyncEncoder())
                     .addLast(SyncStatHandler(this@AbstractAdbDevice, path, promise))
             }
+        })
+        return promise
+    }
+
+    override fun list(path: String): Future<Array<SyncDent>> {
+        val promise = eventLoop().newPromise<Array<SyncDent>>()
+        sync<Array<SyncDent>>(promise,  object:AdbChannelInitializer {
+            override fun invoke(channel: Channel) {
+                channel.pipeline()
+                    .addLast(SyncDentDecoder())
+                    .addLast(SyncDentAggregator())
+                    .addLast(SyncEncoder())
+                    .addLast(SyncListHandler(this@AbstractAdbDevice, path, promise))
+            }
+
         })
         return promise
     }
