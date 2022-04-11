@@ -20,7 +20,7 @@ import java.util.*
  * @date: 2022/4/8 4:44 下午
  * @version: V1.0 <描述当前版本功能>
  */
-class SyncStatDecoder : SyncDecoder() {
+open class SyncStatDecoder : SyncDecoder() {
 
     @Throws(Exception::class)
     private fun decodeStat(ctx: ChannelHandlerContext, `in`: ByteBuf, out: MutableList<Any>) {
@@ -68,7 +68,7 @@ class SyncStatDecoder : SyncDecoder() {
             return StatMode(type, usrPerm, grpPerm, othPerm)
         }
 
-        protected fun decodeStat(`in`: ByteBuf): SyncStat {
+        fun decodeStat(`in`: ByteBuf): SyncStat {
             val mode = `in`.readIntLE()
             val size = `in`.readUnsignedIntLE()
             val mtime = `in`.readUnsignedIntLE()
@@ -79,7 +79,7 @@ class SyncStatDecoder : SyncDecoder() {
             )
         }
 
-        protected fun decodeStatV2(`in`: ByteBuf): SyncStatV2 {
+        fun decodeStatV2(`in`: ByteBuf): SyncStatV2 {
             val error = `in`.readIntLE()
             val dev = `in`.readLongLE()
             val ino = `in`.readLongLE()

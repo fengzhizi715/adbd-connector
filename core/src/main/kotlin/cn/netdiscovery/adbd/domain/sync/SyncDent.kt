@@ -11,7 +11,7 @@ import java.util.*
  * @date: 2021-06-02 15:25
  * @version: V1.0 <描述当前版本功能>
  */
-class SyncDent(mode: StatMode,size: Long,mtime: Date, val name: String) : SyncStat(mode, size, mtime) {
+class SyncDent(mode: StatMode?,size: Long,mtime: Date?, val name: String) : SyncStat(mode, size, mtime) {
 
     override fun toString(): String {
         val sb = StringBuilder()
