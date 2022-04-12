@@ -291,6 +291,25 @@ abstract class AbstractAdbDevice protected constructor(
         return promise
     }
 
+
+    override fun unroot(): Future<*> {
+        val promise: Promise<*> = eventLoop().newPromise<Any>()
+        val handler = RestartHandler(promise)
+        addListener(handler)
+        exec("unroot:\u0000").addListener(GenericFutureListener { f: Future<String> ->
+            if (f.cause() != null) {
+                promise.tryFailure(f.cause())
+            } else {
+                val s: String = f.now.trim()
+                if (s == "adbd not running as root") {
+                    removeListener(handler)
+                    promise.trySuccess(null)
+                }
+            }
+        })
+        return promise
+    }
+
     override fun addListener(listener: DeviceListener) {
         listeners.add(listener)
     }
