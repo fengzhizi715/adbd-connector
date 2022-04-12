@@ -11,6 +11,7 @@ import cn.netdiscovery.adbd.domain.sync.SyncQuit
 import cn.netdiscovery.adbd.domain.sync.SyncStat
 import cn.netdiscovery.adbd.exception.AdbException
 import cn.netdiscovery.adbd.netty.channel.AdbChannel
+import cn.netdiscovery.adbd.netty.channel.TCPReverse
 import cn.netdiscovery.adbd.netty.codec.*
 import cn.netdiscovery.adbd.netty.connection.AdbChannelProcessor
 import cn.netdiscovery.adbd.netty.handler.*
@@ -325,6 +326,80 @@ abstract class AbstractAdbDevice protected constructor(
             }
         })
         return promise
+    }
+
+    override fun reverse(destination: String, initializer: AdbChannelInitializer): Future<String> {
+        val cmd = "reverse:forward:$destination;$destination\u0000"
+        val promise = eventLoop().newPromise<String>()
+        exec(cmd).addListener(GenericFutureListener { f: Future<String> ->
+            if (f.cause() != null) {
+                promise.tryFailure(f.cause())
+            } else {
+                try {
+                    val result: String = readResult(f.now)?:""
+                    reverseMap[destination] = initializer
+                    promise.trySuccess(result)
+                } catch (cause: Throwable) {
+                    promise.tryFailure(cause)
+                }
+            }
+        })
+        return promise
+    }
+
+    override fun reverse(remote: String, local: String): Future<String> {
+        val addr = local.split(":").toTypedArray()
+        val protocol: String
+        val host: String
+        val port: Int
+        if (addr.size == 2) {
+            protocol = addr[0]
+            host = "127.0.0.1"
+            port = Integer.valueOf(addr[1])
+        } else if (addr.size == 3) {
+            protocol = addr[0]
+            host = addr[1]
+            port = Integer.valueOf(addr[2])
+        } else {
+            throw IllegalArgumentException("local")
+        }
+        require("tcp" == protocol) { "local" }
+        val cmd = "reverse:forward:$remote;$local\u0000"
+        val promise = eventLoop().newPromise<String>()
+        exec(cmd).addListener(GenericFutureListener { f: Future<String> ->
+            if (f.cause() != null) {
+                promise.tryFailure(f.cause())
+            } else {
+                try {
+                    val result: String = readResult(f.now)?:""
+                    reverseMap[local] = TCPReverse(host, port, eventLoop())
+                    promise.trySuccess(result)
+                } catch (cause: Throwable) {
+                    promise.tryFailure(cause)
+                }
+            }
+        })
+        return promise
+    }
+
+    @Throws(AdbException::class)
+    private fun readResult(result: String): String? {
+        return if (result.isEmpty()) {
+            null
+        } else if (result.startsWith("FAIL")) {
+            val len = Integer.valueOf(result.substring(4, 8), 16)
+            throw AdbException(result.substring(8, 8 + len))
+        } else if (result.startsWith("OKAY")) {
+            if (result.length > 4) {
+                val len = Integer.valueOf(result.substring(4, 8), 16)
+                result.substring(8, 8 + len)
+            } else {
+                null
+            }
+        } else {
+            val len = Integer.valueOf(result.substring(0, 4), 16)
+            result.substring(4, 4 + len)
+        }
     }
 
     override fun addListener(listener: DeviceListener) {
