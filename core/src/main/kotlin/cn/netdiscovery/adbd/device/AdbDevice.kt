@@ -43,7 +43,7 @@ interface AdbDevice {
 
     fun features(): Set<Feature>?
 
-    fun executor(): EventLoop
+    fun eventLoop(): EventLoop
 
     fun open(destination: String, timeoutMs:Int, initializer: AdbChannelInitializer?): ChannelFuture
 
@@ -106,14 +106,6 @@ interface AdbDevice {
      */
     fun remount(): Future<*>
 
-    /**
-     * usb                      restart adbd listening on USB
-     * tcpip PORT               restart adbd listening on TCP on PORT
-     * @param port
-     * @return
-     */
-    fun reload(port: Int): Future<*>
-
     fun reverse(destination: String, initializer: AdbChannelInitializer): Future<String>
 
     fun reverse(remote: String, local: String): Future<String>
@@ -140,5 +132,6 @@ interface AdbDevice {
 
     fun removeListener(listener: DeviceListener)
 
-    fun close(): Future<*>
+    @Throws(java.lang.Exception::class)
+    fun close()
 }

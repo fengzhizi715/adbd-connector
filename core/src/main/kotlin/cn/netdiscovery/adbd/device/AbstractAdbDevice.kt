@@ -110,7 +110,7 @@ abstract class AbstractAdbDevice protected constructor(
         return publicKey
     }
 
-    fun eventLoop(): EventLoop {
+    override fun eventLoop(): EventLoop {
         return channel.eventLoop()
     }
 
@@ -536,6 +536,23 @@ abstract class AbstractAdbDevice protected constructor(
 
     override fun removeListener(listener: DeviceListener) {
         listeners.remove(listener)
+    }
+
+    @Throws(java.lang.Exception::class)
+    override fun close() {
+        try {
+            //关闭reverse
+            reverseRemoveAll()[30, TimeUnit.SECONDS]
+        } catch (e: java.lang.Exception) {
+        }
+        //关闭forward
+        for (forward in forwards) {
+            try {
+                forward.close()[30, TimeUnit.SECONDS]
+            } catch (e: java.lang.Exception) {
+            }
+        }
+        channel.close()[30, TimeUnit.SECONDS]
     }
 
     private class RestartHandler(private val promise: Promise<*>) : DeviceListener {
