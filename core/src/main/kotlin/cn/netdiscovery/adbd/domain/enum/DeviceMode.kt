@@ -1,9 +1,9 @@
-package cn.netdiscovery.adbd.device
+package cn.netdiscovery.adbd.domain.enum
 
 /**
  *
  * @FileName:
- *          cn.netdiscovery.adbd.device.DeviceMode
+ *          cn.netdiscovery.adbd.device.enum.DeviceMode
  * @author: Tony Shen
  * @date: 2022/4/2 10:29 下午
  * @version: V1.0 <描述当前版本功能>

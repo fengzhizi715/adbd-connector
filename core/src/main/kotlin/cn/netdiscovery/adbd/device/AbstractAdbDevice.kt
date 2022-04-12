@@ -4,6 +4,7 @@ import cn.netdiscovery.adbd.AdbChannelInitializer
 import cn.netdiscovery.adbd.domain.AdbChannelAddress
 import cn.netdiscovery.adbd.domain.DeviceInfo
 import cn.netdiscovery.adbd.domain.PendingWriteEntry
+import cn.netdiscovery.adbd.domain.enum.DeviceMode
 import cn.netdiscovery.adbd.domain.enum.DeviceType
 import cn.netdiscovery.adbd.domain.enum.Feature
 import cn.netdiscovery.adbd.domain.sync.SyncDent
@@ -522,7 +523,6 @@ abstract class AbstractAdbDevice protected constructor(
         }
         return open("reboot:" + mode.name + "\u0000", null)
     }
-
 
     override fun reconnect(): Future<*> {
         val channel = this.channel

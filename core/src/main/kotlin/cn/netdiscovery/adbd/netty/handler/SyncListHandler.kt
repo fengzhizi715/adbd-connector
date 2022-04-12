@@ -6,13 +6,13 @@ import cn.netdiscovery.adbd.domain.enum.SyncID
 import cn.netdiscovery.adbd.domain.sync.SyncDent
 import cn.netdiscovery.adbd.domain.sync.SyncFail
 import cn.netdiscovery.adbd.domain.sync.SyncPath
+import cn.netdiscovery.adbd.exception.AdbException
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
 import io.netty.util.concurrent.Future
 import io.netty.util.concurrent.Promise
 import java.net.ProtocolException
 import java.nio.channels.ClosedChannelException
-import java.rmi.RemoteException
 
 /**
  *
@@ -41,7 +41,7 @@ class SyncListHandler(private val device: AdbDevice, private val path: String, p
     @Throws(Exception::class)
     override fun channelRead(ctx: ChannelHandlerContext?, msg: Any) {
         if (msg is SyncFail) {
-            promise.tryFailure(RemoteException(msg.error))
+            promise.tryFailure(AdbException(msg.error))
         } else if (msg is Array<*> && msg.isArrayOf<SyncDent>()) {
             promise.trySuccess(msg as Array<SyncDent>)
         } else {

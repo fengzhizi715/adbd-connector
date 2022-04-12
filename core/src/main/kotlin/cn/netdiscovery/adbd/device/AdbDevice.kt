@@ -2,6 +2,7 @@ package cn.netdiscovery.adbd.device
 
 import cn.netdiscovery.adbd.AdbChannelInitializer
 import cn.netdiscovery.adbd.constant.DEFAULT_MODE
+import cn.netdiscovery.adbd.domain.enum.DeviceMode
 import cn.netdiscovery.adbd.domain.enum.DeviceType
 import cn.netdiscovery.adbd.domain.enum.Feature
 import cn.netdiscovery.adbd.domain.sync.SyncDent
