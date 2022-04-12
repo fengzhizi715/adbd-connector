@@ -442,6 +442,24 @@ abstract class AbstractAdbDevice protected constructor(
         return promise
     }
 
+    override fun reverseRemoveAll(): Future<Any> {
+        val promise = eventLoop().newPromise<Any>()
+        exec("reverse:killforward-all\u0000").addListener(GenericFutureListener { f: Future<String> ->
+            if (f.cause() != null) {
+                promise.tryFailure(f.cause())
+            } else {
+                try {
+                    val result: String = readResult(f.now)?:""
+                    reverseMap.clear()
+                    promise.trySuccess(result)
+                } catch (cause: Throwable) {
+                    promise.tryFailure(cause)
+                }
+            }
+        })
+        return promise
+    }
+
     override fun addListener(listener: DeviceListener) {
         listeners.add(listener)
     }
