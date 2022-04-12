@@ -402,6 +402,46 @@ abstract class AbstractAdbDevice protected constructor(
         }
     }
 
+    override fun reverseList(): Future<Array<String>> {
+        val promise = eventLoop().newPromise<Array<String>>()
+        exec("reverse:list-forward\u0000").addListener(GenericFutureListener { f: Future<String> ->
+            if (f.cause() != null) {
+                promise.tryFailure(f.cause())
+            } else {
+                try {
+                    val result: String = readResult(f.now)?.trim()?:""
+                    val revs: Array<String> = if (result.isNullOrEmpty()) {
+                        mutableListOf<String>().toTypedArray()
+                    } else {
+                        result.split("\r\n|\n|\r").toTypedArray()
+                    }
+                    promise.trySuccess(revs)
+                } catch (cause: Throwable) {
+                    promise.tryFailure(cause)
+                }
+            }
+        })
+        return promise
+    }
+
+    override fun reverseRemove(destination: String): Future<Any> {
+        val promise = eventLoop().newPromise<Any>()
+        exec("reverse:killforward:$destination\u0000").addListener(GenericFutureListener { f: Future<String> ->
+            if (f.cause() != null) {
+                promise.tryFailure(f.cause())
+            } else {
+                try {
+                    val result: String = readResult(f.now)?:""
+                    reverseMap.remove(destination)
+                    promise.trySuccess(result)
+                } catch (cause: Throwable) {
+                    promise.tryFailure(cause)
+                }
+            }
+        })
+        return promise
+    }
+
     override fun addListener(listener: DeviceListener) {
         listeners.add(listener)
     }
