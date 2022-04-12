@@ -31,7 +31,7 @@ class SyncPushHandler(private val device: AdbDevice,private val  src: InputStrea
         //发送SEND指令
         val destAndMode = "$dest,$mode"
         ctx.writeAndFlush(SyncPath(SyncID.SEND_V1, destAndMode))
-            .addListener { f1: Future<in Void?> ->
+            .addListener { f1: Future<in Void> ->
                 if (f1.cause() != null) {
                     promise.tryFailure(f1.cause())
                 }
@@ -65,7 +65,7 @@ class SyncPushHandler(private val device: AdbDevice,private val  src: InputStrea
                     }
                     //发送done
                     ctx.writeAndFlush(SyncDataDone(mtime))
-                        .addListener { f3: Future<in Void?> ->
+                        .addListener { f3: Future<in Void> ->
                             if (f3.cause() != null) {
                                 promise.tryFailure(f3.cause())
                             }

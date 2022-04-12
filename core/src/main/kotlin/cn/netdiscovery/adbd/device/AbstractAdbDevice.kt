@@ -9,6 +9,7 @@ import cn.netdiscovery.adbd.domain.enum.Feature
 import cn.netdiscovery.adbd.domain.sync.SyncDent
 import cn.netdiscovery.adbd.domain.sync.SyncQuit
 import cn.netdiscovery.adbd.domain.sync.SyncStat
+import cn.netdiscovery.adbd.exception.AdbException
 import cn.netdiscovery.adbd.netty.channel.AdbChannel
 import cn.netdiscovery.adbd.netty.codec.*
 import cn.netdiscovery.adbd.netty.connection.AdbChannelProcessor
@@ -20,6 +21,7 @@ import io.netty.handler.codec.LineBasedFrameDecoder
 import io.netty.handler.codec.string.StringDecoder
 import io.netty.handler.codec.string.StringEncoder
 import io.netty.util.concurrent.Future
+import io.netty.util.concurrent.GenericFutureListener
 import io.netty.util.concurrent.Promise
 import java.io.InputStream
 import java.io.OutputStream
@@ -268,6 +270,27 @@ abstract class AbstractAdbDevice protected constructor(
         return promise
     }
 
+    override fun root(): Future<*> {
+        val promise = eventLoop().newPromise<Any>()
+        val handler = RestartHandler(promise)
+        addListener(handler)
+        exec("root:\u0000").addListener(GenericFutureListener { f: Future<String> ->
+            if (f.cause() != null) {
+                promise.tryFailure(f.cause())
+            } else {
+                val s: String = f.now.trim()
+                if (s == "adbd is already running as root") {
+                    removeListener(handler)
+                    promise.trySuccess(null)
+                } else if (s.startsWith("adbd cannot run as root")) {
+                    removeListener(handler)
+                    promise.tryFailure(AdbException(s))
+                }
+            }
+        })
+        return promise
+    }
+
     override fun addListener(listener: DeviceListener) {
         listeners.add(listener)
     }
@@ -276,6 +299,23 @@ abstract class AbstractAdbDevice protected constructor(
         listeners.remove(listener)
     }
 
+    private class RestartHandler(private val promise: Promise<*>) : DeviceListener {
+
+        override fun onConnected(device: AdbDevice) {
+        }
+
+        override fun onDisconnected(device: AdbDevice) {
+            device.removeListener(this)
+            (device as AbstractAdbDevice).newConnection().addListener{ f1 ->
+                if (f1.cause() != null) {
+                    promise.tryFailure(f1.cause())
+                } else {
+                    promise.trySuccess(null)
+                }
+            }
+
+        }
+    }
     private class ConnectHandler(val device: AbstractAdbDevice) : ChannelDuplexHandler() {
 
         private val pendingWriteEntries: Queue<PendingWriteEntry> = LinkedList()
