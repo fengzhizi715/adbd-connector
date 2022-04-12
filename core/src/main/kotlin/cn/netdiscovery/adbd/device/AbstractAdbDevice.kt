@@ -523,6 +523,13 @@ abstract class AbstractAdbDevice protected constructor(
         return open("reboot:" + mode.name + "\u0000", null)
     }
 
+
+    override fun reconnect(): Future<*> {
+        val channel = this.channel
+        check(!(channel.isOpen || channel.isActive)) { "channel is open or active" }
+        return newConnection()
+    }
+
     override fun addListener(listener: DeviceListener) {
         listeners.add(listener)
     }
