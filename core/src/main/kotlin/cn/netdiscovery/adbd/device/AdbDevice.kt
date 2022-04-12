@@ -44,9 +44,9 @@ interface AdbDevice {
 
     fun executor(): EventLoop
 
-    fun open(destination: String, timeoutMs:Int, initializer: AdbChannelInitializer): ChannelFuture
+    fun open(destination: String, timeoutMs:Int, initializer: AdbChannelInitializer?): ChannelFuture
 
-    fun open(destination: String, initializer: AdbChannelInitializer): ChannelFuture = open(destination, 30000, initializer)
+    fun open(destination: String, initializer: AdbChannelInitializer?): ChannelFuture = open(destination, 30000, initializer)
 
     fun exec(destination: String, timeoutMs:Int): Future<String>
 
@@ -123,7 +123,7 @@ interface AdbDevice {
 
     fun reverseRemoveAll(): Future<*>
 
-    fun forward(destination: String?, port: Int): ChannelFuture
+    fun forward(destination: String, port: Int): ChannelFuture
 
     @Throws(Exception::class)
     fun reboot(mode: DeviceMode): Future<*>

@@ -17,7 +17,11 @@ import cn.netdiscovery.adbd.netty.connection.AdbChannelProcessor
 import cn.netdiscovery.adbd.netty.handler.*
 import cn.netdiscovery.adbd.utils.buildShellCmd
 import cn.netdiscovery.adbd.utils.getChannelName
+import io.netty.bootstrap.ServerBootstrap
+import io.netty.buffer.PooledByteBufAllocator
 import io.netty.channel.*
+import io.netty.channel.socket.SocketChannel
+import io.netty.channel.socket.nio.NioServerSocketChannel
 import io.netty.handler.codec.LineBasedFrameDecoder
 import io.netty.handler.codec.string.StringDecoder
 import io.netty.handler.codec.string.StringEncoder
@@ -123,12 +127,12 @@ abstract class AbstractAdbDevice protected constructor(
 
     override fun features(): Set<Feature>? = deviceInfo?.features?:null
 
-    override fun open(destination: String, timeoutMs: Int, initializer: AdbChannelInitializer): ChannelFuture {
+    override fun open(destination: String, timeoutMs: Int, initializer: AdbChannelInitializer?): ChannelFuture {
         val localId = channelIdGen.getAndIncrement()
         val channelName: String = getChannelName(localId)
         val adbChannel = AdbChannel(channel, localId, 0)
         adbChannel.config().connectTimeoutMillis = timeoutMs
-        initializer.invoke(adbChannel)
+        initializer?.invoke(adbChannel)
         channel.pipeline().addLast(channelName, adbChannel)
         return adbChannel.connect(AdbChannelAddress(destination, localId))
     }
@@ -458,6 +462,65 @@ abstract class AbstractAdbDevice protected constructor(
             }
         })
         return promise
+    }
+
+    override fun forward(destination: String, port: Int): ChannelFuture {
+        val bootstrap = ServerBootstrap()
+        return bootstrap.group(eventLoop())
+            .channel(NioServerSocketChannel::class.java)
+            .option(ChannelOption.SO_BACKLOG, 1024)
+            .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
+            .childOption(ChannelOption.TCP_NODELAY, true)
+            .childOption(ChannelOption.SO_KEEPALIVE, true)
+            .childHandler(object : ChannelInitializer<SocketChannel>() {
+                @Throws(java.lang.Exception::class)
+                override fun initChannel(ch: SocketChannel) {
+                    val future = open(destination, 30000, object: AdbChannelInitializer {
+                        override fun invoke(channel: Channel) {
+                            channel.pipeline().addLast(object : ChannelInboundHandlerAdapter() {
+                                @Throws(java.lang.Exception::class)
+                                override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
+                                    ch.writeAndFlush(msg)
+                                }
+
+                                @Throws(java.lang.Exception::class)
+                                override fun channelInactive(ctx: ChannelHandlerContext) {
+                                    ch.close()
+                                }
+                            })
+                        }
+                    }).addListener { f: Future<in Void> ->
+                        if (f.cause() != null) {
+                            ch.close()
+                        }
+                    }
+                    ch.pipeline().addLast(object : ChannelInboundHandlerAdapter() {
+                        @Throws(java.lang.Exception::class)
+                        override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
+                            future.channel().writeAndFlush(msg)
+                        }
+
+                        @Throws(java.lang.Exception::class)
+                        override fun channelInactive(ctx: ChannelHandlerContext) {
+                            future.channel().close()
+                        }
+                    })
+                }
+            })
+            .bind(port)
+            .addListener(GenericFutureListener { f: ChannelFuture ->
+                if (f.cause() != null) {
+                    forwards.add(f.channel())
+                }
+            })
+    }
+
+    @Throws(java.lang.Exception::class)
+    override fun reboot(mode: DeviceMode): Future<*> {
+        requireNotNull(mode) {
+            "argument `mode` is null"
+        }
+        return open("reboot:" + mode.name + "\u0000", null)
     }
 
     override fun addListener(listener: DeviceListener) {
