@@ -21,6 +21,7 @@ import io.netty.handler.codec.string.StringDecoder
 import io.netty.handler.codec.string.StringEncoder
 import io.netty.util.concurrent.Future
 import io.netty.util.concurrent.Promise
+import java.io.InputStream
 import java.io.OutputStream
 import java.nio.charset.StandardCharsets
 import java.security.interfaces.RSAPrivateCrtKey
@@ -249,6 +250,20 @@ abstract class AbstractAdbDevice protected constructor(
                     .addLast(SyncEncoder())
                     .addLast(SyncPullHandler(this@AbstractAdbDevice, src, dest, promise))
             }
+        })
+        return promise
+    }
+
+    override fun push(src: InputStream, dest: String, mode: Int, mtime: Int): Future<Any> {
+        val promise = eventLoop().newPromise<Any>()
+        sync<Any>(promise, object: AdbChannelInitializer {
+            override fun invoke(channel: Channel) {
+                channel.pipeline()
+                    .addLast(SyncDecoder())
+                    .addLast(SyncEncoder())
+                    .addLast(SyncPushHandler(this@AbstractAdbDevice, src, dest, mode, mtime, promise))
+            }
+
         })
         return promise
     }
