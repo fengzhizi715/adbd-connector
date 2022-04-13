@@ -6,6 +6,7 @@ import cn.netdiscovery.adbd.domain.AdbPacket
 import cn.netdiscovery.adbd.domain.enum.Command
 import cn.netdiscovery.adbd.netty.channel.AdbChannel
 import cn.netdiscovery.adbd.utils.getChannelName
+import cn.netdiscovery.adbd.utils.logger
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandler
 import io.netty.channel.ChannelInboundHandlerAdapter
@@ -26,8 +27,11 @@ class AdbChannelProcessor(
     private val reverseMap: Map<CharSequence, AdbChannelInitializer>
 ) : ChannelInboundHandlerAdapter() {
 
+    private val logger = logger<AdbChannelProcessor>()
+
     @Throws(Exception::class)
-    override fun exceptionCaught(ctx: ChannelHandlerContext?, cause: Throwable) {
+    override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
+        logger.error("Uncaught exception: {}", cause.message, cause)
     }
 
     @Throws(Exception::class)
