@@ -5,6 +5,7 @@ import cn.netdiscovery.adbd.domain.AdbChannelAddress
 import cn.netdiscovery.adbd.domain.AdbPacket
 import cn.netdiscovery.adbd.domain.PendingWriteEntry
 import cn.netdiscovery.adbd.domain.enum.Command
+import cn.netdiscovery.adbd.utils.logger
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
 import io.netty.channel.*
@@ -30,6 +31,8 @@ import java.util.concurrent.TimeUnit
  * @version: V1.0 <描述当前版本功能>
  */
 class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel(parent), ChannelInboundHandler {
+
+    private val logger = logger<AdbChannel>()
 
     private val eventLoop: EventLoop
     private val config: ChannelConfig
@@ -273,7 +276,8 @@ class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel
                     if (!isActive) {
                         val promise = connectPromise
                         if (promise == null) {
-
+                            //记录日志
+                            logger.warn("connectPromise is null")
                             return
                         }
                         remoteId = packet.arg0
