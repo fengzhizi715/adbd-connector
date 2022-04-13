@@ -74,17 +74,11 @@ class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel
         return AdbUnsafe()
     }
 
-    override fun isCompatible(loop: EventLoop): Boolean {
-        return loop is AdbChannelEventLoop
-    }
+    override fun isCompatible(loop: EventLoop): Boolean = loop is AdbChannelEventLoop
 
-    override fun localAddress0(): SocketAddress? {
-        return localAddress
-    }
+    override fun localAddress0(): SocketAddress? = localAddress
 
-    override fun remoteAddress0(): SocketAddress? {
-        return remoteAddress
-    }
+    override fun remoteAddress0(): SocketAddress? = remoteAddress
 
     @Throws(Exception::class)
     override fun doBind(localAddress: SocketAddress) {
@@ -93,7 +87,7 @@ class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel
         localId = address.id
     }
 
-    override fun connect(remoteAddress: SocketAddress?, promise: ChannelPromise?): ChannelFuture {
+    override fun connect(remoteAddress: SocketAddress?, promise: ChannelPromise): ChannelFuture {
         return super.connect(remoteAddress, promise)
     }
 
