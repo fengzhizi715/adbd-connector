@@ -267,8 +267,7 @@ class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel
     override fun channelRead(ctx: ChannelHandlerContext, msg: Any) {
         if (msg is AdbPacket) {
             val packet: AdbPacket = msg
-            val command = packet.command
-            when (command) {
+            when (packet.command) {
                 Command.A_OKAY -> {
 
                     if (!isActive) {

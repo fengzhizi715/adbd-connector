@@ -1,3 +1,9 @@
+ext {
+    libraries = [
+            logback                   : "1.2.3"
+    ]
+}
+
 group 'cn.netdiscovery.adbd'
 version '1.0-SNAPSHOT'
 
