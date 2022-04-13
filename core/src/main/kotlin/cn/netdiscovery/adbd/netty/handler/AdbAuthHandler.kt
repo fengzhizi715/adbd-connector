@@ -7,6 +7,7 @@ import cn.netdiscovery.adbd.domain.enum.Command
 import cn.netdiscovery.adbd.domain.enum.DeviceType
 import cn.netdiscovery.adbd.domain.enum.Feature
 import cn.netdiscovery.adbd.utils.AuthUtil
+import cn.netdiscovery.adbd.utils.logger
 import io.netty.buffer.Unpooled
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.ChannelInboundHandlerAdapter
@@ -28,6 +29,8 @@ import java.util.concurrent.atomic.AtomicInteger
  */
 class AdbAuthHandler(private val privateKey: RSAPrivateCrtKey, private val publicKey: ByteArray) :
     ChannelInboundHandlerAdapter() {
+
+    private val logger = logger<AdbAuthHandler>()
 
     private val state: AtomicInteger = AtomicInteger(STATE_CONNECTING)
 
@@ -121,7 +124,11 @@ class AdbAuthHandler(private val privateKey: RSAPrivateCrtKey, private val publi
                         } else if ("features" == key) {
                             val fts: MutableSet<Feature> = HashSet<Feature>()
                             for (f in value.split(",").toTypedArray()) {
-                                val fe: Feature = Feature.findByCode(f) ?: continue
+                                val fe = Feature.findByCode(f)
+                                if (fe == null) {
+                                    logger.warn("Unknown feature: $f");
+                                    continue
+                                }
                                 fts.add(fe)
                             }
                             features = Collections.unmodifiableSet(fts)

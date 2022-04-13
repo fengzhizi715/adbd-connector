@@ -21,6 +21,7 @@ import java.util.*
 import java.util.concurrent.RejectedExecutionException
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
+import kotlin.math.min
 
 /**
  *
@@ -184,32 +185,32 @@ class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel
     override fun doWrite(`in`: ChannelOutboundBuffer) {
         while (true) {
             val msg = `in`.current() ?: break
+
             if (msg is ByteBuf) {
-                val buf = msg
-                if (!buf.isReadable) {
+                if (!msg.isReadable) {
                     `in`.remove()
                     continue
                 }
-                val localFlushedAmount = buf.readableBytes()
+                val localFlushedAmount = msg.readableBytes()
                 try {
                     /**
                      * @see cn.netdiscovery.adbd.constant.Constants.WRITE_DATA_MAX;
                      * 此处不能直接一次write, 超过大小的得分段write
                      */
                     while (true) {
-                        val size = Math.min(buf.readableBytes(), WRITE_DATA_MAX)
+                        val size = min(msg.readableBytes(), WRITE_DATA_MAX)
                         if (size == 0) {
                             break
                         }
-                        val tmp = buf.readRetainedSlice(size)
+                        val tmp = msg.readRetainedSlice(size)
                         parent().writeAndFlush(AdbPacket(Command.A_WRTE, localId, remoteId, tmp))
                     }
                 } catch (e: Exception) {
-                    ReferenceCountUtil.safeRelease(buf)
+                    ReferenceCountUtil.safeRelease(msg)
                     throw e
                 }
                 `in`.progress(localFlushedAmount.toLong())
-                if (!buf.isReadable) {
+                if (!msg.isReadable) {
                     `in`.remove()
                 }
             } else {
@@ -283,7 +284,7 @@ class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel
                         //开始写入pending write entries
                         while (true) {
                             val entry: PendingWriteEntry = pendingWriteEntries.poll() ?: break
-                            pipeline().write(entry.msg).addListener { f: Future<in Void?> ->
+                            pipeline().write(entry.msg).addListener { f: Future<in Void> ->
                                 if (f.cause() != null) {
                                     entry.promise.tryFailure(f.cause())
                                 } else {
