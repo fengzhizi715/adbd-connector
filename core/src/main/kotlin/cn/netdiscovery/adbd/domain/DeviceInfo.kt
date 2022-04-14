@@ -17,4 +17,15 @@ data class DeviceInfo(
     val product: String,
     val device: String,
     val features: Set<Feature>
-)
+) {
+
+    override fun toString(): String {
+        return "DeviceInfo{" +
+                "type=" + type +
+                ", model=" + model +
+                ", product=" + product +
+                ", device=" + device +
+                ", features=" + features +
+                '}'
+    }
+}
