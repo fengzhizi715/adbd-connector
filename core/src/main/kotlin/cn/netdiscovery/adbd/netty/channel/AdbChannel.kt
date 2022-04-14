@@ -340,7 +340,7 @@ class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel
 
     private inner class AdbUnsafe : AbstractUnsafe() {
 
-        override fun connect(remoteAddress: SocketAddress, localAddress: SocketAddress, promise: ChannelPromise) {
+        override fun connect(remoteAddress: SocketAddress, localAddress: SocketAddress?, promise: ChannelPromise) {
             this@AdbChannel.remoteAddress = remoteAddress as AdbChannelAddress
             var buf: ByteBuf? = null
             try {
