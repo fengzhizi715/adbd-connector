@@ -18,6 +18,7 @@ import cn.netdiscovery.adbd.netty.connection.AdbChannelProcessor
 import cn.netdiscovery.adbd.netty.handler.*
 import cn.netdiscovery.adbd.utils.buildShellCmd
 import cn.netdiscovery.adbd.utils.getChannelName
+import cn.netdiscovery.adbd.utils.logger
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.buffer.PooledByteBufAllocator
 import io.netty.channel.*
@@ -55,6 +56,8 @@ abstract class AbstractAdbDevice protected constructor(
     private val factory: cn.netdiscovery.adbd.ChannelFactory
 ) : AdbDevice {
 
+    private val logger = logger<AbstractAdbDevice>()
+
     private val channelIdGen: AtomicInteger = AtomicInteger(1)
     private val reverseMap: MutableMap<CharSequence, AdbChannelInitializer> = ConcurrentHashMap<CharSequence, AdbChannelInitializer>()
     private val forwards: MutableSet<Channel> = ConcurrentHashMap.newKeySet()
@@ -80,11 +83,12 @@ abstract class AbstractAdbDevice protected constructor(
                 pipeline.addLast(object : ChannelInboundHandlerAdapter() {
                     @Throws(Exception::class)
                     override fun channelInactive(ctx: ChannelHandlerContext) {
-
+                        logger.info("[{}] device disconnected", serial())
                         listeners.forEach{ listener ->
                             try {
                                 listener.onDisconnected(this@AbstractAdbDevice)
                             } catch (e: Exception) {
+                                logger.error("[{}] call disconnect handler failed, error={}", serial(), e.message, e)
                             }
                         }
                         super.channelInactive(ctx)
@@ -148,12 +152,12 @@ abstract class AbstractAdbDevice protected constructor(
                     .addLast(ExecHandler(promise))
             }
         })
-        future.addListener { f: Future<in Void?> ->
+        future.addListener { f: Future<in Void> ->
             if (f.cause() != null) {
                 promise.tryFailure(f.cause())
             }
         }
-        promise.addListener { f: Future<in String>? ->
+        promise.addListener { f: Future<in String> ->
             future.channel().close()
         }
         if (timeoutMs > 0) {

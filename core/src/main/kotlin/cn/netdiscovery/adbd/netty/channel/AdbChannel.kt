@@ -88,7 +88,7 @@ class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel
         localId = address.id
     }
 
-    override fun connect(remoteAddress: SocketAddress?, promise: ChannelPromise): ChannelFuture {
+    override fun connect(remoteAddress: SocketAddress, promise: ChannelPromise): ChannelFuture {
         return super.connect(remoteAddress, promise)
     }
 

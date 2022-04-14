@@ -36,7 +36,7 @@ class AdbAuthHandler(private val privateKey: RSAPrivateCrtKey, private val publi
 
     private fun write(ctx: ChannelHandlerContext, message: AdbPacket) {
         ctx.writeAndFlush(message)
-            .addListener { f: Future<in Void?> ->
+            .addListener { f: Future<in Void> ->
                 if (f.cause() != null) {
                     ctx.fireExceptionCaught(f.cause())
                 }
