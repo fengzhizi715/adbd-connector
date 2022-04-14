@@ -101,6 +101,7 @@ abstract class AbstractAdbDevice protected constructor(
 
         })
         channel = future.channel()
+        logger.info("[{}] device connected", serial())
         return future
     }
 
@@ -134,7 +135,7 @@ abstract class AbstractAdbDevice protected constructor(
 
     override fun open(destination: String, timeoutMs: Int, initializer: AdbChannelInitializer?): ChannelFuture {
         val localId = channelIdGen.getAndIncrement()
-        val channelName: String = getChannelName(localId)
+        val channelName = getChannelName(localId)
         val adbChannel = AdbChannel(channel, localId, 0)
         adbChannel.config().connectTimeoutMillis = timeoutMs
         initializer?.invoke(adbChannel)
@@ -528,7 +529,7 @@ abstract class AbstractAdbDevice protected constructor(
         return open("reboot:" + mode.name + "\u0000", null)
     }
 
-    override fun reconnect(): Future<*> {
+    override fun reconnect(): ChannelFuture {
         val channel = this.channel
         check(!(channel.isOpen || channel.isActive)) { "channel is open or active" }
         return newConnection()

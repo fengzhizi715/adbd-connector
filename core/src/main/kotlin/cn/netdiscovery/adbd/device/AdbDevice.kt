@@ -126,7 +126,7 @@ interface AdbDevice {
         return reboot(DeviceMode.SYSTEM)
     }
 
-    fun reconnect(): Future<*>
+    fun reconnect(): ChannelFuture
 
     fun addListener(listener: DeviceListener)
 

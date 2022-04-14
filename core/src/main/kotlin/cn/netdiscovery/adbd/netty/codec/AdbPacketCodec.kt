@@ -44,11 +44,7 @@ class AdbPacketCodec : ByteToMessageCodec<AdbPacket>() {
             return
         }
         if (command.magic() !== magic) {
-            ctx.fireExceptionCaught(
-                ProtocolException(
-                    "Unmatched magic field expect=" + command.magic().toString() + ", actual=" + magic
-                )
-            )
+            ctx.fireExceptionCaught(ProtocolException("Unmatched magic field expect=" + command.magic().toString() + ", actual=" + magic))
             return
         }
         var payload: ByteBuf? = null
