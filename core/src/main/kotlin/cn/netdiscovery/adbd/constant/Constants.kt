@@ -8,7 +8,7 @@ package cn.netdiscovery.adbd.constant
  * @date: 2021-06-02 15:40
  * @version: V1.0 <描述当前版本功能>
  */
-var DEFAULT_MODE = 436
+const val DEFAULT_MODE = 436
 
 const val A_VERSION = 0x01000001
 

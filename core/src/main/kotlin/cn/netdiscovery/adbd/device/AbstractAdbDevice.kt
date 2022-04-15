@@ -302,7 +302,6 @@ abstract class AbstractAdbDevice protected constructor(
         return promise
     }
 
-
     override fun unroot(): Future<*> {
         val promise = eventLoop().newPromise<Any>()
         val handler = RestartHandler(promise)
@@ -577,6 +576,7 @@ abstract class AbstractAdbDevice protected constructor(
 
         }
     }
+
     private class ConnectHandler(val device: AbstractAdbDevice) : ChannelDuplexHandler() {
 
         private val pendingWriteEntries: Queue<PendingWriteEntry> = LinkedList()
