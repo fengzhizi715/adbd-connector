@@ -1,3 +1,5 @@
 rootProject.name = 'adbd'
 
 include 'core'
+include 'ui'
+
