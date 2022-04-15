@@ -31,7 +31,7 @@ class SyncStatHandler(private val device: AdbDevice, private val path: String, p
         val sid: SyncID = if (hasStatV2) SyncID.STAT_V2 else SyncID.LSTAT_V1
         val syncPath = SyncPath(sid, path)
         ctx.writeAndFlush(syncPath)
-            .addListener { f: Future<in Void?> ->
+            .addListener { f: Future<in Void> ->
                 if (f.cause() != null) {
                     promise.tryFailure(f.cause())
                 }
@@ -50,12 +50,12 @@ class SyncStatHandler(private val device: AdbDevice, private val path: String, p
     }
 
     @Throws(Exception::class)
-    override fun exceptionCaught(ctx: ChannelHandlerContext?, cause: Throwable?) {
+    override fun exceptionCaught(ctx: ChannelHandlerContext?, cause: Throwable) {
         promise.tryFailure(cause)
     }
 
     @Throws(Exception::class)
-    override fun channelInactive(ctx: ChannelHandlerContext?) {
+    override fun channelInactive(ctx: ChannelHandlerContext) {
         promise.tryFailure(ClosedChannelException())
     }
 }

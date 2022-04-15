@@ -68,7 +68,7 @@ class AdbAuthHandler(private val privateKey: RSAPrivateCrtKey, private val publi
             ReferenceCountUtil.release(msg)
             return
         }
-        val message: AdbPacket = msg as AdbPacket
+        val message: AdbPacket = msg
         var payload: ByteArray? = null
         if (message.payload != null) {
             payload = ByteArray(message.payload.readableBytes())

@@ -25,12 +25,8 @@ import java.nio.channels.ClosedChannelException
  * @date: 2022/4/11 9:18 下午
  * @version: V1.0 <描述当前版本功能>
  */
-class SyncPullHandler(device: AdbDevice, src: String, dest: OutputStream, promise: Promise<*>) :
+class SyncPullHandler(private val device: AdbDevice,private val src: String,private val dest: OutputStream,private val promise: Promise<*>) :
     ChannelInboundHandlerAdapter() {
-    private val device: AdbDevice
-    private val src: String
-    private val dest: OutputStream
-    private val promise: Promise<*>
 
     @Throws(Exception::class)
     override fun channelActive(ctx: ChannelHandlerContext) {
@@ -78,12 +74,5 @@ class SyncPullHandler(device: AdbDevice, src: String, dest: OutputStream, promis
     @Throws(Exception::class)
     override fun channelInactive(ctx: ChannelHandlerContext?) {
         promise.tryFailure(ClosedChannelException())
-    }
-
-    init {
-        this.device = device
-        this.src = src
-        this.dest = dest
-        this.promise = promise
     }
 }
