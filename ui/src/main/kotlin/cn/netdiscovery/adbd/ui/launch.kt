@@ -26,19 +26,31 @@ import kotlinx.coroutines.runBlocking
  */
 val padding = 13.dp
 val fontSize = 13.sp
-const val previewWidth = 300
+const val previewWidth = 500
 
 fun main() = application {
 
     Window(
-//        icon = painterResource("image/ic_logo.ico"),
+        icon = painterResource("image/ic_logo.ico"),
         onCloseRequest = { closeRequest() },
-        title = "adbd-connector",
+        title = "adbd-connector ui",
         resizable = false,
-        state = rememberWindowState(width = Dp(previewWidth * 2.toFloat()), height = 400.dp)
+        state = rememberWindowState(width = Dp(previewWidth * 2.toFloat()), height = 600.dp)
     ) {
         MaterialTheme(colors = lightColors(primary = Color(0xFF999999))) {
             Column(Modifier.background(MaterialTheme.colors.surface).padding(padding)) {
+
+                connectMessage {
+
+                }
+
+                commandMessage {
+
+                }
+
+                Row {
+                    messageList()
+                }
             }
         }
     }
