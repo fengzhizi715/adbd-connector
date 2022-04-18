@@ -25,6 +25,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cn.netdiscovery.adbd.utils.extension.isNumeric
 
 /**
  *
@@ -54,7 +55,7 @@ fun connectMessage(onClick: (ip:String, port:String) -> Unit) {
             hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
             textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
             text = Store.device.ipAddress,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii),
             onTextChange = { this },
             modifier = Modifier
                 .padding(end = 7.dp) //设置背景,对应背景来说，在它之前设置的padding 就相当于外边距
@@ -69,8 +70,8 @@ fun connectMessage(onClick: (ip:String, port:String) -> Unit) {
             hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
             textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
             text = Store.device.port,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            onTextChange = { this },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii),
+            onTextChange = { this.filter { it.toString().isNumeric() }  },
             modifier = Modifier
                 .padding(end = 7.dp) //设置背景,对应背景来说，在它之前设置的padding 就相当于外边距
                 .background(Color.LightGray.copy(alpha = 0.5f), shape = RoundedCornerShape(3.dp))
@@ -102,7 +103,7 @@ fun commandMessage(onClick: () -> Unit) {
                 .size(350.dp, 25.dp),
         )
 
-        button("执行", 100.dp, enableConnect()) { onClick.invoke() }
+        button("执行", 100.dp, enableExecute()) { onClick.invoke() }
     }
 }
 
@@ -174,7 +175,9 @@ fun button(text: String, width: Dp = 40.dp, enabled: Boolean = true, onClick: ()
 /**
  * 是否可以连接
  */
-private fun enableConnect(): Boolean = Store.device.ipAddress.value.isNotEmpty() && Store.device.port.value.isNotEmpty()
+private fun enableConnect() = Store.device.ipAddress.value.isNotEmpty() && Store.device.port.value.isNotEmpty()
+
+private fun enableExecute() = Store.device.shellCommand.value.isNotEmpty()
 
 @Composable
 fun textButton(text: String, width: Dp = 40.dp, onClick: () -> Unit) {

@@ -41,7 +41,7 @@ fun main() = application {
             Column(Modifier.background(MaterialTheme.colors.surface).padding(padding)) {
 
                 connectMessage { ip, port ->
-                    
+
                 }
 
                 commandMessage {
