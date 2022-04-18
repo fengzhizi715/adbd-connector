@@ -2,7 +2,6 @@ package cn.netdiscovery.adbd.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -15,22 +14,17 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cn.netdiscovery.adbd.ui.Store.device
 
 /**
  *
@@ -41,7 +35,7 @@ import cn.netdiscovery.adbd.ui.Store.device
  * @version: V1.0 <描述当前版本功能>
  */
 @Composable
-fun connectMessage(onClick: () -> Unit) {
+fun connectMessage(onClick: (ip:String, port:String) -> Unit) {
 
     Text("手机连接状态", Modifier.padding(top = 3.dp), fontSize = fontSize, fontWeight = FontWeight.Bold)
 
@@ -49,7 +43,7 @@ fun connectMessage(onClick: () -> Unit) {
 
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 5.dp)) {
 
-            Text("设备信息: ${device.deviceVersion.value}", modifier = Modifier.width(150.dp), fontSize = fontSize)
+            Text("设备信息: ${Store.device.deviceVersion.value}", modifier = Modifier.width(150.dp), fontSize = fontSize)
         }
     }
 
@@ -84,7 +78,9 @@ fun connectMessage(onClick: () -> Unit) {
                 .size(100.dp, 25.dp),
         )
 
-        button("连接", 100.dp, enableConnect()) { onClick.invoke() }
+        button("连接", 100.dp, enableConnect()) {
+            onClick.invoke(Store.device.ipAddress.value,Store.device.port.value)
+        }
     }
 }
 
@@ -131,7 +127,7 @@ fun customTextField(
         leadingIcon?.invoke()
         BasicTextField(
             value = text.value,
-            onValueChange = { text.value = onTextChange.invoke(it) },
+            onValueChange = { text.value = onTextChange.invoke(it)},
             cursorBrush = SolidColor(Color.Gray),
             singleLine = true,
             modifier = Modifier.weight(1f).padding(start = 10.dp),
@@ -178,13 +174,7 @@ fun button(text: String, width: Dp = 40.dp, enabled: Boolean = true, onClick: ()
 /**
  * 是否可以连接
  */
-fun enableConnect(): Boolean {
-//    return (Store.device.productNumber.value.length == 20 //长度为20
-//            && Store.device.photoStatus.value == 1  //未采集
-//            && Store.device.deviceStatus.value != 1)    //运行中
-
-    return true
-}
+private fun enableConnect(): Boolean = Store.device.ipAddress.value.isNotEmpty() && Store.device.port.value.isNotEmpty()
 
 @Composable
 fun textButton(text: String, width: Dp = 40.dp, onClick: () -> Unit) {

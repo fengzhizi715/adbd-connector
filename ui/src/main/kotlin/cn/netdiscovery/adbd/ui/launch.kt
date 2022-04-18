@@ -40,8 +40,8 @@ fun main() = application {
         MaterialTheme(colors = lightColors(primary = Color(0xFF999999))) {
             Column(Modifier.background(MaterialTheme.colors.surface).padding(padding)) {
 
-                connectMessage {
-
+                connectMessage { ip, port ->
+                    
                 }
 
                 commandMessage {
