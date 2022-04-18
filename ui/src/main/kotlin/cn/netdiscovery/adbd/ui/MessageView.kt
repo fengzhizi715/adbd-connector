@@ -55,7 +55,7 @@ fun connectMessage(onClick: (ip:String, port:String) -> Unit) {
             hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
             textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
             text = Store.device.ipAddress,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             onTextChange = { this },
             modifier = Modifier
                 .padding(end = 7.dp) //设置背景,对应背景来说，在它之前设置的padding 就相当于外边距
@@ -70,7 +70,7 @@ fun connectMessage(onClick: (ip:String, port:String) -> Unit) {
             hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
             textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
             text = Store.device.port,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             onTextChange = { this.filter { it.toString().isNumeric() }  },
             modifier = Modifier
                 .padding(end = 7.dp) //设置背景,对应背景来说，在它之前设置的padding 就相当于外边距
@@ -127,7 +127,7 @@ fun customTextField(
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
         leadingIcon?.invoke()
         BasicTextField(
-            value = text.value,
+            value = onTextChange.invoke(text.value),
             onValueChange = { text.value = onTextChange.invoke(it)},
             cursorBrush = SolidColor(Color.Gray),
             singleLine = true,
