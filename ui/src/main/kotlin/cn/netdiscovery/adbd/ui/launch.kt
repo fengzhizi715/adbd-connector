@@ -58,14 +58,18 @@ fun main() = application {
             Column(Modifier.background(MaterialTheme.colors.surface).padding(padding)) {
 
                 connectMessage { ip, port ->
-                    device = SocketAdbDevice(ip, port.toInt(), privateKey, publicKey)
-                    device.addListener(object :DeviceListener{
-                        override fun onConnected(device: AdbDevice) {
-                        }
+                    try {
+                        device = SocketAdbDevice(ip, port.toInt(), privateKey, publicKey)
+                        device.addListener(object :DeviceListener{
+                            override fun onConnected(device: AdbDevice) {
+                            }
 
-                        override fun onDisconnected(device: AdbDevice) {
-                        }
-                    })
+                            override fun onDisconnected(device: AdbDevice) {
+                            }
+                        })
+                    } catch (e:Exception) {
+                        Store.device.deviceStatus.value = 2
+                    }
                 }
 
                 commandMessage { shellCommand ->

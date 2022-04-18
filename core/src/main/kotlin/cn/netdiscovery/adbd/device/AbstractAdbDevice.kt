@@ -76,7 +76,7 @@ abstract class AbstractAdbDevice protected constructor(
             newConnection()[30, TimeUnit.SECONDS]
         } catch (e:Exception) {
             logger.error("[{}] device disconnected,error={}", serial(), e.message, e)
-
+            throw AdbException("connect exception")
         }
     }
 
