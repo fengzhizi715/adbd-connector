@@ -15,19 +15,27 @@ object Store: IStore {
 
     val device = Device()
 
-    override fun clearLog() {
-        TODO("Not yet implemented")
+    override fun changeConnectStatus(value: Int) {
+        device.deviceStatus.value = value
     }
 
-    override fun changeConnectStatus(value: Int) {
+    override fun clearLog() {
         TODO("Not yet implemented")
     }
 }
 
 data class Device(
-    val deviceStatus: MutableState<Int> = mutableStateOf(-1), //设备状态
+    val deviceStatus: MutableState<Int> = mutableStateOf(0), //设备状态
     val ipAddress: MutableState<String> = mutableStateOf(""),  //ip 地址
     val port: MutableState<String> = mutableStateOf(""),
     val shellCommand: MutableState<String> = mutableStateOf(""),
     val deviceVersion: MutableState<String> = mutableStateOf(""), //手机信息
-)
+) {
+
+    fun deviceStatus(): String = when (deviceStatus.value) {
+        0 -> "初始化"
+        1 -> "已连接"
+        2 -> "已断开"
+        else -> "连接中"
+    }
+}

@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
@@ -38,7 +39,7 @@ import cn.netdiscovery.adbd.utils.extension.isNumeric
 @Composable
 fun connectMessage(onClick: (ip:String, port:String) -> Unit) {
 
-    Text("手机连接状态", Modifier.padding(top = 3.dp), fontSize = fontSize, fontWeight = FontWeight.Bold)
+    Text("手机连接状态: ${Store.device.deviceStatus()}", Modifier.padding(top = 3.dp), fontSize = fontSize, fontWeight = FontWeight.Bold)
 
     SelectionContainer {
 
@@ -80,13 +81,13 @@ fun connectMessage(onClick: (ip:String, port:String) -> Unit) {
         )
 
         button("连接", 100.dp, enableConnect()) {
-            onClick.invoke(Store.device.ipAddress.value,Store.device.port.value)
+            onClick.invoke(Store.device.ipAddress.value, Store.device.port.value)
         }
     }
 }
 
 @Composable
-fun commandMessage(onClick: () -> Unit) {
+fun commandMessage(onClick: (shellCommand:String) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 5.dp)) {
         Text("adb shell 命令:", modifier = Modifier.padding(end = 5.dp), fontSize = fontSize)
         customTextField(
@@ -103,7 +104,9 @@ fun commandMessage(onClick: () -> Unit) {
                 .size(350.dp, 25.dp),
         )
 
-        button("执行", 100.dp, enableExecute()) { onClick.invoke() }
+        button("执行", 100.dp, enableExecute()) {
+            onClick.invoke(Store.device.shellCommand.value)
+        }
     }
 }
 
@@ -177,6 +180,9 @@ fun button(text: String, width: Dp = 40.dp, enabled: Boolean = true, onClick: ()
  */
 private fun enableConnect() = Store.device.ipAddress.value.isNotEmpty() && Store.device.port.value.isNotEmpty()
 
+/**
+ * 是否可以执行
+ */
 private fun enableExecute() = Store.device.shellCommand.value.isNotEmpty()
 
 @Composable

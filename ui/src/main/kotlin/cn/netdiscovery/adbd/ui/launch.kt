@@ -14,7 +14,13 @@ import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import cn.netdiscovery.adbd.device.AdbDevice
+import cn.netdiscovery.adbd.device.DeviceListener
+import cn.netdiscovery.adbd.device.SocketAdbDevice
+import cn.netdiscovery.adbd.utils.AuthUtil
 import kotlinx.coroutines.runBlocking
+import java.nio.charset.StandardCharsets
+import java.security.interfaces.RSAPrivateCrtKey
 
 /**
  *
@@ -30,6 +36,17 @@ const val previewWidth = 500
 
 fun main() = application {
 
+    val privateKey: RSAPrivateCrtKey
+    val publicKey: ByteArray
+    lateinit var device:SocketAdbDevice
+
+    try {
+        privateKey = AuthUtil.loadPrivateKey("adbkey")
+        publicKey = AuthUtil.generatePublicKey(privateKey).toByteArray(StandardCharsets.UTF_8)
+    } catch (cause: Throwable) {
+        throw RuntimeException("load private key failed:" + cause.message, cause)
+    }
+
     Window(
         icon = painterResource("image/ic_logo.ico"),
         onCloseRequest = { closeRequest() },
@@ -41,11 +58,24 @@ fun main() = application {
             Column(Modifier.background(MaterialTheme.colors.surface).padding(padding)) {
 
                 connectMessage { ip, port ->
+                    device = SocketAdbDevice(ip, port.toInt(), privateKey, publicKey)
+                    device.addListener(object :DeviceListener{
+                        override fun onConnected(device: AdbDevice) {
+                        }
 
+                        override fun onDisconnected(device: AdbDevice) {
+                        }
+                    })
                 }
 
-                commandMessage {
+                commandMessage { shellCommand ->
+                    val commands = shellCommand.trim().split("\\s+".toRegex())
+                    val shell = commands[0]
+                    val args = commands.drop(1).toTypedArray()
 
+//                    device.shell(shell,*args).addListener {
+//
+//                    }
                 }
 
                 Row {
