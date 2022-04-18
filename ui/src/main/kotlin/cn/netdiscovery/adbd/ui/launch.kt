@@ -73,9 +73,15 @@ fun main() = application {
                     val shell = commands[0]
                     val args = commands.drop(1).toTypedArray()
 
-//                    device.shell(shell,*args).addListener {
-//
-//                    }
+                    device.shell(shell,*args).addListener { f->
+                        if (f.cause() != null) {
+                            f.cause().printStackTrace()
+                        } else {
+                            println(f.now)
+                        }
+                    }
+
+                    return@commandMessage
                 }
 
                 Row {

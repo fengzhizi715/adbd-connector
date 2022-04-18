@@ -21,6 +21,7 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(compose.desktop.currentOs)
     implementation(compose.desktop.common)
+    implementation ("io.netty:netty-all:4.1.48.Final")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${rootProject.extra["kotlin_version"]}")
 
     implementation(project(":core"))

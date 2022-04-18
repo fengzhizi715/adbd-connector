@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cn.netdiscovery.adbd.utils.extension.isNumeric
+import java.util.concurrent.Future
 
 /**
  *

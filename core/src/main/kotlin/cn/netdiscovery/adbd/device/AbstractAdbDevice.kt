@@ -72,7 +72,12 @@ abstract class AbstractAdbDevice protected constructor(
     var deviceInfo: DeviceInfo?=null
 
     init {
-        newConnection()[30, TimeUnit.SECONDS]
+        try {
+            newConnection()[30, TimeUnit.SECONDS]
+        } catch (e:Exception) {
+            logger.error("[{}] device disconnected,error={}", serial(), e.message, e)
+
+        }
     }
 
     private fun newConnection(): ChannelFuture {
