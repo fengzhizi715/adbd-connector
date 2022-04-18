@@ -19,6 +19,10 @@ object Store: IStore {
         device.deviceStatus.value = value
     }
 
+    override fun setDeviceInfo(value: String) {
+        device.deviceInfo.value = value
+    }
+
     override fun clearLog() {
         TODO("Not yet implemented")
     }
@@ -29,7 +33,7 @@ data class Device(
     val ipAddress: MutableState<String> = mutableStateOf(""),  //ip 地址
     val port: MutableState<String> = mutableStateOf(""),
     val shellCommand: MutableState<String> = mutableStateOf(""),
-    val deviceVersion: MutableState<String> = mutableStateOf(""), //手机信息
+    val deviceInfo: MutableState<String> = mutableStateOf(""), //手机信息
 ) {
 
     fun deviceStatus(): String = when (deviceStatus.value) {
