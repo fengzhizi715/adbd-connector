@@ -198,6 +198,60 @@ fun pushMessage(onClick: (src: String, dest: String) -> Unit) {
 }
 
 @Composable
+fun installMessage(onClick: (installCommand:String) -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 5.dp)) {
+        Text("adb install 命令:", modifier = Modifier.padding(end = 5.dp), fontSize = fontSize)
+        customTextField(
+            hint = "请输入 adb install 命令",
+            hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
+            textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
+            text = Store.device.installCommand,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            onTextChange = { this },
+            modifier = Modifier
+                .padding(end = 7.dp) //设置背景,对应背景来说，在它之前设置的padding 就相当于外边距
+                .background(Color.LightGray.copy(alpha = 0.5f), shape = RoundedCornerShape(3.dp))
+                .padding(end = 10.dp) //在设置size之前设置padding相当于外边距
+                .size(350.dp, 25.dp),
+        )
+
+        button("执行", 100.dp, enableClick(ExecuteType.SHELL)) {
+            Store.addLog {
+                LogItem(msg = "adb install ${Store.device.installCommand.value}")
+            }
+            onClick.invoke(Store.device.installCommand.value)
+        }
+    }
+}
+
+@Composable
+fun uninstallMessage(onClick: (uninstallCommand:String) -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 5.dp)) {
+        Text("adb uninstall 命令:", modifier = Modifier.padding(end = 5.dp), fontSize = fontSize)
+        customTextField(
+            hint = "请输入 adb uninstall 命令",
+            hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
+            textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
+            text = Store.device.uninstallCommand,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            onTextChange = { this },
+            modifier = Modifier
+                .padding(end = 7.dp) //设置背景,对应背景来说，在它之前设置的padding 就相当于外边距
+                .background(Color.LightGray.copy(alpha = 0.5f), shape = RoundedCornerShape(3.dp))
+                .padding(end = 10.dp) //在设置size之前设置padding相当于外边距
+                .size(350.dp, 25.dp),
+        )
+
+        button("执行", 100.dp, enableClick(ExecuteType.SHELL)) {
+            Store.addLog {
+                LogItem(msg = "adb uninstall ${Store.device.uninstallCommand.value}")
+            }
+            onClick.invoke(Store.device.uninstallCommand.value)
+        }
+    }
+}
+
+@Composable
 fun forwardMessage(onClick: (local:String,remote:String) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 5.dp)) {
         Text("adb forward 命令:", modifier = Modifier.padding(end = 5.dp), fontSize = fontSize)

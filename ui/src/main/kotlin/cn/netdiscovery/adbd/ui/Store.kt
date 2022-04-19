@@ -51,6 +51,8 @@ data class Device(
     val pushDest: MutableState<String> = mutableStateOf(""),
     val pullSrc: MutableState<String> = mutableStateOf(""),
     val pullDest: MutableState<String> = mutableStateOf(""),
+    val installCommand: MutableState<String> = mutableStateOf(""),
+    val uninstallCommand: MutableState<String> = mutableStateOf(""),
     val forwardLocal: MutableState<String> = mutableStateOf(""),
     val forwardRemote: MutableState<String> = mutableStateOf(""),
     val reverseLocal: MutableState<String> = mutableStateOf(""),

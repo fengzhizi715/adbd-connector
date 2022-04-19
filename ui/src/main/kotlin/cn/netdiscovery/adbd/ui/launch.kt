@@ -57,7 +57,7 @@ fun main() = application {
         onCloseRequest = { closeRequest() },
         title = "adbd-connector v1.0",
         resizable = false,
-        state = rememberWindowState(width = Dp(previewWidth * 2.toFloat()), height = 800.dp)
+        state = rememberWindowState(width = Dp(previewWidth * 2.toFloat()), height = 900.dp)
     ) {
         MaterialTheme(colors = lightColors(primary = Color(0xFF999999))) {
             Column(Modifier.background(MaterialTheme.colors.surface).padding(padding)) {
@@ -119,7 +119,6 @@ fun main() = application {
                 pullMessage { src, dest ->
 
                     device?.let {
-
                         it.pull(src, File(dest)).addListener { f->
                             if (f.cause() != null) {
                                 f.cause().printStackTrace()
@@ -138,7 +137,6 @@ fun main() = application {
                 pushMessage { src, dest ->
 
                     device?.let {
-
                         it.push(File(src),dest).addListener { f->
                             if (f.cause() != null) {
                                 f.cause().printStackTrace()
@@ -152,6 +150,18 @@ fun main() = application {
                             }
                         }
                     }
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 10.dp)) {
+                    Text("App 安装", modifier = Modifier.padding(end = 5.dp), fontSize = 20.sp)
+                }
+
+                installMessage { installCommand ->
+
+                }
+
+                uninstallMessage { uninstallCommand ->
+
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 10.dp)) {
