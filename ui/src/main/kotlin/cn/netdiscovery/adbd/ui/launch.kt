@@ -34,7 +34,7 @@ import java.security.interfaces.RSAPrivateCrtKey
  */
 val padding = 13.dp
 val fontSize = 13.sp
-const val previewWidth = 500
+const val previewWidth = 600
 
 fun main() = application {
 
@@ -54,7 +54,7 @@ fun main() = application {
         onCloseRequest = { closeRequest() },
         title = "adbd-connector ui",
         resizable = false,
-        state = rememberWindowState(width = Dp(previewWidth * 2.toFloat()), height = 600.dp)
+        state = rememberWindowState(width = Dp(previewWidth * 2.toFloat()), height = 800.dp)
     ) {
         MaterialTheme(colors = lightColors(primary = Color(0xFF999999))) {
             Column(Modifier.background(MaterialTheme.colors.surface).padding(padding)) {
@@ -76,7 +76,7 @@ fun main() = application {
                     }
                 }
 
-                commandMessage { shellCommand ->
+                shellCommandMessage { shellCommand ->
 
                     device?.let {
                         val commands = shellCommand.trim().split("\\s+".toRegex())
@@ -98,7 +98,15 @@ fun main() = application {
                         }
                     }
 
-                    return@commandMessage
+                    return@shellCommandMessage
+                }
+
+                pullMessage {
+
+                }
+
+                pushMessage {
+
                 }
 
                 Row {
