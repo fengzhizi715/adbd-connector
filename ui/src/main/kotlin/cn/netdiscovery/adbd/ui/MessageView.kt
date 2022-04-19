@@ -215,7 +215,7 @@ fun installMessage(onClick: (installCommand:String) -> Unit) {
                 .size(350.dp, 25.dp),
         )
 
-        button("执行", 100.dp, enableClick(ExecuteType.SHELL)) {
+        button("执行", 100.dp, enableClick(ExecuteType.INSTALL)) {
             Store.addLog {
                 LogItem(msg = "adb install ${Store.device.installCommand.value}")
             }
@@ -242,7 +242,7 @@ fun uninstallMessage(onClick: (uninstallCommand:String) -> Unit) {
                 .size(350.dp, 25.dp),
         )
 
-        button("执行", 100.dp, enableClick(ExecuteType.SHELL)) {
+        button("执行", 100.dp, enableClick(ExecuteType.UNINSTALL)) {
             Store.addLog {
                 LogItem(msg = "adb uninstall ${Store.device.uninstallCommand.value}")
             }
@@ -408,6 +408,10 @@ private fun enableClick(type:ExecuteType):Boolean {
         ExecuteType.PULL -> Store.device.pullSrc.value.isNotEmpty() && Store.device.pullDest.value.isNotEmpty()
 
         ExecuteType.PUSH -> Store.device.pushSrc.value.isNotEmpty() && Store.device.pushDest.value.isNotEmpty()
+
+        ExecuteType.INSTALL -> Store.device.installCommand.value.isNotEmpty()
+
+        ExecuteType.UNINSTALL -> Store.device.uninstallCommand.value.isNotEmpty()
 
         ExecuteType.FORWARD -> Store.device.forwardLocal.value.isNotEmpty() && Store.device.forwardRemote.value.isNotEmpty()
 

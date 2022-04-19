@@ -14,6 +14,8 @@ enum class ExecuteType(private val type:String) {
     SHELL("shell"),
     PULL("pull"),
     PUSH("push"),
+    INSTALL("install"),
+    UNINSTALL("uninstall"),
     FORWARD("forward"),
     REVERSE("reverse");
 }
