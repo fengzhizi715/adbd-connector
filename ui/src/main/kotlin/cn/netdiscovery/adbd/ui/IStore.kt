@@ -11,9 +11,9 @@ package cn.netdiscovery.adbd.ui
 interface IStore {
 
     /**
-     * 清空日志
+     * 清空消息
      */
-    fun clearLog()
+    fun clearMessages()
 
     /**
      * 连接状态变更

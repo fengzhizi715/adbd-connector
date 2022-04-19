@@ -8,4 +8,4 @@ package cn.netdiscovery.adbd.ui
  * @date: 2022/4/19 2:43 下午
  * @version: V1.0 <描述当前版本功能>
  */
-data class LogItem(val msg: String)
+data class MessageItem(val msg: String)

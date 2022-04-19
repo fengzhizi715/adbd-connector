@@ -206,37 +206,15 @@ fun messageList() {
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text("运行日志:", fontSize = fontSize)
-            textButton("清空") { Store.clearLog() }
+            textButton("清空") {
+                Store.clearMessages()
+            }
         }
 
-        val messages = remember { Store.logs }
+        val messages = remember { Store.messages }
         val state = rememberLazyListState()
         Box(Modifier.fillMaxSize().border(1.dp, color = Color.Gray)) {
             SelectionContainer {
-//                LazyColumn(Modifier.padding(10.dp), state, verticalArrangement = Arrangement.Center) {
-//                    itemsIndexed(messages) { index, item ->
-//                        when (item.logLevel) {
-//                            LogLevelEnum.WARN -> {
-//                                Text(fontSize = fontSize,
-//                                    text = buildAnnotatedString {
-//                                        append("${item.create} ${item.source}: ")
-//                                        withStyle(SpanStyle(Color.Blue, 16.sp, FontWeight.Bold)) { append(item.msg) }
-//                                    })
-//                            }
-//                            LogLevelEnum.ERROR -> {
-//                                Text(fontSize = fontSize,
-//                                    text = buildAnnotatedString {
-//                                        append("${item.create} ${item.source}: ")
-//                                        withStyle(SpanStyle(Color.Red, 16.sp, FontWeight.Bold)) { append(item.msg) }
-//                                    })
-//                            }
-//                            else -> {
-//                                Text(item.getMessage(), fontSize = 12.sp, color = item.getColor())
-//                            }
-//                        }
-//                        Spacer(modifier = Modifier.height(5.dp))
-//                    }
-//                }
             }
             VerticalScrollbar(
                 modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
