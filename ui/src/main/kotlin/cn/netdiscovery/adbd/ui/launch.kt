@@ -1,7 +1,9 @@
 package cn.netdiscovery.adbd.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.lightColors
 import androidx.compose.ui.Modifier
@@ -83,7 +85,9 @@ fun main() = application {
                         if (f.cause() != null) {
                             f.cause().printStackTrace()
                         } else {
-                            println(f.now)
+                            Store.addLog {
+                                LogItem(f.now as String)
+                            }
                         }
                     }
 

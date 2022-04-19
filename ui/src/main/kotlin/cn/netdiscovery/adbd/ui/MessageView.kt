@@ -218,7 +218,7 @@ fun messageList() {
             SelectionContainer {
                 LazyColumn(Modifier.padding(10.dp), state, verticalArrangement = Arrangement.Center) {
                     itemsIndexed(messages) { index, item ->
-
+                        Text(item.msg, fontSize = 12.sp)
                         Spacer(modifier = Modifier.height(5.dp))
                     }
                 }
