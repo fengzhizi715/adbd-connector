@@ -158,7 +158,7 @@ fun pullMessage(onClick: (src: String, dest: String) -> Unit) {
 }
 
 @Composable
-fun pushMessage(onClick: () -> Unit) {
+fun pushMessage(onClick: (src: String, dest: String) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 5.dp)) {
         Text("adb push 命令:", modifier = Modifier.padding(end = 5.dp), fontSize = fontSize)
         customTextField(
@@ -190,7 +190,10 @@ fun pushMessage(onClick: () -> Unit) {
         )
 
         button("执行", 100.dp, enableClick(ExecuteType.PUSH)) {
-            onClick.invoke()
+            Store.addLog {
+                LogItem(msg = "adb push ${Store.device.pushSrc.value} ${Store.device.pushDest.value}")
+            }
+            onClick.invoke(Store.device.pushSrc.value, Store.device.pushDest.value)
         }
     }
 }
