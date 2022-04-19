@@ -21,6 +21,7 @@ import cn.netdiscovery.adbd.device.DeviceListener
 import cn.netdiscovery.adbd.device.SocketAdbDevice
 import cn.netdiscovery.adbd.utils.AuthUtil
 import kotlinx.coroutines.runBlocking
+import java.io.File
 import java.nio.charset.StandardCharsets
 import java.security.interfaces.RSAPrivateCrtKey
 
@@ -103,6 +104,22 @@ fun main() = application {
 
                 pullMessage { src, dest ->
 
+                    device?.let {
+
+                        val file = File(dest)
+                        it.pull(src,file.outputStream()).addListener { f->
+                            if (f.cause() != null) {
+                                f.cause().printStackTrace()
+                                Store.addLog {
+                                    LogItem("adb pull $src $dest error")
+                                }
+                            } else {
+                                Store.addLog {
+                                    LogItem("adb pull $src $dest done")
+                                }
+                            }
+                        }
+                    }
                 }
 
                 pushMessage { src, dest ->
