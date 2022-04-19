@@ -123,7 +123,7 @@ fun pullMessage(onClick: () -> Unit) {
             hint = "手机路径",
             hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
             textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
-            text = Store.device.ipAddress,
+            text = Store.device.pullSrc,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             onTextChange = { this },
             modifier = Modifier
@@ -137,7 +137,7 @@ fun pullMessage(onClick: () -> Unit) {
             hint = "本机路径",
             hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
             textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
-            text = Store.device.port,
+            text = Store.device.pullDest,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             onTextChange = { this.filter { it.toString().isNumeric() }  },
             modifier = Modifier
@@ -161,7 +161,7 @@ fun pushMessage(onClick: () -> Unit) {
             hint = "本机路径",
             hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
             textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
-            text = Store.device.ipAddress,
+            text = Store.device.pushSrc,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             onTextChange = { this },
             modifier = Modifier
@@ -175,7 +175,7 @@ fun pushMessage(onClick: () -> Unit) {
             hint = "手机路径",
             hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
             textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
-            text = Store.device.port,
+            text = Store.device.pushDest,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             onTextChange = { this.filter { it.toString().isNumeric() }  },
             modifier = Modifier

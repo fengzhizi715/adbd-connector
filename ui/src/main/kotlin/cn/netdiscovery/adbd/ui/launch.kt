@@ -52,7 +52,7 @@ fun main() = application {
     Window(
         icon = painterResource("image/ic_logo.ico"),
         onCloseRequest = { closeRequest() },
-        title = "adbd-connector ui",
+        title = "adbd-connector v1.0",
         resizable = false,
         state = rememberWindowState(width = Dp(previewWidth * 2.toFloat()), height = 800.dp)
     ) {
