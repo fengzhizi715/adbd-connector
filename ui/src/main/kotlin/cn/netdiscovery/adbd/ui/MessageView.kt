@@ -229,7 +229,7 @@ fun forwardMessage(onClick: (local:String,remote:String) -> Unit) {
                 .size(200.dp, 25.dp),
         )
 
-        button("执行", 100.dp, enableClick(ExecuteType.PUSH)) {
+        button("执行", 100.dp, enableClick(ExecuteType.FORWARD)) {
 //            Store.addLog {
 //                LogItem(msg = "adb push ${Store.device.pushSrc.value} ${Store.device.pushDest.value}")
 //            }
@@ -270,7 +270,7 @@ fun reverseMessage(onClick: (remote:String,local:String) -> Unit) {
                 .size(200.dp, 25.dp),
         )
 
-        button("执行", 100.dp, enableClick(ExecuteType.PUSH)) {
+        button("执行", 100.dp, enableClick(ExecuteType.REVERSE)) {
 //            Store.addLog {
 //                LogItem(msg = "adb push ${Store.device.pushSrc.value} ${Store.device.pushDest.value}")
 //            }
@@ -354,6 +354,10 @@ private fun enableClick(type:ExecuteType):Boolean {
         ExecuteType.PULL -> Store.device.pullSrc.value.isNotEmpty() && Store.device.pullDest.value.isNotEmpty()
 
         ExecuteType.PUSH -> Store.device.pushSrc.value.isNotEmpty() && Store.device.pushDest.value.isNotEmpty()
+
+        ExecuteType.FORWARD -> Store.device.forwardLocal.value.isNotEmpty() && Store.device.forwardRemote.value.isNotEmpty()
+
+        ExecuteType.REVERSE -> Store.device.reverseLocal.value.isNotEmpty() && Store.device.reverseRemote.value.isNotEmpty()
     }
 }
 

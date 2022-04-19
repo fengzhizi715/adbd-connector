@@ -13,5 +13,7 @@ enum class ExecuteType(private val type:String) {
     CONNECT("connect"),
     SHELL("shell"),
     PULL("pull"),
-    PUSH("push");
+    PUSH("push"),
+    FORWARD("forward"),
+    REVERSE("reverse");
 }
