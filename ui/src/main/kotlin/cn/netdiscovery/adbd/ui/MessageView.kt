@@ -44,7 +44,7 @@ fun connectMessage(onClick: (ip:String, port:String) -> Unit) {
 
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 5.dp)) {
 
-            Text("设备信息: ${Store.device.deviceInfo.value}", modifier = Modifier.width(150.dp), fontSize = fontSize)
+            Text("设备信息: ${Store.device.deviceInfo.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
         }
     }
 

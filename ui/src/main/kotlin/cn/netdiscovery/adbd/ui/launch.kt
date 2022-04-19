@@ -62,7 +62,8 @@ fun main() = application {
                         device = SocketAdbDevice(ip, port.toInt(), privateKey, publicKey)
                         device.addListener(object :DeviceListener{
                             override fun onConnected(device: AdbDevice) {
-                                Store.setDeviceInfo("${device.model()} ${device.product()}")
+                                Store.setDeviceInfo("${device.device()} ${device.product()}")
+                                Store.changeConnectStatus(1)
                             }
 
                             override fun onDisconnected(device: AdbDevice) {
