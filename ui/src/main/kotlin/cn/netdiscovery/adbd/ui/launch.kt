@@ -101,7 +101,7 @@ fun main() = application {
                     return@shellCommandMessage
                 }
 
-                pullMessage {
+                pullMessage { src, dest ->
 
                 }
 

@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cn.netdiscovery.adbd.utils.extension.isNumeric
+import java.io.OutputStream
 
 /**
  *
@@ -116,7 +117,7 @@ fun shellCommandMessage(onClick: (shellCommand:String) -> Unit) {
 }
 
 @Composable
-fun pullMessage(onClick: () -> Unit) {
+fun pullMessage(onClick: (src: String, dest: String) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 5.dp)) {
         Text("adb pull 命令:", modifier = Modifier.padding(end = 5.dp), fontSize = fontSize)
         customTextField(
@@ -139,7 +140,7 @@ fun pullMessage(onClick: () -> Unit) {
             textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
             text = Store.device.pullDest,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            onTextChange = { this.filter { it.toString().isNumeric() }  },
+            onTextChange = { this },
             modifier = Modifier
                 .padding(end = 7.dp) //设置背景,对应背景来说，在它之前设置的padding 就相当于外边距
                 .background(Color.LightGray.copy(alpha = 0.5f), shape = RoundedCornerShape(3.dp))
@@ -148,7 +149,10 @@ fun pullMessage(onClick: () -> Unit) {
         )
 
         button("执行", 100.dp, enableClick(ExecuteType.PULL)) {
-            onClick.invoke()
+            Store.addLog {
+                LogItem(msg = "adb pull ${Store.device.pullSrc.value} ${Store.device.pullDest.value}")
+            }
+            onClick.invoke(Store.device.pullSrc.value, Store.device.pullDest.value)
         }
     }
 }
@@ -177,7 +181,7 @@ fun pushMessage(onClick: () -> Unit) {
             textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
             text = Store.device.pushDest,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            onTextChange = { this.filter { it.toString().isNumeric() }  },
+            onTextChange = { this },
             modifier = Modifier
                 .padding(end = 7.dp) //设置背景,对应背景来说，在它之前设置的padding 就相当于外边距
                 .background(Color.LightGray.copy(alpha = 0.5f), shape = RoundedCornerShape(3.dp))
@@ -256,7 +260,6 @@ fun button(text: String, width: Dp = 40.dp, enabled: Boolean = true, onClick: ()
     }
 }
 
-
 private fun enableClick(type:ExecuteType):Boolean {
 
     return when(type) {
@@ -267,8 +270,6 @@ private fun enableClick(type:ExecuteType):Boolean {
         ExecuteType.PULL -> Store.device.pullSrc.value.isNotEmpty() && Store.device.pullDest.value.isNotEmpty()
 
         ExecuteType.PUSH -> Store.device.pushSrc.value.isNotEmpty() && Store.device.pushDest.value.isNotEmpty()
-
-        else -> false
     }
 }
 
