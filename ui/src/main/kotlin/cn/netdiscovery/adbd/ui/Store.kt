@@ -15,7 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 object Store: IStore {
 
     val device = Device()
-    val logs = mutableStateListOf(LogItem("adbd-connector start"))
+    val logs = mutableStateListOf(LogItem("the adbd-connector is starting"))
 
     override fun addLog(msg: () -> LogItem) {
         val logItem = msg.invoke()

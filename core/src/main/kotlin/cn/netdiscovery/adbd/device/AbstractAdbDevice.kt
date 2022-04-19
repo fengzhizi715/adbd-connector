@@ -124,9 +124,7 @@ abstract class AbstractAdbDevice protected constructor(
         return channel.eventLoop()
     }
 
-    override fun serial(): String {
-        return serial
-    }
+    override fun serial() = serial
 
     override fun type(): DeviceType?  = deviceInfo?.type?:null
 
