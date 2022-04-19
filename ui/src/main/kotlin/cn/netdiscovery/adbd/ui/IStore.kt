@@ -11,7 +11,12 @@ package cn.netdiscovery.adbd.ui
 interface IStore {
 
     /**
-     * 清空消息
+     * 添加日志
+     */
+    fun addMessage(msg:()->MessageItem)
+
+    /**
+     * 清空日志
      */
     fun clearMessages()
 

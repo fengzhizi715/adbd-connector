@@ -2,6 +2,8 @@ package cn.netdiscovery.adbd.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -20,9 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -200,11 +205,7 @@ fun textButton(text: String, width: Dp = 40.dp, onClick: () -> Unit) {
 @Composable
 fun messageList() {
     Column(Modifier.fillMaxSize()) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,) {
             Text("运行日志:", fontSize = fontSize)
             textButton("清空") {
                 Store.clearMessages()
@@ -215,6 +216,12 @@ fun messageList() {
         val state = rememberLazyListState()
         Box(Modifier.fillMaxSize().border(1.dp, color = Color.Gray)) {
             SelectionContainer {
+                LazyColumn(Modifier.padding(10.dp), state, verticalArrangement = Arrangement.Center) {
+                    itemsIndexed(messages) { index, item ->
+
+                        Spacer(modifier = Modifier.height(5.dp))
+                    }
+                }
             }
             VerticalScrollbar(
                 modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
