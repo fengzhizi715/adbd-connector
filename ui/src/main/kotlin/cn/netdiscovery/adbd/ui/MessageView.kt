@@ -197,21 +197,16 @@ fun textButton(text: String, width: Dp = 40.dp, onClick: () -> Unit) {
 }
 
 @Composable
-fun cameraMessage(text: String, clickText: String, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Text(text, fontSize = fontSize)
-        textButton(clickText) { onClick.invoke() }
-    }
-}
-
-@Composable
 fun messageList() {
     Column(Modifier.fillMaxSize()) {
-        cameraMessage("运行日志:", "清空") { Store.clearLog() }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text("运行日志:", fontSize = fontSize)
+            textButton("清空") { Store.clearLog() }
+        }
 
 //        val messages = remember { Store.logs }
         val state = rememberLazyListState()

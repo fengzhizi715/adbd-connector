@@ -24,7 +24,7 @@ object Store: IStore {
     }
 
     override fun clearLog() {
-        TODO("Not yet implemented")
+
     }
 }
 
