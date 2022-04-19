@@ -51,6 +51,10 @@ data class Device(
     val pushDest: MutableState<String> = mutableStateOf(""),
     val pullSrc: MutableState<String> = mutableStateOf(""),
     val pullDest: MutableState<String> = mutableStateOf(""),
+    val forwardLocal: MutableState<String> = mutableStateOf(""),
+    val forwardRemote: MutableState<String> = mutableStateOf(""),
+    val reverseLocal: MutableState<String> = mutableStateOf(""),
+    val reverseRemote: MutableState<String> = mutableStateOf(""),
 ) {
 
     fun deviceStatus(): String = when (deviceStatus.value) {

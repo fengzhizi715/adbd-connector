@@ -83,6 +83,10 @@ fun main() = application {
                     }
                 }
 
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 10.dp)) {
+                    Text("shell 相关", modifier = Modifier.padding(end = 5.dp), fontSize = 20.sp)
+                }
+
                 shellCommandMessage { shellCommand ->
 
                     device?.let {
@@ -106,6 +110,10 @@ fun main() = application {
                     }
 
                     return@shellCommandMessage
+                }
+
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 10.dp)) {
+                    Text("文件传送", modifier = Modifier.padding(end = 5.dp), fontSize = 20.sp)
                 }
 
                 pullMessage { src, dest ->
@@ -146,7 +154,15 @@ fun main() = application {
                     }
                 }
 
-                reverseMessage {
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 10.dp)) {
+                    Text("网络相关", modifier = Modifier.padding(end = 5.dp), fontSize = 20.sp)
+                }
+
+                forwardMessage { local, remote ->
+
+                }
+
+                reverseMessage { remote, local ->
 
                 }
 

@@ -90,10 +90,6 @@ fun connectMessage(onClick: (ip:String, port:String) -> Unit) {
 
 @Composable
 fun shellCommandMessage(onClick: (shellCommand:String) -> Unit) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 10.dp)) {
-        Text("调用 android shell 命令", modifier = Modifier.padding(end = 5.dp), fontSize = 20.sp)
-    }
-
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 5.dp)) {
         Text("adb shell 命令:", modifier = Modifier.padding(end = 5.dp), fontSize = fontSize)
         customTextField(
@@ -202,14 +198,14 @@ fun pushMessage(onClick: (src: String, dest: String) -> Unit) {
 }
 
 @Composable
-fun reverseMessage(onClick: () -> Unit) {
+fun forwardMessage(onClick: (local:String,remote:String) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 5.dp)) {
-        Text("adb reverse 命令:", modifier = Modifier.padding(end = 5.dp), fontSize = fontSize)
+        Text("adb forward 命令:", modifier = Modifier.padding(end = 5.dp), fontSize = fontSize)
         customTextField(
-            hint = "本机路径",
+            hint = "local",
             hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
             textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
-            text = Store.device.pushSrc,
+            text = Store.device.forwardLocal,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             onTextChange = { this },
             modifier = Modifier
@@ -220,10 +216,10 @@ fun reverseMessage(onClick: () -> Unit) {
         )
 
         customTextField(
-            hint = "手机路径",
+            hint = "remote",
             hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
             textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
-            text = Store.device.pushDest,
+            text = Store.device.forwardRemote,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             onTextChange = { this },
             modifier = Modifier
@@ -237,7 +233,48 @@ fun reverseMessage(onClick: () -> Unit) {
 //            Store.addLog {
 //                LogItem(msg = "adb push ${Store.device.pushSrc.value} ${Store.device.pushDest.value}")
 //            }
-            onClick.invoke()
+            onClick.invoke(Store.device.forwardLocal.value, Store.device.forwardRemote.value)
+        }
+    }
+}
+
+@Composable
+fun reverseMessage(onClick: (remote:String,local:String) -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 5.dp)) {
+        Text("adb reverse 命令:", modifier = Modifier.padding(end = 5.dp), fontSize = fontSize)
+        customTextField(
+            hint = "remote",
+            hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
+            textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
+            text = Store.device.reverseRemote,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            onTextChange = { this },
+            modifier = Modifier
+                .padding(end = 7.dp) //设置背景,对应背景来说，在它之前设置的padding 就相当于外边距
+                .background(Color.LightGray.copy(alpha = 0.5f), shape = RoundedCornerShape(3.dp))
+                .padding(end = 10.dp) //在设置size之前设置padding相当于外边距
+                .size(200.dp, 25.dp),
+        )
+
+        customTextField(
+            hint = "local",
+            hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
+            textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
+            text = Store.device.reverseLocal,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            onTextChange = { this },
+            modifier = Modifier
+                .padding(end = 7.dp) //设置背景,对应背景来说，在它之前设置的padding 就相当于外边距
+                .background(Color.LightGray.copy(alpha = 0.5f), shape = RoundedCornerShape(3.dp))
+                .padding(end = 10.dp) //在设置size之前设置padding相当于外边距
+                .size(200.dp, 25.dp),
+        )
+
+        button("执行", 100.dp, enableClick(ExecuteType.PUSH)) {
+//            Store.addLog {
+//                LogItem(msg = "adb push ${Store.device.pushSrc.value} ${Store.device.pushDest.value}")
+//            }
+            onClick.invoke(Store.device.reverseRemote.value, Store.device.reverseLocal.value)
         }
     }
 }
