@@ -40,7 +40,7 @@ fun main() = application {
 
     val privateKey: RSAPrivateCrtKey
     val publicKey: ByteArray
-    lateinit var device:SocketAdbDevice
+    var device:SocketAdbDevice?=null
 
     try {
         privateKey = AuthUtil.loadPrivateKey("adbkey")
@@ -62,7 +62,7 @@ fun main() = application {
                 connectMessage { ip, port ->
                     try {
                         device = SocketAdbDevice(ip, port.toInt(), privateKey, publicKey)
-                        device.addListener(object :DeviceListener{
+                        device?.addListener(object :DeviceListener{
                             override fun onConnected(device: AdbDevice) {
                                 Store.setDeviceInfo("${device.device()} ${device.product()}")
                                 Store.changeConnectStatus(1)
@@ -77,16 +77,19 @@ fun main() = application {
                 }
 
                 commandMessage { shellCommand ->
-                    val commands = shellCommand.trim().split("\\s+".toRegex())
-                    val shell = commands[0]
-                    val args = commands.drop(1).toTypedArray()
 
-                    device.shell(shell,*args).addListener { f->
-                        if (f.cause() != null) {
-                            f.cause().printStackTrace()
-                        } else {
-                            Store.addLog {
-                                LogItem(f.now as String)
+                    device?.let {
+                        val commands = shellCommand.trim().split("\\s+".toRegex())
+                        val shell = commands[0]
+                        val args = commands.drop(1).toTypedArray()
+
+                        it.shell(shell,*args).addListener { f->
+                            if (f.cause() != null) {
+                                f.cause().printStackTrace()
+                            } else {
+                                Store.addLog {
+                                    LogItem(f.now as String)
+                                }
                             }
                         }
                     }
