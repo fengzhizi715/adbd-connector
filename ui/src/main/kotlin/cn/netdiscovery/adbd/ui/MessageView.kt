@@ -208,11 +208,11 @@ fun messageList() {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween,) {
             Text("运行日志:", fontSize = fontSize)
             textButton("清空") {
-                Store.clearMessages()
+                Store.clearLog()
             }
         }
 
-        val messages = remember { Store.messages }
+        val messages = remember { Store.logs }
         val state = rememberLazyListState()
         Box(Modifier.fillMaxSize().border(1.dp, color = Color.Gray)) {
             SelectionContainer {

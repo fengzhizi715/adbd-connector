@@ -15,7 +15,15 @@ import androidx.compose.runtime.mutableStateOf
 object Store: IStore {
 
     val device = Device()
-    val messages = mutableStateListOf(MessageItem(""))
+    val logs = mutableStateListOf(LogItem(""))
+
+    override fun addLog(msg: () -> LogItem) {
+        logs.add(msg.invoke())
+    }
+
+    override fun clearLog() {
+        logs.clear()
+    }
 
     override fun changeConnectStatus(value: Int) {
         device.deviceStatus.value = value
@@ -23,10 +31,6 @@ object Store: IStore {
 
     override fun setDeviceInfo(value: String) {
         device.deviceInfo.value = value
-    }
-
-    override fun clearMessages() {
-        messages.clear()
     }
 }
 

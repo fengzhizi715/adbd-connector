@@ -13,12 +13,12 @@ interface IStore {
     /**
      * 添加日志
      */
-    fun addMessage(msg:()->MessageItem)
+    fun addLog(msg:()->LogItem)
 
     /**
      * 清空日志
      */
-    fun clearMessages()
+    fun clearLog()
 
     /**
      * 连接状态变更
