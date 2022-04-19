@@ -15,10 +15,17 @@ import androidx.compose.runtime.mutableStateOf
 object Store: IStore {
 
     val device = Device()
-    val logs = mutableStateListOf(LogItem(""))
+    val logs = mutableStateListOf(LogItem("adbd-connector start"))
 
     override fun addLog(msg: () -> LogItem) {
-        logs.add(msg.invoke())
+        val logItem = msg.invoke()
+
+        logs.add(0, logItem)
+
+        //只保留1000条日志,防止list储存过大
+        if (logs.size > 2000) {
+            logs.removeRange(1000, logs.size)
+        }
     }
 
     override fun clearLog() {
