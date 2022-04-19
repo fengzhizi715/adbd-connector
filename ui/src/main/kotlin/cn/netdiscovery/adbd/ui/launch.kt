@@ -92,6 +92,10 @@ fun main() = application {
                                 }
                             }
                         }
+                    }?: run{
+                        Store.addLog {
+                            LogItem("the phone is not connected")
+                        }
                     }
 
                     return@commandMessage
