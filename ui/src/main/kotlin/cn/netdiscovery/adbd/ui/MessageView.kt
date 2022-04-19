@@ -82,7 +82,7 @@ fun connectMessage(onClick: (ip:String, port:String) -> Unit) {
                 .size(100.dp, 25.dp),
         )
 
-        button("连接", 100.dp, enableConnect()) {
+        button("连接", 100.dp, enableClick(ExecuteType.CONNECT)) {
             onClick.invoke(Store.device.ipAddress.value, Store.device.port.value)
         }
     }
@@ -106,7 +106,7 @@ fun shellCommandMessage(onClick: (shellCommand:String) -> Unit) {
                 .size(350.dp, 25.dp),
         )
 
-        button("执行", 100.dp, enableExecute()) {
+        button("执行", 100.dp, enableClick(ExecuteType.SHELL)) {
             Store.addLog {
                 LogItem(msg = "adb shell ${Store.device.shellCommand.value}")
             }
@@ -147,7 +147,7 @@ fun pullMessage(onClick: () -> Unit) {
                 .size(200.dp, 25.dp),
         )
 
-        button("执行", 100.dp, enableConnect()) {
+        button("执行", 100.dp, enableClick(ExecuteType.PULL)) {
             onClick.invoke()
         }
     }
@@ -185,7 +185,7 @@ fun pushMessage(onClick: () -> Unit) {
                 .size(200.dp, 25.dp),
         )
 
-        button("执行", 100.dp, enableConnect()) {
+        button("执行", 100.dp, enableClick(ExecuteType.PUSH)) {
             onClick.invoke()
         }
     }
@@ -256,15 +256,21 @@ fun button(text: String, width: Dp = 40.dp, enabled: Boolean = true, onClick: ()
     }
 }
 
-/**
- * 是否可以连接
- */
-private fun enableConnect() = Store.device.ipAddress.value.isNotEmpty() && Store.device.port.value.isNotEmpty()
 
-/**
- * 是否可以执行
- */
-private fun enableExecute() = Store.device.shellCommand.value.isNotEmpty()
+private fun enableClick(type:ExecuteType):Boolean {
+
+    return when(type) {
+        ExecuteType.CONNECT -> Store.device.ipAddress.value.isNotEmpty() && Store.device.port.value.isNotEmpty()
+
+        ExecuteType.SHELL -> Store.device.shellCommand.value.isNotEmpty()
+
+        ExecuteType.PULL -> Store.device.pullSrc.value.isNotEmpty() && Store.device.pullDest.value.isNotEmpty()
+
+        ExecuteType.PUSH -> Store.device.pushSrc.value.isNotEmpty() && Store.device.pushDest.value.isNotEmpty()
+
+        else -> false
+    }
+}
 
 @Composable
 fun textButton(text: String, width: Dp = 40.dp, onClick: () -> Unit) {
@@ -288,8 +294,12 @@ fun messageList() {
             }
         }
 
-        val messages = remember { Store.logs }
+        val messages = remember {
+            Store.logs
+        }
+
         val state = rememberLazyListState()
+
         Box(Modifier.fillMaxSize().border(1.dp, color = Color.Gray)) {
             SelectionContainer {
                 LazyColumn(Modifier.padding(10.dp), state, verticalArrangement = Arrangement.Center) {
