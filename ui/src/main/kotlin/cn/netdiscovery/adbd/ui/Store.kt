@@ -1,6 +1,7 @@
 package cn.netdiscovery.adbd.ui
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 
 /**
@@ -14,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 object Store: IStore {
 
     val device = Device()
+    val logs = mutableStateListOf(LogItem(""))
 
     override fun changeConnectStatus(value: Int) {
         device.deviceStatus.value = value
@@ -24,7 +26,7 @@ object Store: IStore {
     }
 
     override fun clearLog() {
-
+        logs.clear()
     }
 }
 

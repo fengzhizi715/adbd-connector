@@ -14,6 +14,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -208,7 +209,7 @@ fun messageList() {
             textButton("清空") { Store.clearLog() }
         }
 
-//        val messages = remember { Store.logs }
+        val messages = remember { Store.logs }
         val state = rememberLazyListState()
         Box(Modifier.fillMaxSize().border(1.dp, color = Color.Gray)) {
             SelectionContainer {
