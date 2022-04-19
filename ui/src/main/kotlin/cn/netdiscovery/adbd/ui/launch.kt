@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.lightColors
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -59,6 +61,10 @@ fun main() = application {
     ) {
         MaterialTheme(colors = lightColors(primary = Color(0xFF999999))) {
             Column(Modifier.background(MaterialTheme.colors.surface).padding(padding)) {
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text("adbd-connector", modifier = Modifier.padding(end = 5.dp), fontSize = 20.sp)
+                }
 
                 connectMessage { ip, port ->
                     try {
@@ -138,6 +144,10 @@ fun main() = application {
                             }
                         }
                     }
+                }
+
+                reverseMessage {
+
                 }
 
                 Row {
