@@ -72,7 +72,7 @@ fun main() = application {
                             }
                         })
                     } catch (e:Exception) {
-                        Store.device.deviceStatus.value = 2
+                        Store.changeConnectStatus(2)
                     }
                 }
 

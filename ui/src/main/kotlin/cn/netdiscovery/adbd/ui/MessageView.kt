@@ -22,12 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -110,6 +107,9 @@ fun commandMessage(onClick: (shellCommand:String) -> Unit) {
         )
 
         button("执行", 100.dp, enableExecute()) {
+            Store.addLog {
+                LogItem(msg = "adb shell ${Store.device.shellCommand.value}")
+            }
             onClick.invoke(Store.device.shellCommand.value)
         }
     }
@@ -218,7 +218,7 @@ fun messageList() {
             SelectionContainer {
                 LazyColumn(Modifier.padding(10.dp), state, verticalArrangement = Arrangement.Center) {
                     itemsIndexed(messages) { index, item ->
-                        Text(item.msg, fontSize = 12.sp)
+                        Text(item.getMessage(), fontSize = 12.sp, color = Color.Black)
                         Spacer(modifier = Modifier.height(5.dp))
                     }
                 }
