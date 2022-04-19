@@ -106,8 +106,7 @@ fun main() = application {
 
                     device?.let {
 
-                        val file = File(dest)
-                        it.pull(src,file.outputStream()).addListener { f->
+                        it.pull(src, File(dest)).addListener { f->
                             if (f.cause() != null) {
                                 f.cause().printStackTrace()
                                 Store.addLog {
@@ -124,6 +123,21 @@ fun main() = application {
 
                 pushMessage { src, dest ->
 
+                    device?.let {
+
+                        it.push(File(src),dest).addListener { f->
+                            if (f.cause() != null) {
+                                f.cause().printStackTrace()
+                                Store.addLog {
+                                    LogItem("adb push $src $dest error")
+                                }
+                            } else {
+                                Store.addLog {
+                                    LogItem("adb push $src $dest done")
+                                }
+                            }
+                        }
+                    }
                 }
 
                 Row {
