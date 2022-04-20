@@ -47,7 +47,7 @@ import java.util.concurrent.atomic.AtomicInteger
  *          cn.netdiscovery.adbd.device.AbstractAdbDevice
  * @author: Tony Shen
  * @date: 2022/4/2 2:58 下午
- * @version: V1.0 <描述当前版本功能>
+ * @version: V1.0 adb 协议支持的命令可以查看：https://android.googlesource.com/platform/packages/modules/adb/+/HEAD/SERVICES.TXT
  */
 abstract class AbstractAdbDevice protected constructor(
     private val serial: String,

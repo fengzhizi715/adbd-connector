@@ -16,14 +16,17 @@ enum class SyncID(code: String) {
     LSTAT_V1("STAT"),
     STAT_V2("STA2"),
     LSTAT_V2("LST2"),
+
     LIST_V1("LIST"),
     LIST_V2("LIS2"),
     DENT_V1("DENT"),
     DENT_V2("DNT2"),
+
     SEND_V1("SEND"),
     SEND_V2("SND2"),
     RECV_V1("RECV"),
     RECV_V2("RCV2"),
+
     DONE("DONE"),
     DATA("DATA"),
     OKAY("OKAY"),
