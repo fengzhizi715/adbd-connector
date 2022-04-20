@@ -37,6 +37,7 @@ import java.security.interfaces.RSAPrivateCrtKey
  */
 val padding = 13.dp
 val fontSize = 13.sp
+val titleFrontSize = 20.sp
 const val previewWidth = 600
 
 fun main() = application {
@@ -63,7 +64,7 @@ fun main() = application {
             Column(Modifier.background(MaterialTheme.colors.surface).padding(padding)) {
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("adbd-connector", modifier = Modifier.padding(end = 5.dp), fontSize = 20.sp)
+                    Text("adbd-connector", modifier = Modifier.padding(end = 5.dp), fontSize = titleFrontSize)
                 }
 
                 connectMessage { ip, port ->
@@ -84,7 +85,7 @@ fun main() = application {
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 10.dp)) {
-                    Text("shell 相关", modifier = Modifier.padding(end = 5.dp), fontSize = 20.sp)
+                    Text("shell 相关", modifier = Modifier.padding(end = 5.dp), fontSize = titleFrontSize)
                 }
 
                 shellCommandMessage { shellCommand ->
@@ -113,7 +114,7 @@ fun main() = application {
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 10.dp)) {
-                    Text("文件传送", modifier = Modifier.padding(end = 5.dp), fontSize = 20.sp)
+                    Text("文件传送", modifier = Modifier.padding(end = 5.dp), fontSize = titleFrontSize)
                 }
 
                 pullMessage { src, dest ->
@@ -153,7 +154,7 @@ fun main() = application {
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 10.dp)) {
-                    Text("App 安装", modifier = Modifier.padding(end = 5.dp), fontSize = 20.sp)
+                    Text("App 安装", modifier = Modifier.padding(end = 5.dp), fontSize = titleFrontSize)
                 }
 
                 installMessage { installCommand ->
@@ -165,7 +166,7 @@ fun main() = application {
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 10.dp)) {
-                    Text("网络相关", modifier = Modifier.padding(end = 5.dp), fontSize = 20.sp)
+                    Text("网络相关", modifier = Modifier.padding(end = 5.dp), fontSize = titleFrontSize)
                 }
 
                 forwardMessage { local, remote ->
