@@ -74,13 +74,24 @@ fun main() = application {
                             override fun onConnected(device: AdbDevice) {
                                 Store.setDeviceInfo("${device.device()} ${device.product()}")
                                 Store.changeConnectStatus(1)
+
+                                Store.addLog {
+                                    LogItem("[${device.serial()}] device connected")
+                                }
                             }
 
                             override fun onDisconnected(device: AdbDevice) {
+                                Store.changeConnectStatus(2)
+                                Store.addLog {
+                                    LogItem("[${device.serial()}] device disconnected")
+                                }
                             }
                         })
                     } catch (e:Exception) {
                         Store.changeConnectStatus(2)
+                        Store.addLog {
+                            LogItem("[${ip}:${port}] device disconnected")
+                        }
                     }
                 }
 
@@ -138,6 +149,7 @@ fun main() = application {
                 pushMessage { src, dest ->
 
                     device?.let {
+
                         it.push(File(src),dest).addListener { f->
                             if (f.cause() != null) {
                                 f.cause().printStackTrace()
