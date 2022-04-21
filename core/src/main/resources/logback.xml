@@ -1,7 +1,7 @@
 <!--每天生成一个文件，归档文件保存30天：-->
 <configuration >
 
-    <property name="LOG_HOME" value="/Users/tony/IdeaProjects/adbd-connector/log" />
+    <define name="LOG_HOME" class="cn.netdiscovery.adbd.constant.LogHomeProperty" />
 
     <!--设置自定义pattern属性-->
     <property name="pattern" value="%d{HH:mm:ss.SSS} [%-5level] [%thread] [%logger] %msg%n"/>
