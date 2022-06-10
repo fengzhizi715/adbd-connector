@@ -23,7 +23,7 @@ import java.nio.channels.ClosedChannelException
  * @date: 2022/4/12 5:18 下午
  * @version: V1.0 <描述当前版本功能>
  */
-class SyncPushHandler(private val device: AdbDevice,private val  src: InputStream,private val dest: String,private val mode: Int,private val mtime: Int,private val promise: Promise<*>) :
+class SyncPushHandler(private val device: AdbDevice,private val src: InputStream,private val dest: String,private val mode: Int,private val mtime: Int,private val promise: Promise<*>) :
     ChannelInboundHandlerAdapter() {
 
     @Throws(Exception::class)
