@@ -1,6 +1,6 @@
 package cn.netdiscovery.adbd.netty.codec
 
-import cn.netdiscovery.adbd.domain.enum.SyncID
+import cn.netdiscovery.adbd.domain.SyncID
 import cn.netdiscovery.adbd.domain.sync.SyncData
 import cn.netdiscovery.adbd.domain.sync.SyncDataDone
 import cn.netdiscovery.adbd.domain.sync.SyncPath

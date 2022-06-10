@@ -3,8 +3,8 @@ package cn.netdiscovery.adbd.netty.codec
 import cn.netdiscovery.adbd.constant.*
 import cn.netdiscovery.adbd.domain.FilePerm
 import cn.netdiscovery.adbd.domain.StatMode
+import cn.netdiscovery.adbd.domain.SyncID
 import cn.netdiscovery.adbd.domain.enum.FileType
-import cn.netdiscovery.adbd.domain.enum.SyncID
 import cn.netdiscovery.adbd.domain.sync.SyncStat
 import cn.netdiscovery.adbd.domain.sync.SyncStatV2
 import io.netty.buffer.ByteBuf

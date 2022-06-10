@@ -1,6 +1,6 @@
 package cn.netdiscovery.adbd.domain.sync
 
-import cn.netdiscovery.adbd.domain.enum.SyncID
+import cn.netdiscovery.adbd.domain.SyncID
 
 /**
  *

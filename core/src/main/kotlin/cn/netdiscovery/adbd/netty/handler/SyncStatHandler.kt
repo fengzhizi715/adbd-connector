@@ -1,8 +1,8 @@
 package cn.netdiscovery.adbd.netty.handler
 
 import cn.netdiscovery.adbd.device.AdbDevice
+import cn.netdiscovery.adbd.domain.SyncID
 import cn.netdiscovery.adbd.domain.enum.Feature
-import cn.netdiscovery.adbd.domain.enum.SyncID
 import cn.netdiscovery.adbd.domain.sync.SyncFail
 import cn.netdiscovery.adbd.domain.sync.SyncPath
 import cn.netdiscovery.adbd.domain.sync.SyncStat

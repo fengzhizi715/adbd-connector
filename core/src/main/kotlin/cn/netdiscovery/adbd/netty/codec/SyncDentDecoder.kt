@@ -1,6 +1,6 @@
 package cn.netdiscovery.adbd.netty.codec
 
-import cn.netdiscovery.adbd.domain.enum.SyncID
+import cn.netdiscovery.adbd.domain.SyncID
 import cn.netdiscovery.adbd.domain.sync.*
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext

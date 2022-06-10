@@ -2,7 +2,7 @@ package cn.netdiscovery.adbd.netty.handler
 
 import cn.netdiscovery.adbd.constant.SYNC_DATA_MAX
 import cn.netdiscovery.adbd.device.AdbDevice
-import cn.netdiscovery.adbd.domain.enum.SyncID
+import cn.netdiscovery.adbd.domain.SyncID
 import cn.netdiscovery.adbd.domain.sync.*
 import cn.netdiscovery.adbd.exception.AdbException
 import io.netty.buffer.Unpooled
