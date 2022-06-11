@@ -73,7 +73,7 @@ abstract class AbstractAdbDevice protected constructor(
 
     init {
         try {
-            newConnection()[30, TimeUnit.SECONDS]
+            newConnection()[30, TimeUnit.SECONDS] // 30秒超时
         } catch (e:Exception) {
             logger.error("[{}] device disconnected,error={}", serial(), e.message, e)
             throw AdbException("connect exception")
@@ -112,17 +112,11 @@ abstract class AbstractAdbDevice protected constructor(
 
     protected fun factory(): cn.netdiscovery.adbd.ChannelFactory = factory
 
-    protected fun privateKey(): RSAPrivateCrtKey {
-        return privateKey
-    }
+    protected fun privateKey(): RSAPrivateCrtKey = privateKey
 
-    protected fun publicKey(): ByteArray {
-        return publicKey
-    }
+    protected fun publicKey(): ByteArray = publicKey
 
-    override fun eventLoop(): EventLoop {
-        return channel.eventLoop()
-    }
+    override fun eventLoop(): EventLoop = channel.eventLoop()
 
     override fun serial() = serial
 
