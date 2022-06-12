@@ -25,12 +25,10 @@ buildscript {
     ext.kotlin_version = '1.6.10'
 
     repositories {
-        jcenter()
         mavenCentral()
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
