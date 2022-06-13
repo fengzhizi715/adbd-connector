@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("java")
     id("kotlin")
-    id("org.jetbrains.compose") version ("1.1.0")
+    id("org.jetbrains.compose") version ("1.1.1")
 }
 
 group = "org.example"
@@ -36,7 +36,6 @@ compose.desktop {
         mainClass = "cn.netdiscovery.adbd.ui.LaunchKt"
         nativeDistributions {
             outputBaseDir.set(project.buildDir.resolve("output"))   //build/output
-//            appResourcesRootDir.set(project.layout.projectDirectory.dir("resources")) //设置无效
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Exe, TargetFormat.Deb)
             packageName = "adbd-connector"
             packageVersion = "1.0.0"
