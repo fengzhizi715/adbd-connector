@@ -36,8 +36,12 @@ object Store: IStore {
         device.deviceStatus.value = value
     }
 
-    override fun setDeviceInfo(value: String) {
-        device.deviceInfo.value = value
+    override fun setDeviceName(value: String) {
+        device.deviceName.value = value
+    }
+
+    override fun setDeviceType(value: String) {
+        device.deviceType.value = value
     }
 
     override fun setOSVersion(value: String) {
@@ -58,7 +62,8 @@ data class Device(
     val ipAddress: MutableState<String> = mutableStateOf(""),  //ip 地址
     val port: MutableState<String> = mutableStateOf(""),
     val shellCommand: MutableState<String> = mutableStateOf(""),
-    val deviceInfo: MutableState<String> = mutableStateOf(""), //手机信息
+    val deviceName: MutableState<String> = mutableStateOf(""),
+    val deviceType: MutableState<String> = mutableStateOf(""),
     val os: MutableState<String> = mutableStateOf(""),
     val cpuArch: MutableState<String> = mutableStateOf(""),
     val physicalSize: MutableState<String> = mutableStateOf(""), // 分辨率
@@ -75,7 +80,7 @@ data class Device(
 ) {
 
     fun deviceStatus(): String = when (deviceStatus.value) {
-        0 -> "初始化"
+        0 -> "未连接"
         1 -> "已连接"
         2 -> "已断开"
         else -> "连接中"

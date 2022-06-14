@@ -74,7 +74,7 @@ fun main() = application {
                                 device = SocketAdbDevice(ip, port.toInt(), privateKey, publicKey)
                                 device?.addListener(object : DeviceListener {
                                     override fun onConnected(device: AdbDevice) {
-                                        Store.setDeviceInfo("${device.device()} ${device.product()}")
+//                                        Store.setDeviceInfo("${device.device()} ${device.product()}")
                                         Store.changeConnectStatus(1)
 
                                         Store.addLog {
@@ -198,7 +198,9 @@ fun main() = application {
 
                             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(start = 10.dp, top = 5.dp)) {
 
-                                Text("设备信息: ${Store.device.deviceInfo.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
+                                Text("设备名称: ${Store.device.deviceName.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
+
+                                Text("设备类型: ${Store.device.deviceType.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
 
                                 Text("Android OS 版本: ${Store.device.os.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
 

@@ -14,9 +14,39 @@ object GetPhoneInfoTask {
 
     fun execute(device: AdbDevice) {
 
+        getDeviceName(device)
+        getDeviceType(device)
         getOSVersion(device)
         getCPUArchVersion(device)
         getPhysicalSize(device)
+    }
+
+    private fun getDeviceName(device: AdbDevice) {
+        val shellCommand = "getprop ro.product.system.model"
+        val commands = shellCommand.trim().split("\\s+".toRegex())
+        val shell = commands[0]
+        val args = commands.drop(1).toTypedArray()
+        device.shell(shell, *args).addListener { f ->
+            if (f.cause() != null) {
+                f.cause().printStackTrace()
+            } else {
+                Store.setDeviceName(f.now.toString().trim())
+            }
+        }
+    }
+
+    private fun getDeviceType(device: AdbDevice) {
+        val shellCommand = "getprop ro.product.model"
+        val commands = shellCommand.trim().split("\\s+".toRegex())
+        val shell = commands[0]
+        val args = commands.drop(1).toTypedArray()
+        device.shell(shell, *args).addListener { f ->
+            if (f.cause() != null) {
+                f.cause().printStackTrace()
+            } else {
+                Store.setDeviceType(f.now.toString().trim())
+            }
+        }
     }
 
     private fun getOSVersion(device: AdbDevice) {

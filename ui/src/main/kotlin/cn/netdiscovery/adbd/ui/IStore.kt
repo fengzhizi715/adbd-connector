@@ -25,10 +25,9 @@ interface IStore {
      */
     fun changeConnectStatus(value: Int)
 
-    /**
-     * 设置手机的信息
-     */
-    fun setDeviceInfo(value: String)
+    fun setDeviceName(value: String)
+
+    fun setDeviceType(value: String)
 
     fun setOSVersion(value: String)
 
