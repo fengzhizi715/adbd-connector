@@ -43,6 +43,10 @@ object Store: IStore {
     override fun setOSVersion(value: String) {
         device.os.value = value
     }
+
+    override fun setPhysicalSize(value: String) {
+        device.physicalSize.value = value
+    }
 }
 
 data class Device(
@@ -52,6 +56,7 @@ data class Device(
     val shellCommand: MutableState<String> = mutableStateOf(""),
     val deviceInfo: MutableState<String> = mutableStateOf(""), //手机信息
     val os: MutableState<String> = mutableStateOf(""),
+    val physicalSize: MutableState<String> = mutableStateOf(""), // 分辨率
     val pushSrc: MutableState<String> = mutableStateOf(""),
     val pushDest: MutableState<String> = mutableStateOf(""),
     val pullSrc: MutableState<String> = mutableStateOf(""),

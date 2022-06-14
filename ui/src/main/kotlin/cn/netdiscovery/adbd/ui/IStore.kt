@@ -31,4 +31,6 @@ interface IStore {
     fun setDeviceInfo(value: String)
 
     fun setOSVersion(value: String)
+
+    fun setPhysicalSize(value: String)
 }

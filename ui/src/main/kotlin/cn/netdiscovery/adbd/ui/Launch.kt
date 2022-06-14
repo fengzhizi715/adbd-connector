@@ -192,15 +192,17 @@ fun main() = application {
                     }
 
                     Column(modifier = Modifier.absolutePadding(left = 10.dp), verticalArrangement = Arrangement.Top) {
-                        Text("手机连接状态: ${Store.device.deviceStatus()}", Modifier.padding(top = 10.dp), fontSize = fontSize, fontWeight = FontWeight.Bold)
+                        Text("手机连接状态: ${Store.device.deviceStatus()}", Modifier.padding(10.dp), fontSize = fontSize, fontWeight = FontWeight.Bold)
 
                         SelectionContainer {
 
-                            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(top = 5.dp)) {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(start = 10.dp, top = 5.dp)) {
 
                                 Text("设备信息: ${Store.device.deviceInfo.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
 
                                 Text("Android OS 版本: ${Store.device.os.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
+
+                                Text("分辨率: ${Store.device.physicalSize.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
                             }
                         }
                     }

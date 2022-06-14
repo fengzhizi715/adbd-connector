@@ -14,6 +14,11 @@ object GetPhoneInfoTask {
 
     fun execute(device: AdbDevice) {
 
+        getOSVersion(device)
+        getPhysicalSize(device)
+    }
+
+    private fun getOSVersion(device: AdbDevice) {
         val shellCommand = "getprop ro.build.version.release"
         val commands = shellCommand.trim().split("\\s+".toRegex())
         val shell = commands[0]
@@ -23,6 +28,20 @@ object GetPhoneInfoTask {
                 f.cause().printStackTrace()
             } else {
                 Store.setOSVersion(f.now as String)
+            }
+        }
+    }
+
+    private fun getPhysicalSize(device: AdbDevice) {
+        val shellCommand = "wm size"
+        val commands = shellCommand.trim().split("\\s+".toRegex())
+        val shell = commands[0]
+        val args = commands.drop(1).toTypedArray()
+        device.shell(shell, *args).addListener { f ->
+            if (f.cause() != null) {
+                f.cause().printStackTrace()
+            } else {
+                Store.setPhysicalSize(f.now.toString().replace("Physical size:",""))
             }
         }
     }
