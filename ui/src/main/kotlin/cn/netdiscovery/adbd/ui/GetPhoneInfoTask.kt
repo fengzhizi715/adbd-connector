@@ -16,6 +16,8 @@ object GetPhoneInfoTask {
 
         getDeviceName(device)
         getDeviceType(device)
+        getBrand(device)
+        getManufacturer(device)
         getOSVersion(device)
         getCPUArchVersion(device)
         getPhysicalSize(device)
@@ -45,6 +47,34 @@ object GetPhoneInfoTask {
                 f.cause().printStackTrace()
             } else {
                 Store.setDeviceType(f.now.toString().trim())
+            }
+        }
+    }
+
+    private fun getBrand(device: AdbDevice) {
+        val shellCommand = "getprop ro.product.board"
+        val commands = shellCommand.trim().split("\\s+".toRegex())
+        val shell = commands[0]
+        val args = commands.drop(1).toTypedArray()
+        device.shell(shell, *args).addListener { f ->
+            if (f.cause() != null) {
+                f.cause().printStackTrace()
+            } else {
+                Store.setBrand(f.now.toString().trim())
+            }
+        }
+    }
+
+    private fun getManufacturer(device: AdbDevice) {
+        val shellCommand = "getprop ro.product.manufacturer"
+        val commands = shellCommand.trim().split("\\s+".toRegex())
+        val shell = commands[0]
+        val args = commands.drop(1).toTypedArray()
+        device.shell(shell, *args).addListener { f ->
+            if (f.cause() != null) {
+                f.cause().printStackTrace()
+            } else {
+                Store.setManufacturer(f.now.toString().trim())
             }
         }
     }

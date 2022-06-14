@@ -202,6 +202,10 @@ fun main() = application {
 
                                 Text("设备型号: ${Store.device.deviceType.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
 
+                                Text("品牌: ${Store.device.brand.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
+
+                                Text("制造商: ${Store.device.manufacturer.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
+
                                 Text("Android OS 版本: ${Store.device.os.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
 
                                 Text("CPU 架构: ${Store.device.cpuArch.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)

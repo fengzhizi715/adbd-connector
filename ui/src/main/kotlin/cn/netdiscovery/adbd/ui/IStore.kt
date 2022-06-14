@@ -29,6 +29,10 @@ interface IStore {
 
     fun setDeviceType(value: String)
 
+    fun setBrand(value: String)
+
+    fun setManufacturer(value: String)
+
     fun setOSVersion(value: String)
 
     fun setCpuArch(value: String)

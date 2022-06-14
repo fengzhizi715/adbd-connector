@@ -44,6 +44,14 @@ object Store: IStore {
         device.deviceType.value = value
     }
 
+    override fun setBrand(value: String) {
+        device.brand.value = value
+    }
+
+    override fun setManufacturer(value: String) {
+        device.manufacturer.value = value
+    }
+
     override fun setOSVersion(value: String) {
         device.os.value = value
     }
@@ -64,6 +72,8 @@ data class Device(
     val shellCommand: MutableState<String> = mutableStateOf(""),
     val deviceName: MutableState<String> = mutableStateOf(""),
     val deviceType: MutableState<String> = mutableStateOf(""),
+    val brand: MutableState<String> = mutableStateOf(""),
+    val manufacturer: MutableState<String> = mutableStateOf(""),
     val os: MutableState<String> = mutableStateOf(""),
     val cpuArch: MutableState<String> = mutableStateOf(""),
     val physicalSize: MutableState<String> = mutableStateOf(""), // 分辨率
