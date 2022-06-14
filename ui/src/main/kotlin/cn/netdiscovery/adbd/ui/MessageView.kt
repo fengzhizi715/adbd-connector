@@ -41,7 +41,7 @@ import cn.netdiscovery.adbd.utils.extension.isNumeric
 @Composable
 fun connectMessage(onClick: (ip:String, port:String) -> Unit) {
 
-    Text("手机连接状态: ${Store.device.deviceStatus()}", Modifier.padding(top = 3.dp), fontSize = fontSize, fontWeight = FontWeight.Bold)
+    Text("手机连接状态: ${Store.device.deviceStatus()}", Modifier.padding(top = 10.dp), fontSize = fontSize, fontWeight = FontWeight.Bold)
 
     SelectionContainer {
 
