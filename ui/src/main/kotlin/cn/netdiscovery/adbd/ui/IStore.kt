@@ -32,5 +32,7 @@ interface IStore {
 
     fun setOSVersion(value: String)
 
+    fun setCpuArch(value: String)
+
     fun setPhysicalSize(value: String)
 }

@@ -15,6 +15,7 @@ object GetPhoneInfoTask {
     fun execute(device: AdbDevice) {
 
         getOSVersion(device)
+        getCPUArchVersion(device)
         getPhysicalSize(device)
     }
 
@@ -27,7 +28,21 @@ object GetPhoneInfoTask {
             if (f.cause() != null) {
                 f.cause().printStackTrace()
             } else {
-                Store.setOSVersion(f.now as String)
+                Store.setOSVersion(f.now.toString().trim())
+            }
+        }
+    }
+
+    private fun getCPUArchVersion(device: AdbDevice) {
+        val shellCommand = "getprop ro.product.cpu.abi"
+        val commands = shellCommand.trim().split("\\s+".toRegex())
+        val shell = commands[0]
+        val args = commands.drop(1).toTypedArray()
+        device.shell(shell, *args).addListener { f ->
+            if (f.cause() != null) {
+                f.cause().printStackTrace()
+            } else {
+                Store.setCpuArch(f.now.toString().trim())
             }
         }
     }
@@ -41,7 +56,7 @@ object GetPhoneInfoTask {
             if (f.cause() != null) {
                 f.cause().printStackTrace()
             } else {
-                Store.setPhysicalSize(f.now.toString().replace("Physical size:",""))
+                Store.setPhysicalSize(f.now.toString().trim().replace("Physical size:",""))
             }
         }
     }
