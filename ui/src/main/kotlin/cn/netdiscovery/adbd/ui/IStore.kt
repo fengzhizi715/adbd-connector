@@ -29,4 +29,6 @@ interface IStore {
      * 设置手机的信息
      */
     fun setDeviceInfo(value: String)
+
+    fun setOSVersion(value: String)
 }

@@ -80,6 +80,8 @@ fun main() = application {
                                         Store.addLog {
                                             LogItem("[${device.serial()}] device connected")
                                         }
+
+                                        GetPhoneInfoTask.execute(device)
                                     }
 
                                     override fun onDisconnected(device: AdbDevice) {

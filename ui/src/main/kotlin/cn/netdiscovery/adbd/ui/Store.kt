@@ -39,6 +39,10 @@ object Store: IStore {
     override fun setDeviceInfo(value: String) {
         device.deviceInfo.value = value
     }
+
+    override fun setOSVersion(value: String) {
+        device.os.value = value
+    }
 }
 
 data class Device(
@@ -47,6 +51,7 @@ data class Device(
     val port: MutableState<String> = mutableStateOf(""),
     val shellCommand: MutableState<String> = mutableStateOf(""),
     val deviceInfo: MutableState<String> = mutableStateOf(""), //手机信息
+    val os: MutableState<String> = mutableStateOf(""), //手机信息
     val pushSrc: MutableState<String> = mutableStateOf(""),
     val pushDest: MutableState<String> = mutableStateOf(""),
     val pullSrc: MutableState<String> = mutableStateOf(""),
