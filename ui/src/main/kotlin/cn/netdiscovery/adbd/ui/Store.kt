@@ -3,6 +3,7 @@ package cn.netdiscovery.adbd.ui
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import java.lang.NumberFormatException
 
 /**
  *
@@ -60,6 +61,10 @@ object Store: IStore {
         device.cpuArch.value = value
     }
 
+    override fun setCpuNum(value: String) {
+        device.cpuNum.value = value
+    }
+
     override fun setPhysicalSize(value: String) {
         device.physicalSize.value = value
     }
@@ -76,6 +81,7 @@ data class Device(
     val manufacturer: MutableState<String> = mutableStateOf(""),
     val os: MutableState<String> = mutableStateOf(""),
     val cpuArch: MutableState<String> = mutableStateOf(""),
+    val cpuNum: MutableState<String> = mutableStateOf(""),
     val physicalSize: MutableState<String> = mutableStateOf(""), // 分辨率
     val pushSrc: MutableState<String> = mutableStateOf(""),
     val pushDest: MutableState<String> = mutableStateOf(""),

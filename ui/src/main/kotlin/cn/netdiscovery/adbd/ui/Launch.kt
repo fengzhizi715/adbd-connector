@@ -210,6 +210,8 @@ fun main() = application {
 
                                 Text("CPU 架构: ${Store.device.cpuArch.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
 
+                                Text("CPU 数目: ${Store.device.cpuNum.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
+
                                 Text("分辨率: ${Store.device.physicalSize.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
                             }
                         }

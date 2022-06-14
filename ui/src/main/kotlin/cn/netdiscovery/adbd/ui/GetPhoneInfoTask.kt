@@ -20,6 +20,7 @@ object GetPhoneInfoTask {
         getManufacturer(device)
         getOSVersion(device)
         getCPUArchVersion(device)
+        getCPUNum(device)
         getPhysicalSize(device)
     }
 
@@ -52,7 +53,7 @@ object GetPhoneInfoTask {
     }
 
     private fun getBrand(device: AdbDevice) {
-        val shellCommand = "getprop ro.product.board"
+        val shellCommand = "getprop ro.product.brand"
         val commands = shellCommand.trim().split("\\s+".toRegex())
         val shell = commands[0]
         val args = commands.drop(1).toTypedArray()
@@ -103,6 +104,20 @@ object GetPhoneInfoTask {
                 f.cause().printStackTrace()
             } else {
                 Store.setCpuArch(f.now.toString().trim())
+            }
+        }
+    }
+
+    private fun getCPUNum(device: AdbDevice) {
+        val shellCommand = "cat /proc/cpuinfo | grep processor"
+        val commands = shellCommand.trim().split("\\s+".toRegex())
+        val shell = commands[0]
+        val args = commands.drop(1).toTypedArray()
+        device.shell(shell, *args).addListener { f ->
+            if (f.cause() != null) {
+                f.cause().printStackTrace()
+            } else {
+                Store.setCpuNum(f.now.toString().trim())
             }
         }
     }

@@ -37,5 +37,7 @@ interface IStore {
 
     fun setCpuArch(value: String)
 
+    fun setCpuNum(value: String)
+
     fun setPhysicalSize(value: String)
 }
