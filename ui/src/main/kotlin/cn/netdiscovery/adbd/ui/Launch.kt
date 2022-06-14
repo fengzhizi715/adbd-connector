@@ -101,7 +101,7 @@ fun main() = application {
 
                 shellCommandMessage { shellCommand ->
 
-                    device?.let {
+                    device.wrapLet {
                         val commands = shellCommand.trim().split("\\s+".toRegex())
                         val shell = commands[0]
                         val args = commands.drop(1).toTypedArray()
@@ -115,10 +115,6 @@ fun main() = application {
                                 }
                             }
                         }
-                    }?: run{
-                        Store.addLog {
-                            LogItem("the phone is not connected")
-                        }
                     }
 
                     return@shellCommandMessage
@@ -130,7 +126,7 @@ fun main() = application {
 
                 pullMessage { src, dest ->
 
-                    device?.let {
+                    device.wrapLet {
                         it.pull(src, File(dest)).addListener { f->
                             if (f.cause() != null) {
                                 f.cause().printStackTrace()
@@ -148,7 +144,7 @@ fun main() = application {
 
                 pushMessage { src, dest ->
 
-                    device?.let {
+                    device.wrapLet {
 
                         it.push(File(src),dest).addListener { f->
                             if (f.cause() != null) {

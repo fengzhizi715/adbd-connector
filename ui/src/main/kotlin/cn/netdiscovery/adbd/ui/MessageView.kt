@@ -284,9 +284,6 @@ fun forwardMessage(onClick: (local:String,remote:String) -> Unit) {
         )
 
         button("执行", 100.dp, enableClick(ExecuteType.FORWARD)) {
-//            Store.addLog {
-//                LogItem(msg = "adb push ${Store.device.pushSrc.value} ${Store.device.pushDest.value}")
-//            }
             onClick.invoke(Store.device.forwardLocal.value, Store.device.forwardRemote.value)
         }
     }
@@ -325,9 +322,6 @@ fun reverseMessage(onClick: (remote:String,local:String) -> Unit) {
         )
 
         button("执行", 100.dp, enableClick(ExecuteType.REVERSE)) {
-//            Store.addLog {
-//                LogItem(msg = "adb push ${Store.device.pushSrc.value} ${Store.device.pushDest.value}")
-//            }
             onClick.invoke(Store.device.reverseRemote.value, Store.device.reverseLocal.value)
         }
     }
