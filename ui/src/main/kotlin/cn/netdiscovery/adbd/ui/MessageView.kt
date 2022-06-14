@@ -441,9 +441,7 @@ fun messageList() {
             }
         }
 
-        val messages = remember {
-            Store.logs
-        }
+        val messages = remember { Store.logs }
 
         val state = rememberLazyListState()
 

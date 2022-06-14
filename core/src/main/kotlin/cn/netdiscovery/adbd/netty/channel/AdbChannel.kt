@@ -71,9 +71,7 @@ class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel
         config.isAutoRead = parent.config().isAutoRead
     }
 
-    override fun newUnsafe(): AbstractUnsafe {
-        return AdbUnsafe()
-    }
+    override fun newUnsafe(): AbstractUnsafe = AdbUnsafe()
 
     override fun isCompatible(loop: EventLoop): Boolean = loop is AdbChannelEventLoop
 
@@ -195,7 +193,7 @@ class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel
                 try {
                     /**
                      * @see cn.netdiscovery.adbd.constant.Constants.WRITE_DATA_MAX;
-                     * 此处不能直接一次write, 超过大小的得分段write
+                     * 此处不能直接一次write, 超过大小的得分段 write
                      */
                     while (true) {
                         val size = min(msg.readableBytes(), WRITE_DATA_MAX)
@@ -281,6 +279,7 @@ class AdbChannel(parent: Channel, localId: Int, remoteId: Int) : AbstractChannel
                         if (!promiseSet) {
                             close()
                         }
+
                         //开始写入pending write entries
                         while (true) {
                             val entry: PendingWriteEntry = pendingWriteEntries.poll() ?: break

@@ -95,7 +95,7 @@ class AdbChannelProcessor(
             }
             Command.A_CLSE ->
                 /**
-                 * 如果成功转发了事件，那么AdbChannel#doClose的时候已经发送了CLSE命令了，不需要重复发送
+                 * 如果成功转发了事件，那么 AdbChannel#doClose 的时候已经发送了 CLSE 命令了，不需要重复发送
                  * @see AdbChannel.doClose
                  */
                 if (!fireChannelMessage(ctx, message)) {
