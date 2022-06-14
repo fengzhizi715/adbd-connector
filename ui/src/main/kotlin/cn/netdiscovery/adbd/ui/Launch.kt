@@ -196,9 +196,11 @@ fun main() = application {
 
                         SelectionContainer {
 
-                            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 5.dp)) {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(top = 5.dp)) {
 
                                 Text("设备信息: ${Store.device.deviceInfo.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
+
+                                Text("Android OS 版本: ${Store.device.os.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
                             }
                         }
                     }

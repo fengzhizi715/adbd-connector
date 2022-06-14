@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -40,16 +39,6 @@ import cn.netdiscovery.adbd.utils.extension.isNumeric
  */
 @Composable
 fun connectMessage(onClick: (ip:String, port:String) -> Unit) {
-
-//    Text("手机连接状态: ${Store.device.deviceStatus()}", Modifier.padding(top = 10.dp), fontSize = fontSize, fontWeight = FontWeight.Bold)
-//
-//    SelectionContainer {
-//
-//        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 5.dp)) {
-//
-//            Text("设备信息: ${Store.device.deviceInfo.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
-//        }
-//    }
 
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 5.dp)) {
         Text("手机 ip 地址:", modifier = Modifier.padding(end = 5.dp), fontSize = fontSize)

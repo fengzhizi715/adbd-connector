@@ -22,7 +22,7 @@ object GetPhoneInfoTask {
             if (f.cause() != null) {
                 f.cause().printStackTrace()
             } else {
-                Store.setDeviceInfo(f.now as String)
+                Store.setOSVersion(f.now as String)
             }
         }
     }

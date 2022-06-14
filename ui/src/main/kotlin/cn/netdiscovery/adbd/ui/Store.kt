@@ -51,7 +51,7 @@ data class Device(
     val port: MutableState<String> = mutableStateOf(""),
     val shellCommand: MutableState<String> = mutableStateOf(""),
     val deviceInfo: MutableState<String> = mutableStateOf(""), //手机信息
-    val os: MutableState<String> = mutableStateOf(""), //手机信息
+    val os: MutableState<String> = mutableStateOf(""),
     val pushSrc: MutableState<String> = mutableStateOf(""),
     val pushDest: MutableState<String> = mutableStateOf(""),
     val pullSrc: MutableState<String> = mutableStateOf(""),
