@@ -22,7 +22,7 @@ object GetPhoneInfoTask {
     }
 
     private fun getDeviceName(device: AdbDevice) {
-        val shellCommand = "getprop ro.product.system.model"
+        val shellCommand = "getprop ro.product.device"
         val commands = shellCommand.trim().split("\\s+".toRegex())
         val shell = commands[0]
         val args = commands.drop(1).toTypedArray()

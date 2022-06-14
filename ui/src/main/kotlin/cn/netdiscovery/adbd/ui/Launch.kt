@@ -200,7 +200,7 @@ fun main() = application {
 
                                 Text("设备名称: ${Store.device.deviceName.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
 
-                                Text("设备类型: ${Store.device.deviceType.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
+                                Text("设备型号: ${Store.device.deviceType.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
 
                                 Text("Android OS 版本: ${Store.device.os.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
 
