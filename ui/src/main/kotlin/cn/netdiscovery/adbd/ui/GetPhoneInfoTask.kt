@@ -117,7 +117,8 @@ object GetPhoneInfoTask {
             if (f.cause() != null) {
                 f.cause().printStackTrace()
             } else {
-                Store.setCpuNum(f.now.toString().trim())
+                val args = f.now.toString().trim().split("\n")
+                Store.setCpuNum("${args.size}")
             }
         }
     }
