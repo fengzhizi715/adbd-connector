@@ -68,6 +68,10 @@ object Store: IStore {
     override fun setPhysicalSize(value: String) {
         device.physicalSize.value = value
     }
+
+    override fun setMemTotal(value: String) {
+        device.memTotal.value = value
+    }
 }
 
 data class Device(
@@ -83,6 +87,7 @@ data class Device(
     val cpuArch: MutableState<String> = mutableStateOf(""),
     val cpuNum: MutableState<String> = mutableStateOf(""),
     val physicalSize: MutableState<String> = mutableStateOf(""), // 分辨率
+    val memTotal: MutableState<String> = mutableStateOf(""),
     val pushSrc: MutableState<String> = mutableStateOf(""),
     val pushDest: MutableState<String> = mutableStateOf(""),
     val pullSrc: MutableState<String> = mutableStateOf(""),

@@ -213,11 +213,12 @@ fun main() = application {
                                 Text("CPU 数目: ${Store.device.cpuNum.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
 
                                 Text("分辨率: ${Store.device.physicalSize.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
+
+                                Text("内存大小: ${Store.device.memTotal.value}", modifier = Modifier.width(250.dp), fontSize = fontSize)
                             }
                         }
                     }
                 }
-
 
                 Row {
                     messageList()

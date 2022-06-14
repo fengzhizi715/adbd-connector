@@ -1,6 +1,7 @@
 package cn.netdiscovery.adbd.ui
 
 import cn.netdiscovery.adbd.device.AdbDevice
+import kotlin.math.ceil
 
 /**
  *
@@ -22,6 +23,7 @@ object GetPhoneInfoTask {
         getCPUArchVersion(device)
         getCPUNum(device)
         getPhysicalSize(device)
+        getMemTotal(device)
     }
 
     private fun getDeviceName(device: AdbDevice) {
@@ -133,6 +135,22 @@ object GetPhoneInfoTask {
                 f.cause().printStackTrace()
             } else {
                 Store.setPhysicalSize(f.now.toString().trim().replace("Physical size:",""))
+            }
+        }
+    }
+
+    private fun getMemTotal(device: AdbDevice) {
+        val shellCommand = "cat /proc/meminfo | grep MemTotal"
+        val commands = shellCommand.trim().split("\\s+".toRegex())
+        val shell = commands[0]
+        val args = commands.drop(1).toTypedArray()
+        device.shell(shell, *args).addListener { f ->
+            if (f.cause() != null) {
+                f.cause().printStackTrace()
+            } else {
+                val total = f.now.toString().trim().replace("MemTotal:","").trim().replace("kB","").toDouble()
+                val result = ceil(total/1024/1024)
+                Store.setMemTotal("$result GB")
             }
         }
     }

@@ -40,4 +40,6 @@ interface IStore {
     fun setCpuNum(value: String)
 
     fun setPhysicalSize(value: String)
+
+    fun setMemTotal(value: String)
 }
