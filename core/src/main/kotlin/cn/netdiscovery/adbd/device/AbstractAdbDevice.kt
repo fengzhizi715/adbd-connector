@@ -519,9 +519,6 @@ abstract class AbstractAdbDevice protected constructor(
 
     @Throws(java.lang.Exception::class)
     override fun reboot(mode: DeviceMode): Future<*> {
-        requireNotNull(mode) {
-            "argument `mode` is null"
-        }
         return open("reboot:" + mode.name + "\u0000", null)
     }
 
