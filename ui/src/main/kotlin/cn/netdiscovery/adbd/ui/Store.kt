@@ -72,6 +72,10 @@ object Store: IStore {
     override fun setMemTotal(value: String) {
         device.memTotal.value = value
     }
+
+    override fun setScreenShot(value: String) {
+        device.screenShot.value = value
+    }
 }
 
 data class Device(
@@ -88,6 +92,7 @@ data class Device(
     val cpuNum: MutableState<String> = mutableStateOf(""),
     val physicalSize: MutableState<String> = mutableStateOf(""), // 分辨率
     val memTotal: MutableState<String> = mutableStateOf(""),
+    val screenShot: MutableState<String> = mutableStateOf(""),
     val pushSrc: MutableState<String> = mutableStateOf(""),
     val pushDest: MutableState<String> = mutableStateOf(""),
     val pullSrc: MutableState<String> = mutableStateOf(""),

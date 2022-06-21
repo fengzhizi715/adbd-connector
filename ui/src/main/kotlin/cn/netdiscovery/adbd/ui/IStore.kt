@@ -42,4 +42,6 @@ interface IStore {
     fun setPhysicalSize(value: String)
 
     fun setMemTotal(value: String)
+
+    fun setScreenShot(value: String)
 }

@@ -1,6 +1,8 @@
 package cn.netdiscovery.adbd.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.MaterialTheme
@@ -9,6 +11,8 @@ import androidx.compose.material.lightColors
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.toComposeImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -23,9 +27,11 @@ import cn.netdiscovery.adbd.device.DeviceListener
 import cn.netdiscovery.adbd.device.SocketAdbDevice
 import cn.netdiscovery.adbd.utils.AuthUtil
 import kotlinx.coroutines.runBlocking
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.security.interfaces.RSAPrivateCrtKey
+import javax.imageio.ImageIO
 
 /**
  *
@@ -38,7 +44,7 @@ import java.security.interfaces.RSAPrivateCrtKey
 val padding = 13.dp
 val fontSize = 13.sp
 val titleFrontSize = 20.sp
-const val previewWidth = 600
+const val previewWidth = 650
 
 fun main() = application {
 
@@ -74,7 +80,6 @@ fun main() = application {
                                 device = SocketAdbDevice(ip, port.toInt(), privateKey, publicKey)
                                 device?.addListener(object : DeviceListener {
                                     override fun onConnected(device: AdbDevice) {
-//                                        Store.setDeviceInfo("${device.device()} ${device.product()}")
                                         Store.changeConnectStatus(1)
 
                                         Store.addLog {
@@ -218,6 +223,17 @@ fun main() = application {
                             }
                         }
                     }
+
+                    Column(modifier = Modifier.absolutePadding(left = 10.dp), verticalArrangement = Arrangement.Top) {
+
+                        if (Store.device.screenShot.value.isNotEmpty()) {
+                            Image(
+                                bitmap = loadLocalImage(Store.device.screenShot.value),
+                                contentDescription = "",
+                                modifier = Modifier.height(400.dp).width(300.dp)
+                            )
+                        }
+                    }
                 }
 
                 Row {
@@ -226,6 +242,11 @@ fun main() = application {
             }
         }
     }
+}
+
+private fun loadLocalImage(value: String): ImageBitmap {
+    val inputStream = File(value).inputStream()
+    return ImageIO.read(inputStream).toComposeImageBitmap()
 }
 
 fun ApplicationScope.closeRequest() = runBlocking {
