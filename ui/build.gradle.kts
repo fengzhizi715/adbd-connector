@@ -23,6 +23,8 @@ dependencies {
     implementation(compose.desktop.common)
     implementation ("io.netty:netty-all:4.1.48.Final")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${rootProject.extra["kotlin_version"]}")
+    implementation("com.github.fengzhizi715.RxJava-Utils:utils:${rootProject.extra["rxjava_utils"]}")
+    implementation ("io.reactivex.rxjava3:rxjava:${rootProject.extra["rxjava"]}")
 
     implementation(project(":core"))
 }

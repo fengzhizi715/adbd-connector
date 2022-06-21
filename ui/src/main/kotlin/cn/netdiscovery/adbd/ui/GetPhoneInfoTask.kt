@@ -1,7 +1,10 @@
 package cn.netdiscovery.adbd.ui
 
 import cn.netdiscovery.adbd.device.AdbDevice
+import cn.netdiscovery.rxjava.refresh
+import io.reactivex.rxjava3.disposables.Disposable
 import java.io.File
+import java.util.concurrent.TimeUnit
 import kotlin.math.ceil
 
 /**
@@ -25,7 +28,31 @@ object GetPhoneInfoTask {
         getCPUNum(device)
         getPhysicalSize(device)
         getMemTotal(device)
-        displayScreenShot(device)
+    }
+
+    fun displayScreenShot(device: AdbDevice): Disposable {
+        return refresh(0, 1, TimeUnit.SECONDS, func = {
+
+            val src = "/sdcard/screenshot.png"
+            val dest = File("/Users/tony/screenshot.png")
+            val shellCommand = "/system/bin/screencap -p $src"
+            val commands = shellCommand.trim().split("\\s+".toRegex())
+            val shell = commands[0]
+            val args = commands.drop(1).toTypedArray()
+            device.shell(shell, *args).addListener { f ->
+                if (f.cause() != null) {
+                    f.cause().printStackTrace()
+                } else {
+                    device.pull(src, dest).addListener {
+                        if (f.cause() != null) {
+                            f.cause().printStackTrace()
+                        } else {
+                            Store.setScreenShot(dest.absolutePath)
+                        }
+                    }
+                }
+            }
+        })
     }
 
     private fun getDeviceName(device: AdbDevice) {
@@ -153,28 +180,6 @@ object GetPhoneInfoTask {
                 val total = f.now.toString().trim().replace("MemTotal:","").trim().replace("kB","").toDouble()
                 val result = ceil(total/1024/1024)
                 Store.setMemTotal("$result GB")
-            }
-        }
-    }
-
-    private fun displayScreenShot(device: AdbDevice) {
-        val src = "/sdcard/screenshot.png"
-        val dest = File("/Users/tony/screenshot.png")
-        val shellCommand = "/system/bin/screencap -p $src"
-        val commands = shellCommand.trim().split("\\s+".toRegex())
-        val shell = commands[0]
-        val args = commands.drop(1).toTypedArray()
-        device.shell(shell, *args).addListener { f ->
-            if (f.cause() != null) {
-                f.cause().printStackTrace()
-            } else {
-                device.pull(src,dest).addListener {
-                    if (f.cause() != null) {
-                        f.cause().printStackTrace()
-                    } else {
-                        Store.setScreenShot(dest.absolutePath)
-                    }
-                }
             }
         }
     }

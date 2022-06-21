@@ -1,9 +1,3 @@
-ext {
-    libraries = [
-            logback                   : "1.2.3"
-    ]
-}
-
 group 'cn.netdiscovery.adbd'
 version '1.0-SNAPSHOT'
 
@@ -23,6 +17,9 @@ dependencies {
 
 buildscript {
     ext.kotlin_version = '1.6.10'
+    ext.logback = "1.2.3"
+    ext.rxjava_utils = "v0.21"
+    ext.rxjava = "3.1.1"
 
     repositories {
         mavenCentral()

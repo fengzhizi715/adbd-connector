@@ -87,6 +87,7 @@ fun main() = application {
                                         }
 
                                         GetPhoneInfoTask.execute(device)
+                                        GetPhoneInfoTask.displayScreenShot(device)
                                     }
 
                                     override fun onDisconnected(device: AdbDevice) {
