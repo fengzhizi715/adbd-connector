@@ -3,6 +3,7 @@ package cn.netdiscovery.adbd.ui
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import java.awt.image.BufferedImage
 import java.lang.NumberFormatException
 
 /**
@@ -73,8 +74,8 @@ object Store: IStore {
         device.memTotal.value = value
     }
 
-    override fun setScreenShot(value: String) {
-        device.screenShot.value = value
+    override fun setBufferedImage(value: BufferedImage) {
+        device.bufferedImage.value = value
     }
 }
 
@@ -92,7 +93,7 @@ data class Device(
     val cpuNum: MutableState<String> = mutableStateOf(""),
     val physicalSize: MutableState<String> = mutableStateOf(""), // 分辨率
     val memTotal: MutableState<String> = mutableStateOf(""),
-    val screenShot: MutableState<String> = mutableStateOf(""),
+    val bufferedImage: MutableState<BufferedImage?> = mutableStateOf(null),
     val pushSrc: MutableState<String> = mutableStateOf(""),
     val pushDest: MutableState<String> = mutableStateOf(""),
     val pullSrc: MutableState<String> = mutableStateOf(""),

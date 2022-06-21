@@ -5,6 +5,7 @@ import cn.netdiscovery.rxjava.refresh
 import io.reactivex.rxjava3.disposables.Disposable
 import java.io.File
 import java.util.concurrent.TimeUnit
+import javax.imageio.ImageIO
 import kotlin.math.ceil
 
 /**
@@ -47,7 +48,8 @@ object GetPhoneInfoTask {
                         if (f.cause() != null) {
                             f.cause().printStackTrace()
                         } else {
-                            Store.setScreenShot(dest.absolutePath)
+                            val inputStream = dest.inputStream()
+                            Store.setBufferedImage(ImageIO.read(inputStream))
                         }
                     }
                 }

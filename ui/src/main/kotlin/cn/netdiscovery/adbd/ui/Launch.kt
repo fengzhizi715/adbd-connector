@@ -27,6 +27,7 @@ import cn.netdiscovery.adbd.device.DeviceListener
 import cn.netdiscovery.adbd.device.SocketAdbDevice
 import cn.netdiscovery.adbd.utils.AuthUtil
 import kotlinx.coroutines.runBlocking
+import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.charset.StandardCharsets
@@ -227,9 +228,9 @@ fun main() = application {
 
                     Column(modifier = Modifier.absolutePadding(left = 10.dp), verticalArrangement = Arrangement.Top) {
 
-                        if (Store.device.screenShot.value.isNotEmpty()) {
+                        if (Store.device.bufferedImage.value!=null) {
                             Image(
-                                bitmap = loadLocalImage(Store.device.screenShot.value),
+                                bitmap = loadLocalImage(Store.device.bufferedImage.value!!),
                                 contentDescription = "",
                                 modifier = Modifier.height(400.dp).width(300.dp)
                             )
@@ -245,9 +246,8 @@ fun main() = application {
     }
 }
 
-private fun loadLocalImage(value: String): ImageBitmap {
-    val inputStream = File(value).inputStream()
-    return ImageIO.read(inputStream).toComposeImageBitmap()
+private fun loadLocalImage(value: BufferedImage): ImageBitmap {
+    return value.toComposeImageBitmap()
 }
 
 fun ApplicationScope.closeRequest() = runBlocking {

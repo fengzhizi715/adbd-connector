@@ -1,5 +1,7 @@
 package cn.netdiscovery.adbd.ui
 
+import java.awt.image.BufferedImage
+
 /**
  *
  * @FileName:
@@ -43,5 +45,5 @@ interface IStore {
 
     fun setMemTotal(value: String)
 
-    fun setScreenShot(value: String)
+    fun setBufferedImage(value: BufferedImage)
 }
