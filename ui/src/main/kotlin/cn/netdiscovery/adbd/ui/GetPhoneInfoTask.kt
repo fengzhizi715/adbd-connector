@@ -18,6 +18,10 @@ import kotlin.math.ceil
  */
 object GetPhoneInfoTask {
 
+    private val dirPath: String by lazy {
+        File("").absolutePath + File.separator + "images"
+    }
+
     fun execute(device: AdbDevice) {
 
         getDeviceName(device)
@@ -32,10 +36,15 @@ object GetPhoneInfoTask {
     }
 
     fun displayScreenShot(device: AdbDevice): Disposable {
-        return refresh(0, 1, TimeUnit.SECONDS, func = {
 
-            val src = "/sdcard/screenshot.png"
-            val dest = File("/Users/tony/screenshot.png")
+        val src = "/sdcard/screenshot.png"
+        val dir = File("$dirPath")
+        if (!dir.exists()) {
+            dir.mkdirs()
+        }
+        val dest = File("$dirPath/screenshot.png")
+
+        return refresh(0, 1, TimeUnit.SECONDS, func = {
             val shellCommand = "/system/bin/screencap -p $src"
             val commands = shellCommand.trim().split("\\s+".toRegex())
             val shell = commands[0]

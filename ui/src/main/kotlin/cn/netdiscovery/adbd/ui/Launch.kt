@@ -2,7 +2,6 @@ package cn.netdiscovery.adbd.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.MaterialTheme
@@ -30,11 +29,9 @@ import cn.netdiscovery.rxjava.extension.safeDispose
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.runBlocking
 import java.awt.image.BufferedImage
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.nio.charset.StandardCharsets
 import java.security.interfaces.RSAPrivateCrtKey
-import javax.imageio.ImageIO
 
 /**
  *
