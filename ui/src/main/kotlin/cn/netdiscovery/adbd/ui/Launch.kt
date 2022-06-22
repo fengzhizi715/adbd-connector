@@ -75,7 +75,7 @@ fun main() = application {
                     Text("adbd-connector", modifier = Modifier.padding(end = 5.dp), fontSize = titleFrontSize)
                 }
 
-                Row {
+                Row (modifier = Modifier.padding(top = 5.dp)){
                     Column(Modifier.background(MaterialTheme.colors.surface)) {
                         connectMessage { ip, port ->
                             try {

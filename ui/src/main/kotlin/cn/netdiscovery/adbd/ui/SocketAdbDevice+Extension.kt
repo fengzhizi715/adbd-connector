@@ -16,7 +16,7 @@ fun <T> SocketAdbDevice?.wrapLet(block:(SocketAdbDevice)-> T) {
         block.invoke(it)
     }?: run{
         Store.addLog {
-            LogItem("the phone is not connected")
+            LogItem("the phone is not connected，please connect the phone first")
         }
     }
 }
