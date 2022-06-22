@@ -48,8 +48,9 @@ object GetPhoneInfoTask {
                         if (f.cause() != null) {
                             f.cause().printStackTrace()
                         } else {
-                            val inputStream = dest.inputStream()
-                            Store.setBufferedImage(ImageIO.read(inputStream))
+                            dest.inputStream()?.let {
+                                Store.setBufferedImage(ImageIO.read(it))
+                            }
                         }
                     }
                 }

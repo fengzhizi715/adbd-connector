@@ -255,6 +255,7 @@ private fun loadLocalImage(value: BufferedImage): ImageBitmap {
 }
 
 fun dispose() {
+    Store.device.clear()
     disposable.safeDispose()
     device?.close()
     device = null

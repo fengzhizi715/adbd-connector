@@ -112,4 +112,17 @@ data class Device(
         2 -> "已断开"
         else -> "连接中"
     }
+
+    fun clear() {
+        deviceName.value = ""
+        deviceType.value = ""
+        brand.value = ""
+        manufacturer.value = ""
+        os.value = ""
+        cpuArch.value = ""
+        cpuNum.value = ""
+        physicalSize.value = ""
+        memTotal.value = ""
+        bufferedImage.value = null
+    }
 }
