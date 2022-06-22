@@ -71,8 +71,14 @@ fun connectMessage(onClick: (ip:String, port:String) -> Unit) {
                 .size(100.dp, 25.dp),
         )
 
-        button("连接", 100.dp, enableClick(ExecuteType.CONNECT)) {
-            onClick.invoke(Store.device.ipAddress.value, Store.device.port.value)
+        if (device == null) {
+            button("连接", 100.dp, enableClick(ExecuteType.CONNECT)) {
+                onClick.invoke(Store.device.ipAddress.value, Store.device.port.value)
+            }
+        } else {
+            button("断开", 100.dp, enableClick(ExecuteType.CONNECT)) {
+                dispose()
+            }
         }
     }
 }

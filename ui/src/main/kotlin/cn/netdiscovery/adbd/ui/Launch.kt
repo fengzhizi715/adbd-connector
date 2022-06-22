@@ -26,6 +26,8 @@ import cn.netdiscovery.adbd.device.AdbDevice
 import cn.netdiscovery.adbd.device.DeviceListener
 import cn.netdiscovery.adbd.device.SocketAdbDevice
 import cn.netdiscovery.adbd.utils.AuthUtil
+import cn.netdiscovery.rxjava.extension.safeDispose
+import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.runBlocking
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
@@ -45,13 +47,15 @@ import javax.imageio.ImageIO
 val padding = 13.dp
 val fontSize = 13.sp
 val titleFrontSize = 20.sp
-const val previewWidth = 650
+const val previewWidth = 600
+
+var device: SocketAdbDevice? = null
+var disposable: Disposable? = null
 
 fun main() = application {
 
     val privateKey: RSAPrivateCrtKey
     val publicKey: ByteArray
-    var device: SocketAdbDevice? = null
 
     try {
         privateKey = AuthUtil.loadPrivateKey("adbkey")
@@ -88,7 +92,7 @@ fun main() = application {
                                         }
 
                                         GetPhoneInfoTask.execute(device)
-                                        GetPhoneInfoTask.displayScreenShot(device)
+                                        disposable = GetPhoneInfoTask.displayScreenShot(device)
                                     }
 
                                     override fun onDisconnected(device: AdbDevice) {
@@ -226,7 +230,7 @@ fun main() = application {
                         }
                     }
 
-                    Column(modifier = Modifier.absolutePadding(left = 10.dp), verticalArrangement = Arrangement.Top) {
+                    Column(modifier = Modifier.absolutePadding(right = 10.dp), verticalArrangement = Arrangement.Top) {
 
                         if (Store.device.bufferedImage.value!=null) {
                             Image(
@@ -248,6 +252,12 @@ fun main() = application {
 
 private fun loadLocalImage(value: BufferedImage): ImageBitmap {
     return value.toComposeImageBitmap()
+}
+
+fun dispose() {
+    disposable.safeDispose()
+    device?.close()
+    device = null
 }
 
 fun ApplicationScope.closeRequest() = runBlocking {
