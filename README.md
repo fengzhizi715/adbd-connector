@@ -8,3 +8,5 @@ install app 需要分成2步：
 1. 使用 push 命令将 apk 推送到手机的目录 /data/local/tmp/
 2. 使用 adb shell pm install 命令进行安装
 
+uninstall app
+adb shell pm uninstall 包名 
