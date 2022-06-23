@@ -212,7 +212,7 @@ fun installMessage(onClick: (installCommand:String) -> Unit) {
 
         button("执行", 100.dp, enableClick(ExecuteType.INSTALL)) {
             Store.addLog {
-                LogItem(msg = "adb install ${Store.device.installCommand.value}")
+                LogItem(msg = "adb shell ${Store.device.installCommand.value}")
             }
             onClick.invoke(Store.device.installCommand.value)
         }
@@ -239,7 +239,7 @@ fun uninstallMessage(onClick: (uninstallCommand:String) -> Unit) {
 
         button("执行", 100.dp, enableClick(ExecuteType.UNINSTALL)) {
             Store.addLog {
-                LogItem(msg = "adb uninstall ${Store.device.uninstallCommand.value}")
+                LogItem(msg = "adb shell ${Store.device.uninstallCommand.value}")
             }
             onClick.invoke(Store.device.uninstallCommand.value)
         }
