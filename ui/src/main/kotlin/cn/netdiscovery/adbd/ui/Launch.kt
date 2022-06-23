@@ -196,7 +196,21 @@ fun main() = application {
                         }
 
                         uninstallMessage { uninstallCommand ->
+                            device.wrapLet {
+                                val commands = uninstallCommand.trim().split("\\s+".toRegex())
+                                val shell = commands[0]
+                                val args = commands.drop(1).toTypedArray()
 
+                                it.shell(shell, *args).addListener { f ->
+                                    if (f.cause() != null) {
+                                        f.cause().printStackTrace()
+                                    } else {
+                                        Store.addLog {
+                                            LogItem(f.now as String)
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 10.dp)) {
