@@ -97,6 +97,7 @@ fun main() = application {
                                         Store.addLog {
                                             LogItem("[${device.serial()}] device disconnected")
                                         }
+                                        dispose()
                                     }
                                 })
                             } catch (e: Exception) {
@@ -104,6 +105,7 @@ fun main() = application {
                                 Store.addLog {
                                     LogItem("[${ip}:${port}] device disconnected")
                                 }
+                                dispose()
                             }
                         }
 
