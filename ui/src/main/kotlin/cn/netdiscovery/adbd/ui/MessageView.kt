@@ -247,23 +247,9 @@ fun uninstallMessage(onClick: (uninstallCommand:String) -> Unit) {
 }
 
 @Composable
-fun forwardMessage(onClick: (local:String,remote:String) -> Unit) {
+fun forwardMessage(onClick: (remote:String,localPort:String) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 5.dp)) {
         Text("adb forward 命令:", modifier = Modifier.padding(end = 5.dp), fontSize = fontSize)
-        customTextField(
-            hint = "local",
-            hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
-            textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
-            text = Store.device.forwardLocal,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            onTextChange = { this },
-            modifier = Modifier
-                .padding(end = 7.dp) //设置背景,对应背景来说，在它之前设置的padding 就相当于外边距
-                .background(Color.LightGray.copy(alpha = 0.5f), shape = RoundedCornerShape(3.dp))
-                .padding(end = 10.dp) //在设置size之前设置padding相当于外边距
-                .size(200.dp, 25.dp),
-        )
-
         customTextField(
             hint = "remote",
             hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
@@ -278,8 +264,25 @@ fun forwardMessage(onClick: (local:String,remote:String) -> Unit) {
                 .size(200.dp, 25.dp),
         )
 
+        customTextField(
+            hint = "local port",
+            hintTextStyle = TextStyle(Color.Gray, fontSize = 12.sp),
+            textFieldStyle = TextStyle(Color.Black, fontSize = 12.sp),
+            text = Store.device.forwardLocalPort,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            onTextChange = { this },
+            modifier = Modifier
+                .padding(end = 7.dp) //设置背景,对应背景来说，在它之前设置的padding 就相当于外边距
+                .background(Color.LightGray.copy(alpha = 0.5f), shape = RoundedCornerShape(3.dp))
+                .padding(end = 10.dp) //在设置size之前设置padding相当于外边距
+                .size(200.dp, 25.dp),
+        )
+
         button("执行", 100.dp, enableClick(ExecuteType.FORWARD)) {
-            onClick.invoke(Store.device.forwardLocal.value, Store.device.forwardRemote.value)
+            Store.addLog {
+                LogItem(msg = "adb forward tcp:${Store.device.forwardLocalPort.value} ${Store.device.forwardRemote.value} ")
+            }
+            onClick.invoke(Store.device.forwardRemote.value, Store.device.forwardLocalPort.value)
         }
     }
 }
@@ -405,7 +408,7 @@ private fun enableClick(type:ExecuteType):Boolean {
 
         ExecuteType.UNINSTALL -> Store.device.uninstallCommand.value.isNotEmpty()
 
-        ExecuteType.FORWARD -> Store.device.forwardLocal.value.isNotEmpty() && Store.device.forwardRemote.value.isNotEmpty()
+        ExecuteType.FORWARD -> Store.device.forwardLocalPort.value.isNotEmpty() && Store.device.forwardRemote.value.isNotEmpty()
 
         ExecuteType.REVERSE -> Store.device.reverseLocal.value.isNotEmpty() && Store.device.reverseRemote.value.isNotEmpty()
     }

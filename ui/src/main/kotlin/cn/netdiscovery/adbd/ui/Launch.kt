@@ -197,8 +197,22 @@ fun main() = application {
                             Text("网络相关", modifier = Modifier.padding(end = 5.dp), fontSize = titleFrontSize)
                         }
 
-                        forwardMessage { local, remote ->
+                        forwardMessage { remote, localPort ->
+                            device.wrapLet {
 
+                                it.forward(remote, localPort.toInt()).addListener { f ->
+                                    if (f.cause() != null) {
+                                        f.cause().printStackTrace()
+                                        Store.addLog {
+                                            LogItem("adb forward tcp:$localPort $remote error")
+                                        }
+                                    } else {
+                                        Store.addLog {
+                                            LogItem("adb forward tcp:$localPort $remote done")
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                         reverseMessage { remote, local ->

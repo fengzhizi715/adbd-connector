@@ -100,7 +100,7 @@ data class Device(
     val pullDest: MutableState<String> = mutableStateOf(""),
     val installCommand: MutableState<String> = mutableStateOf(""),
     val uninstallCommand: MutableState<String> = mutableStateOf(""),
-    val forwardLocal: MutableState<String> = mutableStateOf(""),
+    val forwardLocalPort: MutableState<String> = mutableStateOf(""),
     val forwardRemote: MutableState<String> = mutableStateOf(""),
     val reverseLocal: MutableState<String> = mutableStateOf(""),
     val reverseRemote: MutableState<String> = mutableStateOf(""),
