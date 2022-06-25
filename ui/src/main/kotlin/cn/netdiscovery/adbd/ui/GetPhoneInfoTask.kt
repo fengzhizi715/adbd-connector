@@ -47,20 +47,13 @@ object GetPhoneInfoTask {
 
         return refresh(0, 1, TimeUnit.SECONDS, func = {
             val shellCommand = "/system/bin/screencap -p $src"
-            val commands = shellCommand.trim().split("\\s+".toRegex())
-            val shell = commands[0]
-            val args = commands.drop(1).toTypedArray()
-            device.shell(shell, *args).addListener { f ->
-                if (f.cause() != null) {
-                    f.cause().printStackTrace()
-                } else {
-                    device.pull(src, dest).addListener {
-                        if (f.cause() != null) {
-                            f.cause().printStackTrace()
-                        } else {
-                            dest.inputStream()?.let {
-                                Store.setBufferedImage(ImageIO.read(it))
-                            }
+            executeADBShell(device,shellCommand) { f->
+                device.pull(src, dest).addListener {
+                    if (f.cause() != null) {
+                        f.cause().printStackTrace()
+                    } else {
+                        dest.inputStream()?.let {
+                            Store.setBufferedImage(ImageIO.read(it))
                         }
                     }
                 }
@@ -70,91 +63,49 @@ object GetPhoneInfoTask {
 
     private fun getDeviceName(device: AdbDevice) {
         val shellCommand = "getprop ro.product.device"
-        val commands = shellCommand.trim().split("\\s+".toRegex())
-        val shell = commands[0]
-        val args = commands.drop(1).toTypedArray()
-        device.shell(shell, *args).addListener { f ->
-            if (f.cause() != null) {
-                f.cause().printStackTrace()
-            } else {
-                Store.setDeviceName(f.now.toString().trim())
-            }
+        executeADBShell(device,shellCommand) { f->
+            Store.setDeviceName(f.now.toString().trim())
         }
     }
 
     private fun getDeviceType(device: AdbDevice) {
         val shellCommand = "getprop ro.product.model"
-        val commands = shellCommand.trim().split("\\s+".toRegex())
-        val shell = commands[0]
-        val args = commands.drop(1).toTypedArray()
-        device.shell(shell, *args).addListener { f ->
-            if (f.cause() != null) {
-                f.cause().printStackTrace()
-            } else {
-                Store.setDeviceType(f.now.toString().trim())
-            }
+        executeADBShell(device,shellCommand) { f->
+            Store.setDeviceType(f.now.toString().trim())
         }
     }
 
     private fun getBrand(device: AdbDevice) {
         val shellCommand = "getprop ro.product.brand"
-        val commands = shellCommand.trim().split("\\s+".toRegex())
-        val shell = commands[0]
-        val args = commands.drop(1).toTypedArray()
-        device.shell(shell, *args).addListener { f ->
-            if (f.cause() != null) {
-                f.cause().printStackTrace()
-            } else {
-                Store.setBrand(f.now.toString().trim())
-            }
+        executeADBShell(device,shellCommand) { f->
+            Store.setBrand(f.now.toString().trim())
         }
     }
 
     private fun getManufacturer(device: AdbDevice) {
         val shellCommand = "getprop ro.product.manufacturer"
-        val commands = shellCommand.trim().split("\\s+".toRegex())
-        val shell = commands[0]
-        val args = commands.drop(1).toTypedArray()
-        device.shell(shell, *args).addListener { f ->
-            if (f.cause() != null) {
-                f.cause().printStackTrace()
-            } else {
-                Store.setManufacturer(f.now.toString().trim())
-            }
+        executeADBShell(device,shellCommand) { f->
+            Store.setManufacturer(f.now.toString().trim())
         }
     }
 
     private fun getOSVersion(device: AdbDevice) {
         val shellCommand = "getprop ro.build.version.release"
-        val commands = shellCommand.trim().split("\\s+".toRegex())
-        val shell = commands[0]
-        val args = commands.drop(1).toTypedArray()
-        device.shell(shell, *args).addListener { f ->
-            if (f.cause() != null) {
-                f.cause().printStackTrace()
-            } else {
-                Store.setOSVersion(f.now.toString().trim())
-            }
+        executeADBShell(device,shellCommand) { f->
+            Store.setOSVersion(f.now.toString().trim())
         }
     }
 
     private fun getCPUArchVersion(device: AdbDevice) {
         val shellCommand = "getprop ro.product.cpu.abi"
-        val commands = shellCommand.trim().split("\\s+".toRegex())
-        val shell = commands[0]
-        val args = commands.drop(1).toTypedArray()
-        device.shell(shell, *args).addListener { f ->
-            if (f.cause() != null) {
-                f.cause().printStackTrace()
-            } else {
-                Store.setCpuArch(f.now.toString().trim())
-            }
+        executeADBShell(device,shellCommand) { f->
+            Store.setCpuArch(f.now.toString().trim())
         }
     }
 
     private fun getCPUNum(device: AdbDevice) {
         val shellCommand = "cat /proc/cpuinfo | grep processor"
-        executeShellCommand(device,shellCommand) { f ->
+        executeADBShell(device,shellCommand) { f ->
             val args = f.now.toString().trim().split("\n")
             Store.setCpuNum("${args.size}")
         }
@@ -162,21 +113,21 @@ object GetPhoneInfoTask {
 
     private fun getPhysicalSize(device: AdbDevice) {
         val shellCommand = "wm size"
-        executeShellCommand(device,shellCommand) { f ->
+        executeADBShell(device,shellCommand) { f ->
             Store.setPhysicalSize(f.now.toString().trim().replace("Physical size:",""))
         }
     }
 
     private fun getMemTotal(device: AdbDevice) {
         val shellCommand = "cat /proc/meminfo | grep MemTotal"
-        executeShellCommand(device,shellCommand) { f ->
+        executeADBShell(device,shellCommand) { f ->
             val total = f.now.toString().trim().replace("MemTotal:","").trim().replace("kB","").toDouble()
             val result = ceil(total/1024/1024)
             Store.setMemTotal("$result GB")
         }
     }
 
-    private inline fun executeShellCommand(device: AdbDevice, shellCommand:String,noinline block:(f: Future<String>)->Unit) {
+    private inline fun executeADBShell(device: AdbDevice, shellCommand:String, noinline block:(f: Future<String>)->Unit) {
         val commands = shellCommand.trim().split("\\s+".toRegex())
         val shell = commands[0]
         val args = commands.drop(1).toTypedArray()
