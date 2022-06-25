@@ -22,7 +22,7 @@
 
 ![](images/adb-connector.png)
 
-其实，在 adb server 和 adbd 之间有一个 TCP 的传输协议，它定义在 Android 源码的 system/core/adb/protocol.txt 文件中。只要是能通过 adb 命令连接的手机，都会遵循这个协议，无论是 Android 或是鸿蒙系统。
+在 adb server 和 adbd 之间有一个 TCP 的传输协议，它定义在 Android 源码的 system/core/adb/protocol.txt 文件中。只要是能通过 adb 命令连接的手机，都会遵循这个协议，无论是 Android 或是鸿蒙系统。
 
 因此，基于这个协议实现了一个 TCP 的客户端(adbd-connector)就可以跟手机的 adbd 服务/进程进行通信，从而实现 adb 的所有指令。
 
@@ -46,11 +46,20 @@
 ## install app 
 需要分成2步：
 1. 使用 push 命令将 apk 推送到手机的目录 /data/local/tmp/
+
+![](images/4.png)
+
 2. 使用 adb shell pm install 命令进行安装
+
+![](images/5.png)
+
+![](images/6.png)
 
 ## uninstall app
 
 adb shell pm uninstall 包名 
+
+![](images/7.png)
 
 ## reverse
 
