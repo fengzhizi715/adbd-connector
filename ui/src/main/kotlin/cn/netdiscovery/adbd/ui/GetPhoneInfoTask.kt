@@ -1,6 +1,7 @@
 package cn.netdiscovery.adbd.ui
 
 import cn.netdiscovery.adbd.device.AdbDevice
+import cn.netdiscovery.adbd.utils.executeADBPull
 import cn.netdiscovery.adbd.utils.executeADBShell
 import cn.netdiscovery.rxjava.refresh
 import io.reactivex.rxjava3.disposables.Disposable
@@ -49,13 +50,9 @@ object GetPhoneInfoTask {
         return refresh(0, 1, TimeUnit.SECONDS, func = {
             val shellCommand = "/system/bin/screencap -p $src"
             executeADBShell(device,shellCommand) { f->
-                device.pull(src, dest).addListener {
-                    if (f.cause() != null) {
-                        f.cause().printStackTrace()
-                    } else {
-                        dest.inputStream()?.let {
-                            Store.setBufferedImage(ImageIO.read(it))
-                        }
+                executeADBPull(device, src, dest) {
+                    dest.inputStream()?.let {
+                        Store.setBufferedImage(ImageIO.read(it))
                     }
                 }
             }
