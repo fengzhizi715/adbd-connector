@@ -23,3 +23,9 @@ install app 需要分成2步：
 uninstall app
 
 adb shell pm uninstall 包名 
+
+reverse
+
+将 TCP 端口从安卓设备中映射到 localhost
+
+adb reverse tcp:{{远程端口}} tcp:{{本地端口}}

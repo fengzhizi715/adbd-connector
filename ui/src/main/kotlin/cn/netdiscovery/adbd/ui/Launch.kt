@@ -202,7 +202,21 @@ fun main() = application {
                         }
 
                         reverseMessage { remote, local ->
+                            device.wrapLet {
 
+                                it.reverse(remote, local).addListener { f ->
+                                    if (f.cause() != null) {
+                                        f.cause().printStackTrace()
+                                        Store.addLog {
+                                            LogItem("adb reverse $remote $local error")
+                                        }
+                                    } else {
+                                        Store.addLog {
+                                            LogItem("adb reverse $remote $local done")
+                                        }
+                                    }
+                                }
+                            }
                         }
 
                     }
