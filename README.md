@@ -1,8 +1,10 @@
 # adbd-connector
 
-基于 ADB Daemon 和 ADB Server 之间的通信协议实现的库
+基于 ADB Server 和 ADB Daemon 之间的通信协议，实现的库
 
-连接前，先要打开手机手机的开发者模式，以及 5555 端口使用 adb 命令：adb tcpip 5555
+连接前，确保手机和电脑在同一个局域网。然后打开手机的开发者模式，以及 5555 端口使用 adb 命令：adb tcpip 5555
+
+手机的连接效果：
 
 ![](images/1.png)
 
