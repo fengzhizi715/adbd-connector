@@ -2,6 +2,7 @@ package cn.netdiscovery.adbd.ui
 
 import cn.netdiscovery.adbd.device.AdbDevice
 import cn.netdiscovery.rxjava.refresh
+import io.netty.util.concurrent.Future
 import io.reactivex.rxjava3.disposables.Disposable
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -153,35 +154,29 @@ object GetPhoneInfoTask {
 
     private fun getCPUNum(device: AdbDevice) {
         val shellCommand = "cat /proc/cpuinfo | grep processor"
-        val commands = shellCommand.trim().split("\\s+".toRegex())
-        val shell = commands[0]
-        val args = commands.drop(1).toTypedArray()
-        device.shell(shell, *args).addListener { f ->
-            if (f.cause() != null) {
-                f.cause().printStackTrace()
-            } else {
-                val args = f.now.toString().trim().split("\n")
-                Store.setCpuNum("${args.size}")
-            }
+        executeShellCommand(device,shellCommand) { f ->
+            val args = f.now.toString().trim().split("\n")
+            Store.setCpuNum("${args.size}")
         }
     }
 
     private fun getPhysicalSize(device: AdbDevice) {
         val shellCommand = "wm size"
-        val commands = shellCommand.trim().split("\\s+".toRegex())
-        val shell = commands[0]
-        val args = commands.drop(1).toTypedArray()
-        device.shell(shell, *args).addListener { f ->
-            if (f.cause() != null) {
-                f.cause().printStackTrace()
-            } else {
-                Store.setPhysicalSize(f.now.toString().trim().replace("Physical size:",""))
-            }
+        executeShellCommand(device,shellCommand) { f ->
+            Store.setPhysicalSize(f.now.toString().trim().replace("Physical size:",""))
         }
     }
 
     private fun getMemTotal(device: AdbDevice) {
         val shellCommand = "cat /proc/meminfo | grep MemTotal"
+        executeShellCommand(device,shellCommand) { f ->
+            val total = f.now.toString().trim().replace("MemTotal:","").trim().replace("kB","").toDouble()
+            val result = ceil(total/1024/1024)
+            Store.setMemTotal("$result GB")
+        }
+    }
+
+    private inline fun executeShellCommand(device: AdbDevice, shellCommand:String,noinline block:(f: Future<String>)->Unit) {
         val commands = shellCommand.trim().split("\\s+".toRegex())
         val shell = commands[0]
         val args = commands.drop(1).toTypedArray()
@@ -189,9 +184,7 @@ object GetPhoneInfoTask {
             if (f.cause() != null) {
                 f.cause().printStackTrace()
             } else {
-                val total = f.now.toString().trim().replace("MemTotal:","").trim().replace("kB","").toDouble()
-                val result = ceil(total/1024/1024)
-                Store.setMemTotal("$result GB")
+                block.invoke(f as Future<String>)
             }
         }
     }
