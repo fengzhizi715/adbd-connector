@@ -317,6 +317,9 @@ fun reverseMessage(onClick: (remote:String,local:String) -> Unit) {
         )
 
         button("执行", 100.dp, enableClick(ExecuteType.REVERSE)) {
+            Store.addLog {
+                LogItem(msg = "adb reverse ${Store.device.reverseRemote.value} ${Store.device.reverseLocal.value}")
+            }
             onClick.invoke(Store.device.reverseRemote.value, Store.device.reverseLocal.value)
         }
     }
