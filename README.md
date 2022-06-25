@@ -14,11 +14,13 @@
 
 ![](images/adb-connector.png)
 
-其实，在 adb server 和 adbd 之间有一个传输协议，它定义在 Android 源码的 system/core/adb/protocol.txt 文件中。只要是能通过 adb 命令连接的手机，都会遵循这个协议，无论是 Android 或是鸿蒙系统。
+其实，在 adb server 和 adbd 之间有一个 TCP 的传输协议，它定义在 Android 源码的 system/core/adb/protocol.txt 文件中。只要是能通过 adb 命令连接的手机，都会遵循这个协议，无论是 Android 或是鸿蒙系统。
 
-使用 Kotlin Compose Desktop 做了一层 UI 可以在 PC 上使用的简易"手机助手"，支持 Mac、Windows、Linux。
+因此，基于这个协议实现了一个 TCP 的客户端(adbd-connector)就可以跟手机的 adbd 服务/进程进行通信，从而实现 adb 的所有指令。
 
-连接前，确保手机和电脑在同一个局域网。然后打开手机的开发者模式，以及 5555 端口使用 adb 命令：adb tcpip 5555
+另外，我还使用 Kotlin Compose Desktop 在这个协议上做了一层 UI，实现了一个在 PC 上的简易"手机助手"，且支持 Mac、Windows、Linux。
+
+> 连接前，确保手机和电脑在同一个局域网。然后打开手机的开发者模式，以及 5555 端口使用 adb 命令：adb tcpip 5555
 
 ## 手机的连接效果：
 
