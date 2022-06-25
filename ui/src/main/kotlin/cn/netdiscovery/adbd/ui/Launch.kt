@@ -175,17 +175,9 @@ fun main() = application {
 
                         installMessage { installCommand ->
                             device.wrapLet {
-                                val commands = installCommand.trim().split("\\s+".toRegex())
-                                val shell = commands[0]
-                                val args = commands.drop(1).toTypedArray()
-
-                                it.shell(shell, *args).addListener { f ->
-                                    if (f.cause() != null) {
-                                        f.cause().printStackTrace()
-                                    } else {
-                                        Store.addLog {
-                                            LogItem(f.now as String)
-                                        }
+                                it.executeADBShell(installCommand) { f->
+                                    Store.addLog {
+                                        LogItem(f.now as String)
                                     }
                                 }
                             }
@@ -193,17 +185,9 @@ fun main() = application {
 
                         uninstallMessage { uninstallCommand ->
                             device.wrapLet {
-                                val commands = uninstallCommand.trim().split("\\s+".toRegex())
-                                val shell = commands[0]
-                                val args = commands.drop(1).toTypedArray()
-
-                                it.shell(shell, *args).addListener { f ->
-                                    if (f.cause() != null) {
-                                        f.cause().printStackTrace()
-                                    } else {
-                                        Store.addLog {
-                                            LogItem(f.now as String)
-                                        }
+                                it.executeADBShell(uninstallCommand) { f->
+                                    Store.addLog {
+                                        LogItem(f.now as String)
                                     }
                                 }
                             }
