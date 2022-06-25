@@ -12,6 +12,14 @@
 
 一次命令的执行包含了 1-6 个步骤。其实，还要算上 adb server 内部的通信和 adb dameon 内部的通信。一次命令的执行，路径会很长。
 
+所以，一次完整的 adb 通信，会涉及如下的概念：
+
+* adb client：运行在 PC 上，通过在命令行执行 adb，就启动了 ADB Client 程序
+* adb server：运行于 PC 的后台进程，用于管理 ADB Client 和 Daemon 间的通信
+* adb daemon(adbd)：运行在模拟器或 Android 设备上的后台服务。当 Android 系统启动时，由 init 程序启动 adbd。如果 adbd 挂了，则 adbd 会由 init 重新启动。
+* DDMS：DDMS 将 IDE 和手机设备之间建立起了一座桥梁，可以很方面的查看到目标机器上的信息。
+* JDWP：即 java debug wire protocol，Java 调试线协议，是一个为 Java 调试而设计的通讯交互协议，它定义了调试器和被调试程序之间传递的信息的格式。
+
 ![](images/adb-connector.png)
 
 其实，在 adb server 和 adbd 之间有一个 TCP 的传输协议，它定义在 Android 源码的 system/core/adb/protocol.txt 文件中。只要是能通过 adb 命令连接的手机，都会遵循这个协议，无论是 Android 或是鸿蒙系统。
@@ -24,6 +32,8 @@
 还要打开手机的 5555 端口(使用 adb 命令：adb tcpip 5555)，以及获取手机连接当前 wifi 的局域网 ip 地址。有了局域网的 ip 地址和端口，才可以通过 adbd-connector 跟 adbd 进行连接。
 
 ## 手机的连接效果：
+
+连上手机可以获取手机的基础信息
 
 ![](images/1.png)
 
