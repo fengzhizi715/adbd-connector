@@ -16,7 +16,7 @@ import kotlin.math.ceil
  *          cn.netdiscovery.adbd.ui.GetPhoneInfoTask
  * @author: Tony Shen
  * @date: 2022/6/14 1:29 下午
- * @version: V1.0 <描述当前版本功能>
+ * @version: V1.0 当手机连接成功后，获取手机的基础信息和实时显示手机的屏幕截图
  */
 object GetPhoneInfoTask {
 
