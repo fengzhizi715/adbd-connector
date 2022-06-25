@@ -25,7 +25,7 @@ import cn.netdiscovery.adbd.device.AdbDevice
 import cn.netdiscovery.adbd.device.DeviceListener
 import cn.netdiscovery.adbd.device.SocketAdbDevice
 import cn.netdiscovery.adbd.utils.AuthUtil
-import cn.netdiscovery.adbd.utils.executeADBShell
+import cn.netdiscovery.adbd.utils.extension.executeADBShell
 import cn.netdiscovery.rxjava.extension.safeDispose
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.runBlocking
@@ -118,7 +118,7 @@ fun main() = application {
                         shellCommandMessage { shellCommand ->
 
                             device.wrapLet {
-                                executeADBShell(it,shellCommand) { f->
+                                it.executeADBShell(shellCommand) { f->
                                     Store.addLog {
                                         LogItem(f.now as String)
                                     }
