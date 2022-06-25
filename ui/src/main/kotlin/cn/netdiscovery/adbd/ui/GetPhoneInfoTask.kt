@@ -19,7 +19,7 @@ import kotlin.math.ceil
 object GetPhoneInfoTask {
 
     private val dirPath: String by lazy {
-        File("").absolutePath + File.separator + "images"
+        File("").absolutePath + File.separator + "screenshot"
     }
 
     fun execute(device: AdbDevice) {
