@@ -1,8 +1,8 @@
 package cn.netdiscovery.adbd.ui
 
 import cn.netdiscovery.adbd.device.AdbDevice
+import cn.netdiscovery.adbd.utils.executeADBShell
 import cn.netdiscovery.rxjava.refresh
-import io.netty.util.concurrent.Future
 import io.reactivex.rxjava3.disposables.Disposable
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -124,19 +124,6 @@ object GetPhoneInfoTask {
             val total = f.now.toString().trim().replace("MemTotal:","").trim().replace("kB","").toDouble()
             val result = ceil(total/1024/1024)
             Store.setMemTotal("$result GB")
-        }
-    }
-
-    private inline fun executeADBShell(device: AdbDevice, shellCommand:String, noinline block:(f: Future<String>)->Unit) {
-        val commands = shellCommand.trim().split("\\s+".toRegex())
-        val shell = commands[0]
-        val args = commands.drop(1).toTypedArray()
-        device.shell(shell, *args).addListener { f ->
-            if (f.cause() != null) {
-                f.cause().printStackTrace()
-            } else {
-                block.invoke(f as Future<String>)
-            }
         }
     }
 }

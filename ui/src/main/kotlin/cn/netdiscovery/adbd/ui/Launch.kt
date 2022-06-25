@@ -25,6 +25,7 @@ import cn.netdiscovery.adbd.device.AdbDevice
 import cn.netdiscovery.adbd.device.DeviceListener
 import cn.netdiscovery.adbd.device.SocketAdbDevice
 import cn.netdiscovery.adbd.utils.AuthUtil
+import cn.netdiscovery.adbd.utils.executeADBShell
 import cn.netdiscovery.rxjava.extension.safeDispose
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.runBlocking
@@ -79,27 +80,28 @@ fun main() = application {
                     Column(Modifier.background(MaterialTheme.colors.surface)) {
                         connectMessage { ip, port ->
                             try {
-                                device = SocketAdbDevice(ip, port.toInt(), privateKey, publicKey)
-                                device?.addListener(object : DeviceListener {
-                                    override fun onConnected(device: AdbDevice) {
-                                        Store.changeConnectStatus(1)
+                                device = SocketAdbDevice(ip, port.toInt(), privateKey, publicKey).apply {
+                                    addListener(object : DeviceListener {
+                                        override fun onConnected(device: AdbDevice) {
+                                            Store.changeConnectStatus(1)
 
-                                        Store.addLog {
-                                            LogItem("[${device.serial()}] device connected")
+                                            Store.addLog {
+                                                LogItem("[${device.serial()}] device connected")
+                                            }
+
+                                            GetPhoneInfoTask.execute(device)
+                                            disposable = GetPhoneInfoTask.displayScreenShot(device)
                                         }
 
-                                        GetPhoneInfoTask.execute(device)
-                                        disposable = GetPhoneInfoTask.displayScreenShot(device)
-                                    }
-
-                                    override fun onDisconnected(device: AdbDevice) {
-                                        Store.changeConnectStatus(2)
-                                        Store.addLog {
-                                            LogItem("[${device.serial()}] device disconnected")
+                                        override fun onDisconnected(device: AdbDevice) {
+                                            Store.changeConnectStatus(2)
+                                            Store.addLog {
+                                                LogItem("[${device.serial()}] device disconnected")
+                                            }
+                                            dispose()
                                         }
-                                        dispose()
-                                    }
-                                })
+                                    })
+                                }
                             } catch (e: Exception) {
                                 Store.changeConnectStatus(2)
                                 Store.addLog {
@@ -116,17 +118,9 @@ fun main() = application {
                         shellCommandMessage { shellCommand ->
 
                             device.wrapLet {
-                                val commands = shellCommand.trim().split("\\s+".toRegex())
-                                val shell = commands[0]
-                                val args = commands.drop(1).toTypedArray()
-
-                                it.shell(shell, *args).addListener { f ->
-                                    if (f.cause() != null) {
-                                        f.cause().printStackTrace()
-                                    } else {
-                                        Store.addLog {
-                                            LogItem(f.now as String)
-                                        }
+                                executeADBShell(it,shellCommand) { f->
+                                    Store.addLog {
+                                        LogItem(f.now as String)
                                     }
                                 }
                             }
