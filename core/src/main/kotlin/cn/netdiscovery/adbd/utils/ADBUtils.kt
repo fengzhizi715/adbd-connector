@@ -11,6 +11,13 @@ import io.netty.util.concurrent.Future
  * @date: 2022/6/25 3:33 下午
  * @version: V1.0 <描述当前版本功能>
  */
+
+/**
+ * 执行 adb shell 相关的命令
+ * @param device 手机设备
+ * @param shellCommand adb shell 的命令，可以省略输入"adb shell"，只需后面的命令
+ * @param block 命令执行成功后的回调
+ */
 inline fun executeADBShell(device: AdbDevice, shellCommand:String, noinline block:(f: Future<String>)->Unit) {
     val commands = shellCommand.trim().split("\\s+".toRegex())
     val shell = commands[0]

@@ -45,6 +45,7 @@ object GetPhoneInfoTask {
         }
         val dest = File("$dirPath/screenshot.png")
 
+        // 每隔1秒定时截图然后通过 pull 将图片推送到 PC 上
         return refresh(0, 1, TimeUnit.SECONDS, func = {
             val shellCommand = "/system/bin/screencap -p $src"
             executeADBShell(device,shellCommand) { f->
