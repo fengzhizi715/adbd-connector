@@ -44,12 +44,16 @@
 ![](images/3.png)
 
 ## install app 
-需要分成2步：
-1. 使用 push 命令将 apk 推送到手机的目录 /data/local/tmp/
+
+目前还处在疫情期间，就在应用宝上找了一个跟生活相关的 App
+
+安装 App 分成2步：
+
+1.使用 push 命令将 apk 推送到手机的目录 /data/local/tmp/ 下
 
 ![](images/4.png)
 
-2. 使用 adb shell pm install 命令进行安装
+2. 使用 adb shell pm install 命令安装 apk
 
 ![](images/5.png)
 
