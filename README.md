@@ -1,10 +1,10 @@
 # adbd-connector
 
-这是一个实现 adb server 和 adb daemon 之间的通信协议的库。
+adbd-connector 是一个实现 adb server 和 adb daemon 之间的通信协议的库，使用 Kotlin 编写。支持 PC 端直接连接 Android 设备操作 adb 相关的指令。
 
 ## 背景
 
-下图中的 adb client 和 adb server 都共存在 PC 中，PC 上安装过 adb 程序就会有。adb dameon (简称adbd)是存在于 Android 手机中的一个进程/服务。
+在下图中的 adb client 和 adb server 都共存在 PC 中，PC 上安装过 adb 程序就会有。adb dameon (简称adbd)是存在于 Android 手机中的一个进程/服务。
 
 当我们启动命令行输入 adb 命令时，实际上使用的是 adb client，它会跟 PC 本地的 adb server 进行通信（当然，有一个前提先要使用 adb-start 启动 adb server 才能调用 adb 命令）。
 
@@ -20,7 +20,7 @@
 * DDMS：DDMS 将 IDE 和手机设备之间建立起了一座桥梁，可以很方面的查看到目标机器上的信息。
 * JDWP：即 java debug wire protocol，Java 调试线协议，是一个为 Java 调试而设计的通讯交互协议，它定义了调试器和被调试程序之间传递的信息的格式。
 
-![](images/adb-connector.png)
+* ![](images/adb-connector.png)
 
 在 adb server 和 adbd 之间有一个 TCP 的传输协议，它定义在 Android 源码的 system/core/adb/protocol.txt 文件中。只要是能通过 adb 命令连接的手机，都会遵循这个协议，无论是 Android 或是鸿蒙系统。
 
