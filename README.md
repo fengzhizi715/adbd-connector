@@ -26,18 +26,20 @@
 
 因此，基于这个协议实现了一个 TCP 的客户端(adbd-connector)就可以跟手机的 adbd 服务/进程进行通信，从而实现 adb 的所有指令。
 
-另外，我还使用 Kotlin Compose Desktop 在这个协议上做了一层 UI，实现了一个在 PC 上使用的简易"手机助手"，且支持运行在 Mac、Windows、Linux 等系统。
+另外，我还使用 Kotlin Compose Desktop 在这个协议上做了一层 UI，实现了一个可以在 PC 上使用的简易"手机助手"，且支持 Mac、Linux、Windows 等系统。
 
 > 在手机连接前，先要打开手机的开发者模式。在连接过程中，手机会弹出信任框，提示是否允许 usb 调试。需要点击信任，才能完成后续的连接。
 还要打开手机的 5555 端口(使用 adb 命令：adb tcpip 5555)，以及获取手机连接当前 wifi 的局域网 ip 地址。有了局域网的 ip 地址和端口，才可以通过 adbd-connector 跟 adbd 进行连接。
 
 ## 手机的连接效果：
 
-连上手机可以获取手机的基础信息
+连上手机，获取手机的基础信息
 
 ![](images/1.png)
 
 ## 执行 adb shell 命令的效果：
+
+执行 adb shell 相关的命令(输入时省略 adb shell，直接输入后面的命令)
 
 ![](images/2.png)
 
@@ -45,9 +47,9 @@
 
 ## install app 
 
-目前还处在疫情期间，就在应用宝上找了一个跟生活相关的 App
+目前还处在疫情期间，所以就在应用宝上找了一个跟生活相关的 App，最主要是这个 App 体积小
 
-安装 App 分成2步：
+安装 App 时分成2步：
 
 1.使用 push 命令将 apk 推送到手机的目录 /data/local/tmp/ 下
 
