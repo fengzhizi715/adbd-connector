@@ -20,7 +20,7 @@ adbd-connector 是一个实现 adb server 和 adb daemon 之间的通信协议�
 * DDMS：DDMS 将 IDE 和手机设备之间建立起了一座桥梁，可以很方面的查看到目标机器上的信息。
 * JDWP：即 java debug wire protocol，Java 调试线协议，是一个为 Java 调试而设计的通讯交互协议，它定义了调试器和被调试程序之间传递的信息的格式。
 
-* ![](images/adb-connector.png)
+![](images/adb-connector.png)
 
 在 adb server 和 adbd 之间有一个 TCP 的传输协议，它定义在 Android 源码的 system/core/adb/protocol.txt 文件中。只要是能通过 adb 命令连接的手机，都会遵循这个协议，无论是 Android 或是鸿蒙系统。
 
